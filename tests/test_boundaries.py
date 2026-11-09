@@ -8,7 +8,7 @@ import pytest
 
 REPO = Path(__file__).resolve().parent.parent
 
-REPO_PACKAGES = {"training", "guard", "client", "demo_rag", "gateway", "evals", "tests"}
+REPO_PACKAGES = {"training", "guard", "client", "demo_rag", "gateway", "evals", "scripts", "tests"}
 
 # Allowed in-repo import prefixes per package. Anything else in REPO_PACKAGES is a violation.
 ALLOWED_REPO_IMPORTS: dict[str, set[str]] = {
@@ -18,6 +18,7 @@ ALLOWED_REPO_IMPORTS: dict[str, set[str]] = {
     "gateway": {"gateway", "client"},
     "evals": {"evals", "client", "training"},
     "training": {"training"},
+    "scripts": {"scripts", "training"},
 }
 
 # Third-party top-level modules from the PRD section 12 whitelist (plus their import names).

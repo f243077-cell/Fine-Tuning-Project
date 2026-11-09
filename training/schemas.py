@@ -59,6 +59,7 @@ class DataRow(BaseModel):
     surface: Surface
     origin: Origin
     intent_id: str | None = None
+    hard_negative: bool = False
 
     @model_validator(mode="after")
     def _check_consistency(self) -> "DataRow":
@@ -69,6 +70,8 @@ class DataRow(BaseModel):
             raise ValueError("attack_type is required when label is INJECTION")
         if self.label == Label.SAFE and self.attack_type is not None:
             raise ValueError("attack_type must be empty when label is SAFE")
+        if self.label == Label.INJECTION and self.hard_negative:
+            raise ValueError("hard_negative is only allowed on SAFE rows")
         if self.origin == Origin.TEST and not self.intent_id:
             raise ValueError("intent_id is required for test rows")
         return self

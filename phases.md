@@ -56,12 +56,12 @@
 **Goal:** a labeled seed set and a **hand-written, hash-locked** test set, plus tools that make authoring and validating them easy.
 
 Claude Code:
-- [ ] `docs/LABELING_GUIDE.md` from `PRD.md` sections 6 and 7, with 3 English examples per attack type (benign placeholder payloads) and 3 hard-negative examples. Roman Urdu examples are left for the owner.
-- [ ] Authoring templates as CSV (easy in a spreadsheet): `data/seeds/seeds_template.csv` and `data/eval/test_template.csv` (columns: `intent_id, surface, source, label, attack_type, text, notes`).
-- [ ] `scripts/csv_to_jsonl.py`: converts CSV to JSONL through the Pydantic schema with clear row-level error messages.
-- [ ] `scripts/validate_data.py`: schema check, duplicates, label balance, and a **coverage matrix** (`attack_type` x `surface` x `source`), flagging empty required cells and test intents that lack all three surfaces.
-- [ ] `scripts/lock_test.py` writes `data/eval/test.lock` (SHA-256 of `test.jsonl`); `scripts/verify_test_lock.py` checks it; a pytest runs the verification (skipped only if no lock exists yet).
-- [ ] `scripts/eda.py`: length distributions and a coverage heatmap (matplotlib/seaborn) saved to `docs/figures/`.
+- [x] `docs/LABELING_GUIDE.md` from `PRD.md` sections 6 and 7, with 3 English examples per attack type (benign placeholder payloads) and 3 hard-negative examples. Roman Urdu examples are left for the owner.
+- [x] Authoring templates as CSV (easy in a spreadsheet): `data/seeds/seeds_template.csv` and `data/eval/test_template.csv` (placed at `data/templates/test_template.csv`, D17; `hard_negative` column added, D16) (columns: `intent_id, surface, source, label, attack_type, text, notes`).
+- [x] `scripts/csv_to_jsonl.py`: converts CSV to JSONL through the Pydantic schema with clear row-level error messages.
+- [x] `scripts/validate_data.py`: schema check, duplicates, label balance, and a **coverage matrix** (`attack_type` x `surface` x `source`), flagging empty required cells and test intents that lack all three surfaces.
+- [x] `scripts/lock_test.py` writes `data/eval/test.lock` (SHA-256 of `test.jsonl`); `scripts/verify_test_lock.py` checks it; a pytest runs the verification (skipped only if no lock exists yet).
+- [x] `scripts/eda.py`: length distributions and a coverage heatmap (matplotlib/seaborn) saved to `docs/figures/`.
 
 **[HUMAN]** (cannot be delegated):
 - [ ] Write about **80 seeds**: 40 injection (at least 8 per attack type) and 40 benign (at least 20 hard negatives). Mostly `ru_mix` and `ru_pure`.

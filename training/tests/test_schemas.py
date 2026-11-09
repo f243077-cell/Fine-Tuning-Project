@@ -61,6 +61,15 @@ def test_safe_forbids_attack_type() -> None:
         DataRow.model_validate({**VALID, "label": "SAFE"})
 
 
+def test_hard_negative_only_on_safe() -> None:
+    """hard_negative defaults to False and is rejected on INJECTION rows."""
+    assert DataRow.model_validate(VALID).hard_negative is False
+    safe = {**VALID, "label": "SAFE", "attack_type": None, "hard_negative": True}
+    assert DataRow.model_validate(safe).hard_negative is True
+    with pytest.raises(ValidationError):
+        DataRow.model_validate({**VALID, "hard_negative": True})
+
+
 def test_test_row_requires_intent_id() -> None:
     """Test-origin rows must carry intent_id."""
     with pytest.raises(ValidationError):

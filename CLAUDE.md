@@ -71,7 +71,10 @@ python evals/run_asr.py --guard off && python evals/run_asr.py --guard on
 python evals/run_quality.py --guard off && python evals/run_quality.py --guard on
 
 # Data and evaluation
+python scripts/csv_to_jsonl.py data/seeds/seeds.csv data/seeds/seeds.jsonl --origin seed
 python scripts/validate_data.py data/seeds/seeds.jsonl   # Phase 1 onward
+python scripts/eda.py data/seeds/seeds.jsonl             # figures to docs/figures/
+python scripts/lock_test.py                              # owner only, once, after the test set is final
 python scripts/verify_test_lock.py                       # Phase 1 onward
 python evals/eval_guard.py --model ru-guard-0.5b --split test   # Phase 3 onward
 python evals/gate.py                                     # Phase 5 onward

@@ -310,9 +310,10 @@ Pydantic enums: `Source`, `Verdict`, `AttackType`, `Action`. Error codes: 401 ba
 JSONL row (`training/schemas.py`):
 ```json
 { "id": "ru-000123", "text": "...", "source": "user_input", "label": "INJECTION",
-  "attack_type": "override", "surface": "ru_mix", "origin": "synthetic", "intent_id": null }
+  "attack_type": "override", "surface": "ru_mix", "origin": "synthetic", "intent_id": null,
+  "hard_negative": false }
 ```
-`origin` is `seed | synthetic | test`. Test rows carry `intent_id` (matched triplets across `en`, `ru_mix`, `ru_pure`).
+`origin` is `seed | synthetic | test`. Test rows carry `intent_id` (matched triplets across `en`, `ru_mix`, `ru_pure`). `hard_negative` (default `false`) marks `SAFE` rows that contain attack-like words in a harmless sense; it is rejected on `INJECTION` rows.
 
 SQLite:
 ```sql
@@ -481,3 +482,9 @@ volumes: { ollama_data: {}, guard_data: {} }
 | D13 | `tests/test_boundaries.py` also fails on any third-party import not in its whitelist-derived list | Enforces the PRD section 12 whitelist mechanically; adding a name there means the owner approved it. |
 | D14 | Phase 0 work is committed to `main` directly, without a `phase-0` branch | Owner instruction (2026-11-09), overrides the branch rule in `CLAUDE.md` for this project. |
 | D15 | Gate 0 closed by owner delegation (2026-11-09, "do whatever you think is best"): machine-read CPU/RAM accepted; `httpx` and `PyYAML` approved (PRD open question 2) | Owner delegated the decision. Both libraries are required by listed tools. |
+| D16 | `hard_negative` boolean on `DataRow` and a `hard_negative` column (`yes` or empty) in the authoring CSVs | PRD sections 10 and 13 need hard negatives counted and cut in metrics; the schema had no field for them. |
+| D17 | The test authoring template lives at `data/templates/test_template.csv`, not `data/eval/` as `phases.md` says | `CLAUDE.md` forbids tools writing into `data/eval/`. Only the owner puts `test.jsonl` (and `lock_test.py` puts `test.lock`) there. |
+| D18 | The lock is a `sha256sum`-style line (`<hash>  test.jsonl`) over the file with CRLF folded to LF; `.gitattributes` forces LF for `*.jsonl`, `*.csv`, `*.lock` | Windows and Linux (CI) checkouts must give the same hash. A lock is never overwritten; `csv_to_jsonl.py` refuses to write over any JSONL that has a `.lock` beside it. |
+| D19 | Row ids from `csv_to_jsonl.py`: `<origin>-<intent_id>-<surface>` when `intent_id` is set, else `<origin>-<row index>` | Stable ids for test triplets that do not depend on row order. |
+| D20 | Labeling tie-break: when an attack mixes techniques, label its goal (tool_abuse > exfiltration > prompt_leak > persona > override); text aimed at the guard itself is `override` | Consistent labels for multi-technique attacks. Proposed in `docs/LABELING_GUIDE.md`; the owner can change it before writing the test set. |
+| D21 | `validate_data.py` required cells: seeds need every class in `ru_mix` and `ru_pure`; the test set needs every class in every surface and every source (benign included), and hard negatives in every surface; synthetic data needs every class x surface x source cell. PRD count targets are warnings, not errors | Errors block locking; target misses are reported but do not block. |
