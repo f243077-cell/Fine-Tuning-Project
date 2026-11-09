@@ -41,7 +41,7 @@
 - [x] Minimal FastAPI app (`guard/app/main.py`) with `GET /health` and a **stub scanner** that returns `safe`; test with the FastAPI test client.
 - [x] `tests/test_boundaries.py`: parses imports and fails if `guard/` imports anything but `training/normalize.py` from the repo, or if any package imports another project (rules in `Architecture.md` section 5).
 - [x] `docker/Dockerfile.guard` and `docker-compose.yml` (ollama + guard-api). `docker compose build` succeeds.
-- [ ] `.github/workflows/ci.yml` runs `pytest -q` on pull requests.
+- [x] `.github/workflows/ci.yml` runs `pytest -q` on pull requests.
 - [ ] `docs/ENVIRONMENT.md` with OS/WSL2, CPU, RAM, Python, and Docker versions. **[HUMAN]** supplies CPU/RAM.
 - [x] Verify every command in `CLAUDE.md` "Commands" works; fix the section if not.
 
