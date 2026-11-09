@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 680 626" role="img">
+<title>RU-Guard grand workflow</title>
+<desc>Four lanes. Build: seeds feed synthetic data generation, QLoRA tuning and GGUF export on Colab. Serve: the GGUF is registered in Ollama, which guard-api calls, with an audit store alongside. Protect: MCP gateway, the demo_rag reference app and the Flutter playground call guard-api through the client SDK. Prove and gate: the frozen test set feeds evaluation, which measures guard-api and demo_rag, and a CI gate that also receives the GGUF release asset.</desc>
+<style>:root{--bg:#ffffff;--p:#1f1e1d;--s:#5f5e5a;--b:#b4b2a9}@media (prefers-color-scheme:dark){:root{--bg:#1f1e1d;--p:#f1efe8;--s:#b4b2a9;--b:#5f5e5a}}text{font-family:Inter,"Anthropic Sans","Segoe UI",Helvetica,Arial,sans-serif}.t{font-size:14px;fill:var(--p)}.ts{font-size:12px;fill:var(--s)}.th{font-size:14px;font-weight:500;fill:var(--p)}.arr{stroke:var(--s);stroke-width:1.5;fill:none}.c-gray>rect,rect.c-gray{fill:#F1EFE8;stroke:#5F5E5A}.c-gray>.th{fill:#444441}.c-gray>.ts{fill:#5F5E5A}.c-coral>rect,rect.c-coral{fill:#FAECE7;stroke:#993C1D}.c-coral>.th{fill:#712B13}.c-coral>.ts{fill:#993C1D}.c-purple>rect,rect.c-purple{fill:#EEEDFE;stroke:#534AB7}.c-purple>.th{fill:#3C3489}.c-purple>.ts{fill:#534AB7}.c-teal>rect,rect.c-teal{fill:#E1F5EE;stroke:#0F6E56}.c-teal>.th{fill:#085041}.c-teal>.ts{fill:#0F6E56}@media (prefers-color-scheme:dark){.c-gray>rect,rect.c-gray{fill:#444441;stroke:#B4B2A9}.c-gray>.th{fill:#D3D1C7}.c-gray>.ts{fill:#B4B2A9}.c-coral>rect,rect.c-coral{fill:#712B13;stroke:#F0997B}.c-coral>.th{fill:#F5C4B3}.c-coral>.ts{fill:#F0997B}.c-purple>rect,rect.c-purple{fill:#3C3489;stroke:#AFA9EC}.c-purple>.th{fill:#CECBF6}.c-purple>.ts{fill:#AFA9EC}.c-teal>rect,rect.c-teal{fill:#085041;stroke:#5DCAA5}.c-teal>.th{fill:#9FE1CB}.c-teal>.ts{fill:#5DCAA5}}</style><rect width="680" height="626" fill="var(--bg)"/><defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+
+<rect x="24" y="20" width="632" height="104" rx="12" fill="none" stroke="var(--b)" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text class="ts" x="40" y="38">Build: human work and Colab</text>
+<rect x="24" y="148" width="632" height="104" rx="12" fill="none" stroke="var(--b)" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text class="ts" x="40" y="166">Serve: Docker on your machine</text>
+<rect x="24" y="272" width="632" height="170" rx="12" fill="none" stroke="var(--b)" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text class="ts" x="40" y="290">Protect: apps call over HTTP</text>
+<rect x="24" y="466" width="632" height="104" rx="12" fill="none" stroke="var(--b)" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text class="ts" x="40" y="484">Prove and gate: tests and CI</text>
+
+<g class="node c-gray">
+<rect x="40" y="52" width="130" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="105" y="72" text-anchor="middle" dominant-baseline="central">Seeds</text>
+<text class="ts" x="105" y="90" text-anchor="middle" dominant-baseline="central">hand-written</text></g>
+<g class="node c-purple">
+<rect x="194" y="52" width="130" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="259" y="72" text-anchor="middle" dominant-baseline="central">Generate data</text>
+<text class="ts" x="259" y="90" text-anchor="middle" dominant-baseline="central">Qwen 7B, 4-bit</text></g>
+<g class="node c-purple">
+<rect x="348" y="52" width="130" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="413" y="72" text-anchor="middle" dominant-baseline="central">QLoRA tuning</text>
+<text class="ts" x="413" y="90" text-anchor="middle" dominant-baseline="central">Unsloth + TRL</text></g>
+<g class="node c-purple">
+<rect x="502" y="52" width="130" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="567" y="72" text-anchor="middle" dominant-baseline="central">GGUF export</text>
+<text class="ts" x="567" y="90" text-anchor="middle" dominant-baseline="central">llama.cpp Q4</text></g>
+<line x1="170" y1="80" x2="192" y2="80" class="arr" marker-end="url(#arrow)"/>
+<line x1="324" y1="80" x2="346" y2="80" class="arr" marker-end="url(#arrow)"/>
+<line x1="478" y1="80" x2="500" y2="80" class="arr" marker-end="url(#arrow)"/>
+
+<line x1="567" y1="110" x2="567" y2="496" class="arr" marker-end="url(#arrow)"/>
+<path d="M567 136 L413 136 L413 178" fill="none" class="arr" marker-end="url(#arrow)"/>
+
+<g class="node c-coral">
+<rect x="40" y="180" width="130" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="105" y="200" text-anchor="middle" dominant-baseline="central">Audit + PII</text>
+<text class="ts" x="105" y="218" text-anchor="middle" dominant-baseline="central">SQLite, Presidio</text></g>
+<g class="node c-coral">
+<rect x="194" y="180" width="130" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="259" y="200" text-anchor="middle" dominant-baseline="central">guard-api</text>
+<text class="ts" x="259" y="218" text-anchor="middle" dominant-baseline="central">FastAPI, OTel</text></g>
+<g class="node c-coral">
+<rect x="348" y="180" width="130" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="413" y="200" text-anchor="middle" dominant-baseline="central">Ollama</text>
+<text class="ts" x="413" y="218" text-anchor="middle" dominant-baseline="central">two models</text></g>
+<line x1="192" y1="208" x2="172" y2="208" class="arr" marker-end="url(#arrow)"/>
+<line x1="326" y1="208" x2="346" y2="208" class="arr" marker-end="url(#arrow)"/>
+
+<line x1="259" y1="238" x2="259" y2="304" class="arr" marker-end="url(#arrow)"/>
+<g class="node c-coral">
+<rect x="40" y="306" width="438" height="36" rx="8" stroke-width="0.5"/>
+<text class="th" x="259" y="324" text-anchor="middle" dominant-baseline="central">client/ SDK: sync + async HTTP</text></g>
+
+<g class="node c-gray">
+<rect x="40" y="370" width="130" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="105" y="390" text-anchor="middle" dominant-baseline="central">MCP gateway</text>
+<text class="ts" x="105" y="408" text-anchor="middle" dominant-baseline="central">read-only tools</text></g>
+<g class="node c-gray">
+<rect x="194" y="370" width="130" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="259" y="390" text-anchor="middle" dominant-baseline="central">demo_rag</text>
+<text class="ts" x="259" y="408" text-anchor="middle" dominant-baseline="central">reference RAG</text></g>
+<g class="node c-gray">
+<rect x="348" y="370" width="130" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="413" y="390" text-anchor="middle" dominant-baseline="central">Flutter app</text>
+<text class="ts" x="413" y="408" text-anchor="middle" dominant-baseline="central">playground</text></g>
+<line x1="105" y1="368" x2="105" y2="344" class="arr" marker-end="url(#arrow)"/>
+<line x1="259" y1="368" x2="259" y2="344" class="arr" marker-end="url(#arrow)"/>
+<line x1="413" y1="368" x2="413" y2="344" class="arr" marker-end="url(#arrow)"/>
+<line x1="172" y1="398" x2="192" y2="398" class="arr" marker-end="url(#arrow)"/>
+<line x1="346" y1="398" x2="326" y2="398" class="arr" marker-end="url(#arrow)"/>
+
+<g class="node c-gray">
+<rect x="40" y="498" width="130" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="105" y="518" text-anchor="middle" dominant-baseline="central">Test set</text>
+<text class="ts" x="105" y="536" text-anchor="middle" dominant-baseline="central">hash-locked</text></g>
+<g class="node c-purple">
+<rect x="194" y="498" width="130" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="259" y="518" text-anchor="middle" dominant-baseline="central">Evaluation</text>
+<text class="ts" x="259" y="536" text-anchor="middle" dominant-baseline="central">recall, FPR, ASR</text></g>
+<g class="node c-gray">
+<rect x="348" y="498" width="130" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="413" y="518" text-anchor="middle" dominant-baseline="central">CI gate</text>
+<text class="ts" x="413" y="536" text-anchor="middle" dominant-baseline="central">GitHub Actions</text></g>
+<g class="node c-gray">
+<rect x="502" y="498" width="130" height="56" rx="8" stroke-width="0.5"/>
+<text class="th" x="567" y="518" text-anchor="middle" dominant-baseline="central">Release asset</text>
+<text class="ts" x="567" y="536" text-anchor="middle" dominant-baseline="central">GGUF for CI</text></g>
+<line x1="172" y1="526" x2="192" y2="526" class="arr" marker-end="url(#arrow)"/>
+<line x1="326" y1="526" x2="346" y2="526" class="arr" marker-end="url(#arrow)"/>
+<line x1="500" y1="526" x2="480" y2="526" class="arr" marker-end="url(#arrow)"/>
+<line x1="259" y1="496" x2="259" y2="428" class="arr" marker-end="url(#arrow)"/>
+
+<rect class="c-purple" x="40" y="592" width="14" height="14" rx="3" stroke-width="0.5"/>
+<text class="ts" x="62" y="603">Model build and evaluation</text>
+<rect class="c-coral" x="250" y="592" width="14" height="14" rx="3" stroke-width="0.5"/>
+<text class="ts" x="272" y="603">Guard runtime</text>
+<rect class="c-gray" x="390" y="592" width="14" height="14" rx="3" stroke-width="0.5"/>
+<text class="ts" x="412" y="603">Apps, human work, CI</text>
+</svg>

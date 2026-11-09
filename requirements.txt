@@ -1,0 +1,5 @@
+# guard-api service (pinned after a successful install, Phase 0)
+# Phase 6 adds slowapi, presidio, opentelemetry, and an HTTP client for Ollama.
+fastapi==0.162.2
+uvicorn==0.54.0
+pydantic==2.14.3

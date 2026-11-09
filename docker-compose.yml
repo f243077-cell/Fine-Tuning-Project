@@ -1,0 +1,28 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports: ["11434:11434"]
+    volumes:
+      - ollama_data:/root/.ollama
+      - ./models:/models:ro
+
+  guard-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.guard
+    ports: ["8001:8001"]
+    environment:
+      OLLAMA_URL: http://ollama:11434
+      GUARD_MODEL: ${GUARD_MODEL:-ru-guard-0.5b}
+      GUARD_API_KEY: ${GUARD_API_KEY:-}
+      AUDIT_SALT: ${AUDIT_SALT:-}
+      FAIL_MODE: ${FAIL_MODE:-closed}
+      MODE: ${MODE:-enforce}
+      DB_PATH: /data/guard.db
+    volumes:
+      - guard_data:/data
+    depends_on: [ollama]
+
+volumes:
+  ollama_data: {}
+  guard_data: {}

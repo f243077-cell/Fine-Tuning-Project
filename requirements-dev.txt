@@ -1,0 +1,7 @@
+# Local development and tests (pinned after a successful install, Phase 0)
+pytest==9.2.0
+pandas==3.1.1
+numpy==2.5.4
+matplotlib==3.11.2
+seaborn==0.13.2
+httpx==0.28.1

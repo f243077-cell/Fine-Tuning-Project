@@ -1,0 +1,6 @@
+# demo_rag/ and gateway/ (installed and pinned from Phase 7)
+langchain-core
+langgraph
+chromadb
+tiktoken
+mcp

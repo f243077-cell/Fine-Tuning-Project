@@ -1,0 +1,13 @@
+.git
+.venv
+.env
+**/__pycache__
+**/.pytest_cache
+models
+data
+docs
+flutter_app
+notebooks
+*.db
+*.gguf
+*.safetensors

@@ -1,0 +1,6 @@
+# Colab only (installed and pinned in Phases 2 and 4 after a successful Colab install)
+unsloth
+transformers
+peft
+trl
+bitsandbytes
