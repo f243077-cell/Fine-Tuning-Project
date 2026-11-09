@@ -480,3 +480,4 @@ volumes: { ollama_data: {}, guard_data: {} }
 | D12 | Phase 0 tooling runs on Windows Python 3.12 (`py -3.12`) because the owner's machine has no WSL Ubuntu distro; Docker Desktop uses the WSL2 backend | Same Python version and pinned packages; both setup paths are in `CLAUDE.md`. |
 | D13 | `tests/test_boundaries.py` also fails on any third-party import not in its whitelist-derived list | Enforces the PRD section 12 whitelist mechanically; adding a name there means the owner approved it. |
 | D14 | Phase 0 work is committed to `main` directly, without a `phase-0` branch | Owner instruction (2026-11-09), overrides the branch rule in `CLAUDE.md` for this project. |
+| D15 | Gate 0 closed by owner delegation (2026-11-09, "do whatever you think is best"): machine-read CPU/RAM accepted; `httpx` and `PyYAML` approved (PRD open question 2) | Owner delegated the decision. Both libraries are required by listed tools. |

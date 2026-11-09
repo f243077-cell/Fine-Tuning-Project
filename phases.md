@@ -14,7 +14,7 @@
 
 | Phase | Name | Est. | Colab | Human-heavy | Status |
 |---|---|---|---|---|---|
-| 0 | Scaffold and environment | 1 d | no | low | [ ] |
+| 0 | Scaffold and environment | 1 d | no | low | [x] |
 | 1 | Taxonomy, seeds, frozen test set | 4 to 5 d | no | **high** | [ ] |
 | 2 | Synthetic data generation | 3 d | yes | medium | [ ] |
 | 3 | Baselines | 2 d | maybe | low | [ ] |
@@ -42,7 +42,7 @@
 - [x] `tests/test_boundaries.py`: parses imports and fails if `guard/` imports anything but `training/normalize.py` from the repo, or if any package imports another project (rules in `Architecture.md` section 5).
 - [x] `docker/Dockerfile.guard` and `docker-compose.yml` (ollama + guard-api). `docker compose build` succeeds.
 - [x] `.github/workflows/ci.yml` runs `pytest -q` on pull requests.
-- [ ] `docs/ENVIRONMENT.md` with OS/WSL2, CPU, RAM, Python, and Docker versions. **[HUMAN]** supplies CPU/RAM.
+- [x] `docs/ENVIRONMENT.md` with OS/WSL2, CPU, RAM, Python, and Docker versions. **[HUMAN]** supplies CPU/RAM.
 - [x] Verify every command in `CLAUDE.md` "Commands" works; fix the section if not.
 
 **Acceptance:** `pytest -q` green; `docker compose build` ok; `/health` returns 200 locally and in the container; CI green on a test PR.

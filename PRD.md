@@ -167,7 +167,7 @@ Public English injection datasets may be adapted only after checking their licen
 | CI/CD | GitHub Actions | Roadmap 5.7 |
 | Client | Flutter, Riverpod, http/dio, SSE | Roadmap 6 |
 
-**Libraries needed by listed tools but not named in the roadmap documents (pending owner approval, open question 2):** `httpx` (required by FastAPI's test client; also used for async calls to Ollama and `guard-api`) and `PyYAML` (attack suite, golden set, and training configs). `uvicorn` is also needed to serve FastAPI and appears in Study Guide 5.1.
+**Libraries needed by listed tools but not named in the roadmap documents (approved by the owner on 2026-11-09, open question 2, decision D15):** `httpx` (required by FastAPI's test client; also used for async calls to Ollama and `guard-api`) and `PyYAML` (attack suite, golden set, and training configs). `uvicorn` is also needed to serve FastAPI and appears in Study Guide 5.1.
 
 **Operational notes (not project dependencies):** Colab's built-in Google Drive mount is used only to move adapters and GGUF files between Colab and the local machine. GitHub Releases hold the GGUF file for CI (check current size limits).
 
@@ -252,7 +252,7 @@ All evaluation runs on the frozen test set; compare **fine-tuned vs baselines** 
 ## 17. Open questions for the owner
 
 1. Laptop RAM/CPU for the latency target? (Record in Phase 0.)
-2. Two Python libraries are not named in your documents but are required by listed tools: `httpx` (FastAPI's test client and async HTTP calls) and `PyYAML` (config and test-suite files). Approve both, or name the replacements you prefer?
+2. ~~Two Python libraries are not named in your documents but are required by listed tools: `httpx` (FastAPI's test client and async HTTP calls) and `PyYAML` (config and test-suite files). Approve both, or name the replacements you prefer?~~ Resolved 2026-11-09: both approved (D15).
 3. Will you write the 100 matched test intents yourself (about 2 to 3 days)? This cannot be delegated to Claude Code.
 4. Should v2 add Urdu script after v1.0 is released?
 5. Will you write or review about 10 Roman Urdu documents and the poisoned documents for the `demo_rag` corpus (Phase 7, about half a day)? They must not reuse test-set rows.

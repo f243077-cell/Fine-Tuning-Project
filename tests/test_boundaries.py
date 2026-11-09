@@ -23,7 +23,7 @@ ALLOWED_REPO_IMPORTS: dict[str, set[str]] = {
 # Third-party top-level modules from the PRD section 12 whitelist (plus their import names).
 # Adding a name here means the owner approved the dependency.
 THIRD_PARTY = {
-    "fastapi", "starlette", "pydantic", "uvicorn", "httpx", "pytest",
+    "fastapi", "starlette", "pydantic", "uvicorn", "httpx", "yaml", "pytest",
     "pandas", "numpy", "matplotlib", "seaborn",
     "langchain_core", "langgraph", "chromadb", "tiktoken", "mcp",
     "transformers", "peft", "trl", "bitsandbytes", "unsloth", "torch", "datasets",

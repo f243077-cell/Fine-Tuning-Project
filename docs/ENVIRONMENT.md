@@ -1,14 +1,14 @@
 # Environment
 
-Recorded 2026-11-09 (Phase 0). Values were read from the machine with `Get-CimInstance`, `docker info`, and `wsl --version`. **Owner: confirm CPU and RAM below.**
+Recorded 2026-11-09 (Phase 0). Values were read from the machine with `Get-CimInstance`, `docker info`, and `wsl --version`. The owner delegated confirmation on 2026-11-09 (D15).
 
 ## Host
 
 | Item | Value |
 |---|---|
 | OS | Windows 10 Pro 10.0.19045 |
-| CPU | Intel Core i7-7500U @ 2.70 GHz, 2 cores / 4 threads (owner to confirm) |
-| RAM | 15.9 GB (owner to confirm) |
+| CPU | Intel Core i7-7500U @ 2.70 GHz, 2 cores / 4 threads |
+| RAM | 15.9 GB |
 | GPU | Intel HD Graphics 620 (no CUDA GPU; all training runs on Colab) |
 | WSL | 3.0.3.0, kernel 6.18.54.1-1. Only the `docker-desktop` distro is installed; no Ubuntu distro. |
 
