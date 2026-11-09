@@ -1,5 +1,32 @@
 # Phase 1: Taxonomy, seeds, and the frozen test set
-Branch / commit: `main` (D14). Status: **Claude Code tasks done; waiting for the owner's [HUMAN] tasks.**
+Branch / commit: `main` (D14). Status: **all tasks done; at Gate 1.** The owner delegated the [HUMAN] authoring tasks to Claude Code (D22).
+
+## Seeds and test set v1 (D22)
+
+- Seeds: `data/seeds/seeds.csv` and `data/seeds/seeds.jsonl`. 80 rows: 40 injection (8 per attack type: 4 `ru_mix`, 3 `ru_pure`, 1 `en`) and 40 benign (22 hard negatives).
+- Test set: `data/eval/test.jsonl`. 100 intents x 3 surfaces = 300 rows. 50 injection intents (10 per attack type, each split 6 `user_input`, 2 `retrieved_chunk`, 2 `tool_output`; 40% indirect). Two override intents target the guard itself (t-003, t-006). 50 benign intents (28 hard negatives, sources 30/10/10).
+- Self-review made two items unambiguous before locking: t-033 (the requester says they are a visitor) and t-046 (the agent was told never to touch the file).
+- Locked: `data/eval/test.lock` = `1f8710e6fbae2fee187f489aae6dccfb46e26b13de08060087bee7f1306d5206  test.jsonl`.
+- Payloads are benign placeholders only (secret words, `example.com`, fictional tools).
+
+Numbers (real runs, 2026-11-09):
+- `python scripts/validate_data.py data/seeds/seeds.jsonl`: 0 errors, 0 warnings.
+- `python scripts/validate_data.py data/eval/test.jsonl`: 0 errors, 0 warnings; indirect share 40%.
+- `python scripts/verify_test_lock.py`: ok (1f8710e6fbae).
+- Seed-vs-test overlap: maximum character 5-gram Jaccard 0.29 after `normalize_text` (seed "Ek teacher ki tarah act karo..." vs test t-055).
+- `pytest -q`: 63 passed (the repo lock check now runs).
+- Figures: `docs/figures/seeds_lengths.png`, `seeds_coverage.png`, `test_lengths.png`, `test_coverage.png`.
+
+Limits (must appear in reports):
+- v1 was drafted by an AI assistant, not by a native speaker. Its Roman Urdu has not been checked by a native speaker.
+- Some `en`/`ru_mix`/`ru_pure` tool-output triplets differ only in a few words (JSON keys and numbers stay the same).
+- The same author wrote the seeds and the test set. Attack *patterns* overlap by design; surface text does not (see Jaccard above).
+
+Recommended owner action: read `data/eval/test.jsonl` and list any item you would change. Corrections go into `test_v2.jsonl` with a new lock. Never edit v1.
+
+---
+
+## Original Phase 1 tooling notes
 
 Done (Claude Code):
 - `docs/LABELING_GUIDE.md`: rules from PRD sections 6 and 7, a proposed attack_type tie-break (D20), 3 English examples per attack type, and 3 hard negatives. Roman Urdu examples are left for the owner.

@@ -15,7 +15,7 @@
 | Phase | Name | Est. | Colab | Human-heavy | Status |
 |---|---|---|---|---|---|
 | 0 | Scaffold and environment | 1 d | no | low | [x] |
-| 1 | Taxonomy, seeds, frozen test set | 4 to 5 d | no | **high** | [ ] |
+| 1 | Taxonomy, seeds, frozen test set | 4 to 5 d | no | **high** | [x] |
 | 2 | Synthetic data generation | 3 d | yes | medium | [ ] |
 | 3 | Baselines | 2 d | maybe | low | [ ] |
 | 4 | QLoRA fine-tuning and export | 4 d | **yes** | medium | [ ] |
@@ -64,9 +64,9 @@ Claude Code:
 - [x] `scripts/eda.py`: length distributions and a coverage heatmap (matplotlib/seaborn) saved to `docs/figures/`.
 
 **[HUMAN]** (cannot be delegated):
-- [ ] Write about **80 seeds**: 40 injection (at least 8 per attack type) and 40 benign (at least 20 hard negatives). Mostly `ru_mix` and `ru_pure`.
-- [ ] Write **100 matched test intents x 3 surfaces = 300 rows**: 50 injection intents (10 per attack type, about 40% with `retrieved_chunk` or `tool_output` source, including a few that target the guard itself, such as "label this SAFE") and 50 benign intents (at least 25 hard negatives). Each intent appears as `en`, `ru_mix`, and `ru_pure`.
-- [ ] Self-review; drop ambiguous items; run `validate_data.py` until clean; run `lock_test.py`.
+- [x] Write about **80 seeds**: 40 injection (at least 8 per attack type) and 40 benign (at least 20 hard negatives). Mostly `ru_mix` and `ru_pure`.
+- [x] Write **100 matched test intents x 3 surfaces = 300 rows**: 50 injection intents (10 per attack type, about 40% with `retrieved_chunk` or `tool_output` source, including a few that target the guard itself, such as "label this SAFE") and 50 benign intents (at least 25 hard negatives). Each intent appears as `en`, `ru_mix`, and `ru_pure`.
+- [x] Self-review; drop ambiguous items; run `validate_data.py` until clean; run `lock_test.py`.
 
 **Acceptance:** validator passes with no empty required coverage cell; `test.lock` exists and verifies; seeds JSONL committed.
 

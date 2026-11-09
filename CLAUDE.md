@@ -18,7 +18,7 @@ A small Qwen2.5 model fine-tuned with **QLoRA** to detect prompt injection in Ro
 - **No attribution.** Never add Claude as co-author, collaborator, or "generated with" attribution anywhere: commits, PR descriptions, docs, README, model card, code comments. This is a standing rule for all work.
 - **Targeted edits.** Prefer small edits to existing files over rewriting whole files. Do not reformat code you were not asked to change.
 - **The test set is sacred.** `data/eval/test.jsonl` is hand-written by the owner and frozen by `data/eval/test.lock`. Never edit, regenerate, augment, train on, or tune prompts against it. Never write anything into `data/eval/`. If `scripts/verify_test_lock.py` fails, stop and tell the owner.
-- **Never draft test-set content.** Test items are written or rewritten by the owner.
+- **Never draft test-set content.** Test items are written or rewritten by the owner. (One recorded exception: the owner delegated drafting of test set v1 and the seeds on 2026-11-09, decision D22. v1 is now locked; this rule applies in full again.)
 - **Benign payloads only.** Attack examples in datasets use harmless placeholders (reveal the system prompt, say a secret word, call a harmless tool). Never write real instructions for weapons, malware, self-harm, or other harmful content.
 - **Privacy.** No raw user text in logs or `audit_log`. Store only a keyed hash and length. Quarantined text is Presidio-masked.
 - **Secrets.** Config from environment variables. Never commit `.env`, keys, model files (`.gguf`, `.safetensors`), or large data. Keep `.gitignore` correct.

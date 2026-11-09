@@ -132,6 +132,8 @@ References:
 | Train (synthetic) | ~4,000 | Generated with Qwen2.5-7B-Instruct (4-bit) on free Colab from the seeds, then filtered | 50% injection, 50% benign (at least 25% hard negatives); about 15% `en`, the rest `ru_mix`/`ru_pure`; all three sources represented. |
 | Validation | ~500 | Held-out slice of the synthetic data, plus a human-checked 10% sample | Used for model selection only. |
 
+**v1 provenance note (D22):** at the owner's request, the 80 seeds and the 300-row test set v1 were drafted by the AI coding assistant, not hand-written by the owner. Native-speaker review is pending. Reports must state this.
+
 Data quality gates: Pydantic schema validation, exact and near-duplicate removal (character n-gram Jaccard, no overlap with the test set), length limits, a language-mix heuristic, and a **human review of at least 200 random synthetic rows** before training. Document everything in `data/DATA_CARD.md`.
 
 Public English injection datasets may be adapted only after checking their licences; otherwise generate English with Qwen.
