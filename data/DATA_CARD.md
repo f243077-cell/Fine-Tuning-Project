@@ -11,7 +11,7 @@ Train a small classifier (Qwen2.5-0.5B/1.5B with QLoRA) to label text as `SAFE` 
 | Set | Rows | How it was made | Used for |
 |---|---|---|---|
 | Seeds (`data/seeds/seeds.jsonl`) | 80 | Drafted by the AI coding assistant at the owner's request (D22); no native-speaker review yet | Few-shot examples in generation prompts only |
-| Synthetic raw (`data/synthetic/`, gitignored) | target 6,600; actual: not run | Qwen2.5-7B-Instruct, 4-bit (`training/generate_data.py`, `training/configs/generate.yaml`) on free Colab | Input to the build |
+| Synthetic raw (`data/synthetic/`, gitignored) | target 6,600; actual: not run | Qwen2.5-14B-Instruct-AWQ, 4-bit (D29; `training/generate_data.py`, `training/configs/generate.yaml`) on free Colab | Input to the build |
 | Train (`data/processed/train.jsonl`) | target about 4,000; actual: not run | `training/build_dataset.py` | Fine-tuning |
 | Validation (`data/processed/val.jsonl`) | target about 500; actual: not run | Stratified held-out slice of the same build | Model selection only |
 | Test (`data/eval/test.jsonl`) | 300 | Frozen and hash-locked (D22) | Never trained on; read by the build only to remove near-duplicates |

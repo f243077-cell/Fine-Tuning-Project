@@ -36,7 +36,7 @@ A small Qwen2.5 model fine-tuned with **QLoRA** to detect prompt injection in Ro
 | source | `user_input`, `retrieved_chunk`, `tool_output` |
 | surface | `en`, `ru_mix`, `ru_pure` |
 | Models | `ru-guard-0.5b`, `ru-guard-1.5b` (QLoRA on Qwen2.5-0.5B/1.5B-Instruct) |
-| Data generator | Qwen2.5-7B-Instruct, 4-bit, on free Colab |
+| Data generator | Qwen2.5-14B-Instruct-AWQ (4-bit) on free Colab (D29; PRD named 7B) |
 | guard-api | `:8001`, header `X-API-Key` (env `GUARD_API_KEY`) |
 | Ollama | `:11434` (serves `ru-guard-*` and the demo chat model) |
 | Reference RAG | `demo_rag/`, FastAPI `demo-rag` on `:8002`, chat model `qwen2.5:1.5b-instruct` via Ollama, flag `GUARD_ENABLED` |

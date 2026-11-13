@@ -129,7 +129,7 @@ References:
 |---|---|---|---|
 | Seeds | ~80 rows (40 injection, 40 benign) | Hand-written by the owner, covering every attack_type and the `ru_mix`/`ru_pure` forms | Used only as few-shot examples for generation. |
 | **Test (frozen)** | **300 rows = 100 matched intents x 3 surface forms** | **Hand-written/rewritten by the owner** (50 injection intents, 10 per attack_type, about 40% indirect sources; 50 benign intents, at least 25 hard negatives) | Never used for training or prompt tuning. Locked with a SHA-256 hash in `data/eval/test.lock`. |
-| Train (synthetic) | ~4,000 | Generated with Qwen2.5-7B-Instruct (4-bit) on free Colab from the seeds, then filtered | 50% injection, 50% benign (at least 25% hard negatives); about 15% `en`, the rest `ru_mix`/`ru_pure`; all three sources represented. |
+| Train (synthetic) | ~4,000 | Generated with Qwen2.5-14B-Instruct-AWQ (4-bit; 7B was tried first, see D29) on free Colab from the seeds, then filtered | 50% injection, 50% benign (at least 25% hard negatives); about 15% `en`, the rest `ru_mix`/`ru_pure`; all three sources represented. |
 | Validation | ~500 | Held-out slice of the synthetic data, plus a human-checked 10% sample | Used for model selection only. |
 
 **v1 provenance note (D22):** at the owner's request, the 80 seeds and the 300-row test set v1 were drafted by the AI coding assistant, not hand-written by the owner. Native-speaker review is pending. Reports must state this.
@@ -141,7 +141,7 @@ Public English injection datasets may be adapted only after checking their licen
 ## 11. Model requirements (QLoRA)
 
 - **Base models:** Qwen2.5-0.5B-Instruct and Qwen2.5-1.5B-Instruct (both trained; compared on the test set). Check each model's licence on its model card before publishing weights.
-- **Data generator:** Qwen2.5-7B-Instruct, 4-bit (vLLM if it works on the Colab T4, otherwise Transformers + bitsandbytes).
+- **Data generator:** Qwen2.5-14B-Instruct-AWQ, 4-bit, with vLLM on the Colab T4 (Transformers + bitsandbytes as fallback). 7B was tried first and produced too much incoherent Roman Urdu (D29).
 - **Method:** QLoRA with Unsloth, Hugging Face Transformers, PEFT, TRL (`SFTTrainer`, loss on the assistant answer only), and bitsandbytes (4-bit NF4).
 - **Starting hyperparameters (tune on validation only):** LoRA r=16, alpha=32, dropout 0.05, all linear projection modules; learning rate 2e-4 with cosine schedule and 3% warmup; 3 epochs; effective batch size 32; max sequence length 512; **fp16** (the free Colab T4 does not support bfloat16); fixed seed.
 - **Output format:** one line, `SAFE` or `INJECTION|<attack_type>`; temperature 0; at most 8 new tokens.

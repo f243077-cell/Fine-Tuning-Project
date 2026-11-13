@@ -1,4 +1,4 @@
-"""Generate synthetic rows with Qwen2.5-7B-Instruct (4-bit) on Colab; resumable JSONL shards per cell.
+"""Generate synthetic rows with Qwen2.5-14B-Instruct (4-bit, D29) on Colab; resumable JSONL shards per cell.
 
 Run on Colab (see docs/colab/02_generate.md):
     python -m training.generate_data --config training/configs/generate.yaml --out <drive dir>
@@ -35,12 +35,12 @@ class GenerateConfig(BaseModel):
     """Settings from training/configs/generate.yaml."""
 
     backend: str = "vllm"
-    vllm_model: str = "Qwen/Qwen2.5-7B-Instruct-AWQ"
+    vllm_model: str = "Qwen/Qwen2.5-14B-Instruct-AWQ"
     vllm_quantization: str | None = "awq"
     vllm_enforce_eager: bool = False
-    hf_model: str = "Qwen/Qwen2.5-7B-Instruct"
+    hf_model: str = "Qwen/Qwen2.5-14B-Instruct"
     hf_batch_size: int = 6
-    max_model_len: int = 4096
+    max_model_len: int = 3072
     gpu_memory_utilization: float = 0.90
     seed: int = 1234
     temperature: float = 0.9

@@ -1,6 +1,6 @@
 # Colab step 02: generate synthetic training data
 
-**Goal:** generate about 6,600 raw labeled rows with Qwen2.5-7B-Instruct (4-bit) from the seeds. `training/build_dataset.py` then filters them down to about 4,000 train rows and 500 validation rows on your local machine.
+**Goal:** generate about 6,600 raw labeled rows with Qwen2.5-14B-Instruct-AWQ (4-bit, D29) from the seeds. `training/build_dataset.py` then filters them down to about 4,000 train rows and 500 validation rows on your local machine.
 
 **You need:** a Google account, a free Colab session with a **T4 GPU**, and about 2 GB of free space on Google Drive. No Hugging Face token is needed, because the Qwen models are public.
 
@@ -43,7 +43,7 @@ drive.mount('/content/drive')
 !head -n 20 /content/preview/prompts_preview.txt
 ```
 
-**6. Smoke test** (8 calls, about 40 rows). The first run downloads the model, which is about 5.5 GB.
+**6. Smoke test** (8 calls, about 40 rows). The first run downloads the model, which is about 10 GB.
 ```python
 OUT = "/content/drive/MyDrive/ru-guard/synthetic"
 !python -m training.generate_data --config training/configs/generate.yaml --out {OUT} --max-calls 8

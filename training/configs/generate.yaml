@@ -1,11 +1,11 @@
 # Synthetic data generation (Phase 2). Read by training/generate_data.py.
 backend: vllm                          # vllm first; use --backend hf if vLLM fails on the T4
-vllm_model: Qwen/Qwen2.5-7B-Instruct-AWQ   # official 4-bit AWQ checkpoint
+vllm_model: Qwen/Qwen2.5-14B-Instruct-AWQ  # official 4-bit AWQ checkpoint (D29: 7B Roman Urdu too weak)
 vllm_quantization: awq                 # set to null to let vLLM auto-detect
 vllm_enforce_eager: false              # set true if CUDA graph capture runs out of memory
-hf_model: Qwen/Qwen2.5-7B-Instruct     # loaded in 4-bit NF4 with bitsandbytes
+hf_model: Qwen/Qwen2.5-14B-Instruct    # loaded in 4-bit NF4 with bitsandbytes
 hf_batch_size: 6
-max_model_len: 4096
+max_model_len: 3072
 gpu_memory_utilization: 0.90
 
 seed: 1234
