@@ -1,6 +1,6 @@
 # Phase 2: Synthetic data generation
 
-Branch / commit: `main` (D14). Status: **Gate 2 passed (D41).** Dataset v1 is the v3.2 build (en and `ru_mix` only, D38) with its review applied: 3,977 train and 499 val rows, hash `c09b65da...`. The review found 12% bad rows (D40). The owner delegated the go decision. Phase 3 starts when the owner says "start phase 3". Earlier builds: v1 24%, v2 30.5%, v3 23% (`ru_pure` 44%).
+Branch / commit: `main` (D14). Status: **Gate 2 passed (D41).** Dataset v1 is the v3.2 build (en and `ru_mix` only, D38) with its review applied: 3,977 train and 499 val rows, hash `c09b65da...`. The review found 12% bad rows (D40). The owner delegated the go decision. Phase 3 starts when the owner says "start phase 3". **Current data: dataset v1.1** (D42: v1 plus 900 human-written Roman Urdu SAFE rows from UCI and the Roman Urdu Cyber Abuse Dataset; 4,378 train and 548 val, hash `f0f78baa...`). ERUPD (arXiv 2412.17562) was considered but not used: there is no public download, and the owner chose to go ahead with v1.1. Earlier builds: v1 24%, v2 30.5%, v3 23% (`ru_pure` 44%).
 
 ## Done (Claude Code)
 
