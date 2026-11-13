@@ -1,6 +1,6 @@
 # Phase 2: Synthetic data generation
 
-Branch / commit: `main` (D14). Status: **all Claude Code tasks are done. Waiting for the owner's Colab run (the [HUMAN] step).** Gate 2 is not reached yet.
+Branch / commit: `main` (D14). Status: **generation and build done; waiting for the owner's 200-row review (Gate 2).**
 
 ## Done (Claude Code)
 
@@ -37,10 +37,23 @@ Branch / commit: `main` (D14). Status: **all Claude Code tasks are done. Waiting
 - Language-mix heuristic on the seeds: 79 of 80 pass. The failure is seed "Bus booking confirmed: Daewoo, Lahore to Multan..." (all English, labeled `ru_mix`).
 - Generation, build, review: not run (they need the Colab run).
 
+## Colab run and build (2026-11-13)
+
+Claude Code ran Colab through the owner's browser. The owner approved the Drive mount and the download.
+- Smoke test with 7B (8 calls): an `en` cell got Roman Urdu items. Fixed by putting same-language seeds first (commit `b60ef57`).
+- Full run with 7B: stopped after about 200 calls. It gave about 1.1 usable rows per call, and much of the Roman Urdu was incoherent.
+- Smoke test with 14B (64 calls): 284 rows, with clearly better Roman Urdu. The generator was switched to Qwen2.5-14B-Instruct-AWQ and the payload lists were widened (D29, commit `c5e15f7`).
+- Full run with 14B: 6,600 rows from 1,518 calls in 2,612 s on a T4. Manifest: `data/processed/generation_manifest.json`.
+- Colab note: killing the generator with `pkill` left an orphaned `VLLM::EngineCore` process holding 14 GB of GPU memory. Kill the GPU processes by pid (`nvidia-smi --query-compute-apps=pid`).
+- `python -m training.build_dataset --config training/configs/build.yaml`: 4,004 train and 496 val rows; dataset hash `75482df3...`; maximum Jaccard 0.446 against the test set. Drops are listed in `data/DATA_CARD.md`.
+- `python scripts/token_report.py data/processed/train.jsonl data/processed/val.jsonl`: largest 291 tokens; fits 512.
+- `python scripts/sample_for_review.py --n 200`: `data/review/review_sample.csv`.
+- `requirements-train.txt` is pinned from the manifest.
+
 ## Open issues
 
-- vLLM 0.33 on a T4 has not been tried. The fallback path and the config switches are in the Colab doc.
-- `requirements-train.txt` is unpinned until `manifest.json` comes back.
+- vLLM 0.33 works on the T4 with the AWQ checkpoint; the Transformers fallback was not needed.
+- Data quality: see the spot-check limits in `data/DATA_CARD.md`. The review decides go or no-go.
 - Phase 6: `guard/` must import `training/prompt.py` (extend the boundary rule). Windows of unusual characters can exceed 512 tokens.
 - One seed is mislabeled for its surface (see above). The seeds are not edited here. Fix it in a later seeds revision if you want.
 - The `data/eval/.gitkeep` note from Phase 1 still applies.
