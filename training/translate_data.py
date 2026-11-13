@@ -82,13 +82,17 @@ def translate_one(row: DataRow, surface: str, raw: str) -> DataRow | None:
 
 
 def run_translate(rows: list[DataRow], generate: GenerateFn, out_dir: Path, shares: dict[str, float],
-                  batch: int, seed: int) -> dict[str, int]:
-    """Write final rows to out_dir/shards/rows.jsonl and per-source status to out_dir/progress.jsonl."""
+                  batch: int, seed: int, only: str | None = None) -> dict[str, int]:
+    """Write final rows to out_dir/shards/rows.jsonl and per-source status to out_dir/progress.jsonl.
+
+    With `only`, handle just the rows whose target surface is `only` (to redo one surface, D37).
+    """
     shard = out_dir / "shards" / "rows.jsonl"
     shard.parent.mkdir(parents=True, exist_ok=True)
     progress = out_dir / "progress.jsonl"
     done = done_ids(progress)
-    todo = [r for r in rows if r.id not in done and r.surface == "en"]
+    todo = [r for r in rows if r.id not in done and r.surface == "en"
+            and (only is None or assign_surface(r.id, shares) == only)]
     counts = {"kept_en": 0, "translated": 0, "failed": 0}
     for start in range(0, len(todo), batch):
         chunk = todo[start:start + batch]
@@ -120,6 +124,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--in", dest="in_dir", type=Path, required=True, help="English generation folder (holds shards/)")
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--backend", choices=["vllm", "hf"])
+    ap.add_argument("--only", choices=list(SURFACE_ORDER), help="redo only the rows assigned to this surface")
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     cfg = load_config(args.config)
@@ -131,7 +136,8 @@ def main(argv: list[str] | None = None) -> int:
                                   "max_new_tokens": cfg.translate_max_new_tokens})
     backend = args.backend or cfg.backend
     generate = make_vllm_backend(tcfg) if backend == "vllm" else make_hf_backend(tcfg)
-    counts = run_translate(rows, generate, args.out, cfg.translate_surface_share, cfg.translate_batch, cfg.seed)
+    counts = run_translate(rows, generate, args.out, cfg.translate_surface_share, cfg.translate_batch, cfg.seed,
+                           only=args.only)
     log.info("done: %s", counts)
     return 0
 

@@ -127,3 +127,9 @@ OUT = "/content/drive/MyDrive/ru-guard/synthetic_v3"
 - Translation keeps about 15% of them as English and translates the rest into `ru_mix` or `ru_pure`. It writes `synthetic_v3/shards/rows.jsonl` and `progress.jsonl`.
 - Both steps resume after a disconnect if you run the same command again.
 - Bring back `synthetic_v3/` and unzip it so that `data/synthetic/shards/rows.jsonl` exists.
+
+**Redo one surface (D37).** This re-translates only the rows assigned to `ru_pure`, using the current prompt, into a new folder (about 10 minutes):
+```python
+!nohup python -m training.translate_data --config training/configs/generate_en.yaml --in {EN} --out /content/drive/MyDrive/ru-guard/synthetic_v3_pure --only ru_pure > /content/drive/MyDrive/ru-guard/gen_v3_pure.log 2>&1 &
+```
+Locally, keep the non-`ru_pure` rows of `synthetic_v3` in `data/synthetic/shards/rows.jsonl`, and put the new rows next to them as `data/synthetic/shards/rows_pure.jsonl`. The build reads every `shards/*.jsonl` file.
