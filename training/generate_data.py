@@ -58,6 +58,10 @@ class GenerateConfig(BaseModel):
     seeds_path: str = "data/seeds/seeds.jsonl"
     judge_batch: int = 256
     judge_max_new_tokens: int = 32
+    translate_surface_share: dict[str, float] = {"en": 0.15, "ru_mix": 0.45, "ru_pure": 0.40}
+    translate_batch: int = 128
+    translate_temperature: float = 0.3
+    translate_max_new_tokens: int = 512
 
 
 @dataclass(frozen=True)

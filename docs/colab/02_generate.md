@@ -114,3 +114,16 @@ Reconnect with a T4 GPU, then run cells 2, 3, and 4 (or the fallback install). T
    python scripts/apply_review.py data/review/review_sample.csv             # applies it
    ```
    The target is a bad-row rate of 10% or less. Between 10% and 15%, look at what went wrong. Above 15%, the prompts are improved and the data is regenerated.
+
+## v3 pipeline: English first, then translate (D35)
+
+Use this instead of cells 6 to 7b. Run cells 1 to 4 first.
+```python
+EN = "/content/drive/MyDrive/ru-guard/en_v3"
+OUT = "/content/drive/MyDrive/ru-guard/synthetic_v3"
+!nohup bash -c "python -m training.generate_data --config training/configs/generate_en.yaml --out {EN} && python -m training.translate_data --config training/configs/generate_en.yaml --in {EN} --out {OUT}" > /content/drive/MyDrive/ru-guard/gen_v3.log 2>&1 &
+```
+- Generation writes 7,000 English rows to `en_v3/shards/`.
+- Translation keeps about 15% of them as English and translates the rest into `ru_mix` or `ru_pure`. It writes `synthetic_v3/shards/rows.jsonl` and `progress.jsonl`.
+- Both steps resume after a disconnect if you run the same command again.
+- Bring back `synthetic_v3/` and unzip it so that `data/synthetic/shards/rows.jsonl` exists.

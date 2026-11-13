@@ -1,0 +1,37 @@
+# English-only generation for the translate pipeline (D35). Read by generate_data.py and translate_data.py.
+backend: vllm                          # vllm first; use --backend hf if vLLM fails on the T4
+vllm_model: Qwen/Qwen2.5-14B-Instruct-AWQ  # official 4-bit AWQ checkpoint (D29: 7B Roman Urdu too weak)
+vllm_quantization: awq                 # set to null to let vLLM auto-detect
+vllm_enforce_eager: false              # set true if CUDA graph capture runs out of memory
+hf_model: Qwen/Qwen2.5-14B-Instruct    # loaded in 4-bit NF4 with bitsandbytes
+hf_batch_size: 6
+max_model_len: 3072
+gpu_memory_utilization: 0.90
+
+seed: 1234
+temperature: 0.9
+top_p: 0.95
+max_new_tokens: 1024
+items_per_call: 5                      # examples requested per call
+shots: 3                               # few-shot seeds per prompt
+batch_prompts: 64                      # prompts per generate() call
+max_attempt_factor: 3.0                # give up on a cell after target/items * factor calls
+
+# Raw target. build_dataset.py filters and balances this down to about 4,000 train + 500 val.
+raw_total: 7000                        # all English; translate_data.py sets the surface mix
+injection_share: 0.5
+hard_negative_share_of_safe: 0.5       # 25% of all rows
+surface_share: {en: 1.0, ru_mix: 0.0, ru_pure: 0.0}
+source_share: {user_input: 0.5, retrieved_chunk: 0.25, tool_output: 0.25}
+
+seeds_path: data/seeds/seeds.jsonl
+
+# Judge pass (training/judge_data.py, D31): temperature 0, short JSON answers.
+judge_batch: 256
+judge_max_new_tokens: 8
+
+# Translation (training/translate_data.py, D35): final surface mix and sampling.
+translate_surface_share: {en: 0.15, ru_mix: 0.45, ru_pure: 0.40}
+translate_batch: 128
+translate_temperature: 0.3
+translate_max_new_tokens: 512
