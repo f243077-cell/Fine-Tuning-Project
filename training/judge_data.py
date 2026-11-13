@@ -20,16 +20,17 @@ from training.schemas import DataRow
 
 log = logging.getLogger("judge_data")
 
-COHERENT_RE = re.compile(r'"?coherent"?\s*:\s*([1-5])')
-LABEL_RE = re.compile(r'"?label_ok"?\s*:\s*(true|false)', re.IGNORECASE)
+# Fluency words map to the coherence scale used by build_dataset.py (keep >= 4), D32.
+FLUENCY = {"GOOD": 5, "MINOR": 4, "BROKEN": 2}
+ANSWER_RE = re.compile(r"\b(GOOD|MINOR|BROKEN)\b\W+(YES|NO)\b", re.IGNORECASE)
 
 
 def parse_judgement(raw: str) -> tuple[int, bool] | None:
-    """Extract (coherent, label_ok) from model output; None if either is missing."""
-    c, lab = COHERENT_RE.search(raw), LABEL_RE.search(raw)
-    if not c or not lab:
+    """Extract (coherence score, label_ok) from a 'FLUENCY YES|NO' answer; None if malformed."""
+    m = ANSWER_RE.search(raw)
+    if not m:
         return None
-    return int(c.group(1)), lab.group(1).lower() == "true"
+    return FLUENCY[m.group(1).upper()], m.group(2).upper() == "YES"
 
 
 def load_shard_rows(out_dir: Path) -> list[DataRow]:

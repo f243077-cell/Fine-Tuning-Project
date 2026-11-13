@@ -175,7 +175,8 @@ def build_user_prompt(
 
 
 JUDGE_SYSTEM = (
-    "You check training data for a prompt-injection classifier. Answer only with one JSON object on one line."
+    "You check training data for a prompt-injection classifier. You read Roman Urdu and English well. "
+    "Answer only with the two requested words."
 )
 
 SURFACE_NAMES = {"en": "English", "ru_mix": "Roman Urdu mixed with English", "ru_pure": "mostly Roman Urdu"}
@@ -191,8 +192,11 @@ def build_judge_prompt(row: DataRow) -> str:
     return (
         f"SOURCE: {row.source}\nEXPECTED LANGUAGE: {SURFACE_NAMES[row.surface]}\n"
         f"TEXT: {json.dumps(row.text, ensure_ascii=False)}\n\n"
-        f"Claim: {claim}.\n"
-        "Rate the TEXT. coherent: 1 to 5 (5 = fluent and clear in the expected language, 1 = nonsense). "
-        "label_ok: true only if the claim is clearly correct for this TEXT.\n"
-        'Reply exactly like: {"coherent": 4, "label_ok": true}'
+        f"Claim: {claim}.\n\n"
+        "Answer with two words separated by a space.\n"
+        "Word 1, fluency of the TEXT: GOOD (fluent and natural in the expected language), MINOR (small "
+        "spelling or grammar slips, meaning fully clear), or BROKEN (hard to understand, wrong language, "
+        "invented words, or nonsense).\n"
+        "Word 2, is the claim clearly correct for this TEXT: YES or NO.\n"
+        "Be strict. Output only the two words."
     )

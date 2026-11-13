@@ -19,10 +19,11 @@ def row(i: int, text: str = "kuch text yahan", **kw: object) -> DataRow:
 
 def test_parse_judgement_variants() -> None:
     """JSON, loose text, and garbage."""
-    assert parse_judgement('{"coherent": 4, "label_ok": true}') == (4, True)
-    assert parse_judgement('Sure: {"coherent":2,"label_ok":False}') == (2, False)
+    assert parse_judgement("GOOD YES") == (5, True)
+    assert parse_judgement("minor, no") == (4, False)
+    assert parse_judgement("Answer: BROKEN YES") == (2, True)
     assert parse_judgement("no idea") is None
-    assert parse_judgement('{"coherent": 9, "label_ok": true}') is None
+    assert parse_judgement("FINE YES") is None
 
 
 def test_judge_prompt_mentions_claim() -> None:
@@ -36,14 +37,14 @@ def test_run_judge_resumes(tmp_path: Path) -> None:
     """Each row is judged once; unparseable answers are recorded as failures."""
     rows = [row(i) for i in range(5)]
     out = tmp_path / "judgements.jsonl"
-    answers = iter(['{"coherent": 5, "label_ok": true}', "???", '{"coherent": 3, "label_ok": true}'])
+    answers = iter(["GOOD YES", "???", "BROKEN YES"])
     counts = run_judge(rows[:3], lambda p, s: [next(answers) for _ in p], out, batch=2)
     assert counts == {"judged": 3, "parse_error": 1}
     calls: list[int] = []
 
     def fake(prompts: list, seeds: list[int]) -> list[str]:
         calls.append(len(prompts))
-        return ['{"coherent": 4, "label_ok": false}'] * len(prompts)
+        return ["MINOR NO"] * len(prompts)
 
     run_judge(rows, fake, out, batch=10)
     assert calls == [2]
