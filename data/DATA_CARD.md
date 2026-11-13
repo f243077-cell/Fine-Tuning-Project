@@ -1,6 +1,6 @@
 # Data card: RU-Guard training data v1
 
-Status: **Dataset v1 is approved (Gate 2, D41).** It is the v3.2 build (en and `ru_mix` only, D38) with its 200-row review applied: 3,977 train and 499 val rows in `data/processed/`, dataset hash `c09b65da87caefa87cb3c553c0630fe533702f6197157ba69b4285ab2868d300`. The reviewed bad-row rate was 12% (D40), above the 10% target and below the 15% regenerate limit. The owner delegated both the review and the go decision to the AI coding assistant. Earlier builds failed: v1 `75482df3` 24% (D30), v2 `f9fdcb8a` 30.5% (D34), v3 `297f48cb` 23% (D36; `ru_pure` 44%). The sections below describe v1 unless marked v2, v3, or v3.2.
+Status: **Current data is dataset v1.1 (D42): v1 plus 900 human-written Roman Urdu SAFE rows, 4,378 train and 548 val rows, hash `f0f78baa...`. See the last section.** Dataset v1 was approved at Gate 2 (D41). It is the v3.2 build (en and `ru_mix` only, D38) with its 200-row review applied: 3,977 train and 499 val rows in `data/processed/`, dataset hash `c09b65da87caefa87cb3c553c0630fe533702f6197157ba69b4285ab2868d300`. The reviewed bad-row rate was 12% (D40), above the 10% target and below the 15% regenerate limit. The owner delegated both the review and the go decision to the AI coding assistant. Earlier builds failed: v1 `75482df3` 24% (D30), v2 `f9fdcb8a` 30.5% (D34), v3 `297f48cb` 23% (D36; `ru_pure` 44%). The sections below describe v1 unless marked v2, v3, or v3.2.
 
 ## Purpose
 
