@@ -134,7 +134,9 @@ def build_user_prompt(
         lines.append(rng.choice(SPELLING_STYLES))
     lines.append("Topics for this batch: " + ", ".join(rng.sample(TOPICS, 2)) + ". Vary the length.")
     if examples:
-        lines.append("Examples of the same category (do not copy them or reuse their wording):")
+        lines.append("Examples of the same category (do not copy them or reuse their wording; they may be "
+                     "in a different language, but your items must follow the language rule above):")
         lines.extend(f"- {json.dumps(r.text, ensure_ascii=False)}" for r in examples)
+    lines.append("Write natural, polite, grammatical text; no slang insults.")
     lines.append(f"Return exactly {n} items as a JSON array of strings. No numbering, no labels, no explanation.")
     return "\n".join(lines)

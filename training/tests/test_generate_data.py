@@ -132,3 +132,14 @@ def test_dry_run_writes_preview(tmp_path: Path) -> None:
     """Dry run writes prompts without a model."""
     path = dry_run(small_cfg(), seed_rows(), tmp_path, 3)
     assert path.read_text(encoding="utf-8").count("=====") == 3
+
+
+def test_english_cell_prefers_english_seeds() -> None:
+    """An en cell puts the en seed of its category first in the few-shot pool."""
+    from training.generate_data import pick_examples
+    import random
+    seeds = seed_rows() + [DataRow(id="s7", text="english override seed", source="tool_output",
+                                   label="INJECTION", attack_type="override", surface="en", origin="seed")]
+    cell = Cell("INJECTION", "override", "en", "user_input", False, 5)
+    for k in range(5):
+        assert pick_examples(cell, seeds, 1, random.Random(k))[0].id == "s7"

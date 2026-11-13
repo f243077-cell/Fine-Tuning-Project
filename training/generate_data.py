@@ -127,14 +127,15 @@ def cell_seed(base: int, key: str, attempt: int) -> int:
 
 
 def pick_examples(cell: Cell, seeds: list[DataRow], k: int, rng: random.Random) -> list[DataRow]:
-    """Few-shot seeds of the same category, same-source seeds first, order randomized."""
+    """Few-shot seeds of the same category; same language and source first, order randomized."""
     if cell.label == "INJECTION":
         pool = [r for r in seeds if r.label == "INJECTION" and r.attack_type == cell.attack_type]
     else:
         pool = [r for r in seeds if r.label == "SAFE" and r.hard_negative == cell.hard_negative]
     pool = pool[:]
     rng.shuffle(pool)
-    pool.sort(key=lambda r: r.source != cell.source)
+    # Same language family first (en vs Roman Urdu), then same source; ties stay random.
+    pool.sort(key=lambda r: ((r.surface == "en") != (cell.surface == "en"), r.source != cell.source))
     picked = pool[:k]
     rng.shuffle(picked)
     return picked
