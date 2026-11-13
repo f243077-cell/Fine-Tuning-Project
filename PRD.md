@@ -161,6 +161,7 @@ Public English injection datasets may be adapted only after checking their licen
 | Agents and protocols | MCP (official Python SDK), LangGraph | Roadmap 3.2, 2.5+ |
 | Models and fine-tuning | Qwen2.5, Hugging Face Transformers, PEFT, TRL, bitsandbytes, Unsloth | Roadmap 1.2, 4.1, 4.2 |
 | Free compute | Google Colab free GPU | Study Guide Day 8 |
+| Free compute (backup) | Kaggle Notebooks free GPU (weekly quota; private datasets for inputs) | Owner approval 2026-11-13 (D39) |
 | Serving | llama.cpp (GGUF), Ollama, vLLM (generation only, optional) | Roadmap 4.3 |
 | Deployment | FastAPI + Docker, slowapi for rate limiting | Roadmap 5.1; Study Guide 5.1 |
 | Observability | OpenTelemetry; Langfuse (self-hosted, optional) | Roadmap 5.2 |

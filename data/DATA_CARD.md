@@ -1,6 +1,6 @@
 # Data card: RU-Guard training data v1
 
-Status: **three builds failed the 200-row review; nothing is approved for training.** v1 build `75482df3` (6,600 raw rows): 24% bad rows (D30). v2 build `f9fdcb8a` (stricter prompts, 8,000 raw rows): 30.5% bad rows (D34). v3 build `297f48cb` (English first, then translation; now in `data/processed/`): 23% bad rows (D36). In v3, `en` rows are 7% bad and `ru_mix` rows 8% bad, but `ru_pure` rows are 44% bad, mostly invented or wrong "pure Urdu" words. The sections below describe v1 unless marked v2 or v3.
+Status: **v3.2 build `21b2a10b` (en and `ru_mix` only, D38; now in `data/processed/`) has a 12% bad-row rate in the 200-row review (D40). That is above the 10% target but below the 15% regenerate limit, so it waits for the owner's Gate 2 decision.** Earlier builds failed: v1 `75482df3` 24% (D30), v2 `f9fdcb8a` 30.5% (D34), v3 `297f48cb` 23% (D36; `ru_pure` 44%). The sections below describe v1 unless marked v2, v3, or v3.2.
 
 ## Purpose
 
@@ -117,8 +117,21 @@ The dataset v1 hash (after the review is applied) is recorded here at Gate 2.
   - Result: 3,996 train and 504 val rows. Train: 2,000 INJECTION / 1,996 SAFE, 998 hard negatives; `en` 571, `ru_mix` 1,879, `ru_pure` 1,546. Maximum Jaccard 0.430 against the test set, 0.471 against the seeds.
   - Hashes: train `30220dd3...`, val `74a8835f...`, dataset `297f48cb8adfedf3e71dadf2c506a53bc7729d766eb7ecb26d00fb7125c0ba55`.
 - Token check (`scripts/token_report.py`): train maximum 192 tokens (p95 148), val maximum 170; worst-case window 356 tokens. Fits 512.
-- AI review of 200 rows (`data/review/review_sample.csv`, owner-delegated, not a native speaker): 154 keep, 46 drop, 23%. Not applied.
+- AI review of 200 rows (`data/review/review_297f48cb.csv`, owner-delegated, not a native speaker): 154 keep, 46 drop, 23%. Not applied.
   - Per surface: `en` 2/27 (7%), `ru_mix` 7/88 (8%), `ru_pure` 37/85 (44%).
   - Causes: 38 rows of incoherent or broken Roman Urdu (invented or wrong words such as "qadim takhfif", "gaibi khayal"; 37 of them are not `en`). 8 rows where the label does not fit:
     - 3 translations changed the meaning (the speaker flipped, or the target was lost);
     - 5 come from weak English source items: 2 plain topic changes, 2 normal tool requests, and 1 persona that keeps its rules.
+
+## v3.2 build (2026-11-13)
+
+- `ru_pure` was dropped from training data (D38). The 2,783 English rows assigned to `ru_pure` were translated into `ru_mix` on a free Kaggle T4 (D39; commit `1b27b68`, `translate_data.py --only ru_pure --as ru_mix`): 2,696 translated, 87 failed, about 15 minutes including model load. They are in `data/synthetic/shards/rows_mix2.jsonl`, next to the 4,123 v3 `en` and `ru_mix` rows in `rows.jsonl` (both gitignored).
+- `python -m training.build_dataset --config training/configs/build.yaml`:
+  - Input 6,819. Dropped: language mix 161, exact duplicate 7, near duplicate 3, leakage 3, balance cap 2,145. Relabeled: 378 hard negatives without a trigger word became plain SAFE.
+  - Result: 4,000 train and 500 val rows. Train: 1,998 INJECTION / 2,002 SAFE, 1,001 hard negatives; `en` 582, `ru_mix` 3,418, `ru_pure` 0. Maximum Jaccard 0.430 against the test set, 0.416 against the seeds.
+  - Hashes: train `dab6dc8c...`, val `1e9884a8...`, dataset `21b2a10b27d744ffaa6361c3b148c2d1df7dd020dccac4f897f57253b190a335`.
+- Token check: train maximum 209 tokens (p95 144), val maximum 185; worst-case window 349. Fits 512.
+- AI review of 200 rows (`data/review/review_sample.csv`, owner-delegated, not a native speaker): 176 keep, 24 drop, 12%; verdict "review prompts". Not applied.
+  - Per surface: `en` 2/32 (6%), `ru_mix` 22/168 (13%). Per label: INJECTION 13/101, SAFE 11/99.
+  - Causes: 18 rows of incoherent Roman Urdu or a wrong word that changes the meaning. 6 rows where the label does not fit: 2 translations flipped the speaker, and 4 come from weak English items (a plain topic change, a benign request, a note that is not addressed to the AI, a confused payload).
+- Known limit: the model never sees `ru_pure` text in training. The `ru_pure` items in the test set measure how well it generalizes from `ru_mix`.

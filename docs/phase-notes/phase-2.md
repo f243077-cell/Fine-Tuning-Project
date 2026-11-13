@@ -1,6 +1,6 @@
 # Phase 2: Synthetic data generation
 
-Branch / commit: `main` (D14). Status: **v1 (24%), v2 (30.5%), and v3 (23%) all failed the 200-row review (D30, D34, D36). In v3, `en` (7%) and `ru_mix` (8%) pass, but `ru_pure` is 44% bad.** Gate 2 is not reached.
+Branch / commit: `main` (D14). Status: **v3.2 (en and `ru_mix` only, D38) has 12% bad rows in the 200-row review (D40): above the 10% target, below the 15% regenerate limit. Stopped at Gate 2 for the owner's decision.** Earlier builds: v1 24%, v2 30.5%, v3 23% (`ru_pure` 44%).
 
 ## Done (Claude Code)
 
@@ -57,6 +57,17 @@ Claude Code ran Colab through the owner's Chrome. The owner approved the Drive m
 - Build: 3,996 train and 504 val rows, dataset hash `297f48cb...`. Token check fits 512 (largest 192).
 - AI review: 23% bad (`ru_pure` 44%). Details are in `data/DATA_CARD.md` and D36.
 - Proposed next step: re-translate only the `ru_pure` rows with a simpler prompt (see D36). About 15 minutes on Colab, because `en_v3` is on Drive.
+
+## v3.1 and v3.2 (2026-11-13)
+
+- v3.1 (D37): a simpler `ru_pure` prompt was still garbled in a 15-row spot check (about 10 of 15 bad). The run was stopped.
+- The free Colab GPU quota ran out. Kaggle's free T4 was added as backup compute after the owner approved it (D39). The owner verified the account by phone.
+- v3.2 (D38): the `ru_pure`-assigned rows were translated into `ru_mix` on Kaggle (2,696 rows). Build `21b2a10b`: 4,000 train and 500 val; tokens fit (largest 209).
+- AI review: 12% bad (`ru_mix` 13%, `en` 6%). Details are in `data/DATA_CARD.md`.
+
+Gate 2 options for the owner:
+1. Approve v3.2: run `python scripts/apply_review.py data/review/review_sample.csv` (removes the 24 bad rows). Record the new hash in `DATA_CARD.md`, then start Phase 3.
+2. Another round: for example, drop hard negatives that need relabeling, or re-translate with stricter checks. Then rebuild and review again.
 
 ## Open issues
 
