@@ -1,6 +1,6 @@
 # Data card: RU-Guard training data v1
 
-Status: **built; waiting for the owner's 200-row review (Gate 2).** The numbers below come from the runs on 2026-11-13: generation on Colab (`data/processed/generation_manifest.json`) and the build (`data/processed/build_report.json`). The review numbers are "not run" until `scripts/apply_review.py` has been run.
+Status: **build `75482df3` failed the 200-row review (bad-row rate 24%); not approved for training. Prompts must be improved and the data regenerated (D30).** The numbers below come from the runs on 2026-11-13: generation on Colab (`data/processed/generation_manifest.json`) and the build (`data/processed/build_report.json`). The review numbers are "not run" until `scripts/apply_review.py` has been run.
 
 ## Purpose
 
@@ -62,7 +62,12 @@ Counts per cell: `train.cells` and `val.cells` in `data/processed/build_report.j
 
 ## Human review
 
-200 random rows (`data/review/review_sample.csv`, seed 1234), to be reviewed by the owner. Bad-row rate (fix + drop): not run. Target: 10% or less.
+200 random rows (`data/review/review_sample.csv`, seed 1234). The review was done by the AI coding assistant at the owner's request, not by a native speaker (D30).
+
+`python scripts/apply_review.py data/review/review_sample.csv --dry-run` (2026-11-13): 152 keep, 3 fix, 45 drop. Bad-row rate 24% (target 10% or less; above 15% means regenerate). The review was **not applied**.
+- Injection rows: 33 of 101 bad. Safe rows: 15 of 99 bad.
+- Causes (see the `notes` column): incoherent text (25 rows); requests that are not clearly injections, or harmless role-play (15); other (8: label leak, wrong language, non-benign payload, wrong attack type, benign requests labeled as injection).
+- Not counted: many rows flagged `hard_negative` contain no attack-like word. The flag is metadata and does not change the training target.
 
 ## Token lengths
 

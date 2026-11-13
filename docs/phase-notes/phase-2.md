@@ -1,6 +1,6 @@
 # Phase 2: Synthetic data generation
 
-Branch / commit: `main` (D14). Status: **generation and build done; waiting for the owner's 200-row review (Gate 2).**
+Branch / commit: `main` (D14). Status: **build `75482df3` failed the 200-row review (24% bad rows, D30). Next: improve prompts, regenerate, rebuild, review again.** Gate 2 is not reached.
 
 ## Done (Claude Code)
 
