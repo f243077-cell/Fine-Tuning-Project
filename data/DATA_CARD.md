@@ -1,6 +1,6 @@
 # Data card: RU-Guard training data v1
 
-Status: **two builds failed the 200-row review; nothing is approved for training.** v1 build `75482df3` (6,600 raw rows): 24% bad rows (D30). v2 build `f9fdcb8a` (stricter prompts, 8,000 raw rows; now in `data/processed/`): 30.5% bad rows (D34). In v2, English rows are 3% bad; Roman Urdu rows are 32% (`ru_mix`) and 40% (`ru_pure`) bad, mostly incoherent text. The sections below describe v1 unless marked v2.
+Status: **three builds failed the 200-row review; nothing is approved for training.** v1 build `75482df3` (6,600 raw rows): 24% bad rows (D30). v2 build `f9fdcb8a` (stricter prompts, 8,000 raw rows): 30.5% bad rows (D34). v3 build `297f48cb` (English first, then translation; now in `data/processed/`): 23% bad rows (D36). In v3, `en` rows are 7% bad and `ru_mix` rows 8% bad, but `ru_pure` rows are 44% bad, mostly invented or wrong "pure Urdu" words. The sections below describe v1 unless marked v2 or v3.
 
 ## Purpose
 
@@ -103,4 +103,22 @@ The dataset v1 hash (after the review is applied) is recorded here at Gate 2.
   - Result: 4,000 train and 500 val rows. Maximum Jaccard 0.464 against the test set, 0.492 against the seeds.
   - Hashes: train `8377a074...`, val `7f625cea...`, dataset `f9fdcb8aeb095bd5beba98d6fa98aa750c5fe7f495b3562f6fb310fbc074352c`.
 - Token check: largest 291 tokens (fits 512).
-- AI review of 200 rows (`data/review/review_sample.csv`): 139 keep, 61 drop, 30.5%. Not applied.
+- AI review of 200 rows (`data/review/review_f9fdcb8a.csv`): 139 keep, 61 drop, 30.5%. Not applied.
+
+## v3 build (2026-11-13)
+
+- Generation (D35, commit `370be47`, Colab T4, Qwen2.5-14B-Instruct-AWQ, vLLM 0.33.0):
+  - English only: 7,000 rows from 1,439 calls, 2,414 s including model load (`training/configs/generate_en.yaml`).
+  - Translation (`training/translate_data.py`, temperature 0.3): 1,017 rows kept as `en`, 5,858 translated, 125 failed (empty or unchanged); 1,517 s. Output: 6,875 rows.
+  - Raw rows, manifest (`en_manifest.json`), and log are in `data/synthetic/` (gitignored) and on Drive at `ru-guard/en_v3` and `ru-guard/synthetic_v3`.
+- `python -m training.build_dataset --config training/configs/build.yaml`:
+  - Dropped: language mix 221, length 1, exact duplicate 5, near duplicate 2, leakage 2, balance cap 2,144.
+  - Relabeled: 507 hard negatives without a trigger word became plain SAFE.
+  - Result: 3,996 train and 504 val rows. Train: 2,000 INJECTION / 1,996 SAFE, 998 hard negatives; `en` 571, `ru_mix` 1,879, `ru_pure` 1,546. Maximum Jaccard 0.430 against the test set, 0.471 against the seeds.
+  - Hashes: train `30220dd3...`, val `74a8835f...`, dataset `297f48cb8adfedf3e71dadf2c506a53bc7729d766eb7ecb26d00fb7125c0ba55`.
+- Token check (`scripts/token_report.py`): train maximum 192 tokens (p95 148), val maximum 170; worst-case window 356 tokens. Fits 512.
+- AI review of 200 rows (`data/review/review_sample.csv`, owner-delegated, not a native speaker): 154 keep, 46 drop, 23%. Not applied.
+  - Per surface: `en` 2/27 (7%), `ru_mix` 7/88 (8%), `ru_pure` 37/85 (44%).
+  - Causes: 38 rows of incoherent or broken Roman Urdu (invented or wrong words such as "qadim takhfif", "gaibi khayal"; 37 of them are not `en`). 8 rows where the label does not fit:
+    - 3 translations changed the meaning (the speaker flipped, or the target was lost);
+    - 5 come from weak English source items: 2 plain topic changes, 2 normal tool requests, and 1 persona that keeps its rules.

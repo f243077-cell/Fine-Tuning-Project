@@ -1,6 +1,6 @@
 # Phase 2: Synthetic data generation
 
-Branch / commit: `main` (D14). Status: **v1 (24%) and v2 (30.5%) both failed the 200-row review (D30, D34). Waiting for an owner decision on the Roman Urdu data source.** Gate 2 is not reached.
+Branch / commit: `main` (D14). Status: **v1 (24%), v2 (30.5%), and v3 (23%) all failed the 200-row review (D30, D34, D36). In v3, `en` (7%) and `ru_mix` (8%) pass, but `ru_pure` is 44% bad.** Gate 2 is not reached.
 
 ## Done (Claude Code)
 
@@ -49,6 +49,14 @@ Claude Code ran Colab through the owner's browser. The owner approved the Drive 
 - `python scripts/token_report.py data/processed/train.jsonl data/processed/val.jsonl`: largest 291 tokens; fits 512.
 - `python scripts/sample_for_review.py --n 200`: `data/review/review_sample.csv`.
 - `requirements-train.txt` is pinned from the manifest.
+
+## v3 run (2026-11-13)
+
+Claude Code ran Colab through the owner's Chrome. The owner approved the Drive mount.
+- English generation: 7,000 rows in 2,414 s. Translation: 5,858 translated, 1,017 kept as `en`, 125 failed; 1,517 s.
+- Build: 3,996 train and 504 val rows, dataset hash `297f48cb...`. Token check fits 512 (largest 192).
+- AI review: 23% bad (`ru_pure` 44%). Details are in `data/DATA_CARD.md` and D36.
+- Proposed next step: re-translate only the `ru_pure` rows with a simpler prompt (see D36). About 15 minutes on Colab, because `en_v3` is on Drive.
 
 ## Open issues
 
