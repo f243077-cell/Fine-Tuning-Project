@@ -28,4 +28,4 @@ seeds_path: data/seeds/seeds.jsonl
 
 # Judge pass (training/judge_data.py, D31): temperature 0, short JSON answers.
 judge_batch: 256
-judge_max_new_tokens: 32
+judge_max_new_tokens: 8
