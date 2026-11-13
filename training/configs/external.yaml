@@ -1,0 +1,24 @@
+# Dataset v1.1 (D42): add human-written Roman Urdu as SAFE rows to the approved dataset v1.
+# Raw files are downloaded by hand into data/external/raw/ (gitignored); see data/DATA_CARD.md.
+processed_dir: data/processed
+seeds_path: data/seeds/seeds.jsonl
+test_path: data/eval/test.jsonl
+denylist_path: training/configs/denylist.yaml
+seed: 1234
+min_chars: 20
+max_chars: 400
+min_tokens: 4
+ngram: 5
+leak_threshold: 0.5      # against seeds and test (same as the build)
+near_dup_threshold: 0.8  # within the new rows and against dataset v1
+val_share: 0.11          # matches dataset v1 (499 / 4,476)
+replace_share: 0.5       # half of the new rows replace synthetic plain SAFE user_input rows; the rest are added
+sources:
+  - name: uci_roman_urdu
+    path: "data/external/raw/uci/Roman Urdu DataSet.csv"
+    format: uci          # no header: sentence, sentiment
+    take: {ru_pure: 450, ru_mix: 150}
+  - name: roman_urdu_cyber_abuse
+    path: data/external/raw/abuse/roman_urdu_cyber_abuse_dataset.csv
+    format: abuse        # header: id, comment, label (H / O)
+    take: {ru_mix: 300}  # split evenly between H and O where possible

@@ -139,3 +139,31 @@ Build (before review): `75482df3c6491016a14908affcafa73d3df12b075377d2abb2226b09
   - Per surface: `en` 2/32 (6%), `ru_mix` 22/168 (13%). Per label: INJECTION 13/101, SAFE 11/99.
   - Causes: 18 rows of incoherent Roman Urdu or a wrong word that changes the meaning. 6 rows where the label does not fit: 2 translations flipped the speaker, and 4 come from weak English items (a plain topic change, a benign request, a note that is not addressed to the AI, a confused payload).
 - Known limit: the model never sees `ru_pure` text in training. The `ru_pure` items in the test set measure how well it generalizes from `ru_mix`.
+
+## Dataset v1.1: human-written SAFE rows (2026-11-13, D42)
+
+`python -m training.add_external --config training/configs/external.yaml` (run on dataset v1). This adds 900 real Roman Urdu comments as SAFE rows, with origin `external` and source `user_input`:
+
+| Source | License | Rows | Surface |
+|---|---|---|---|
+| UCI "Roman Urdu Data Set", Z. Sharf (2017), https://doi.org/10.24432/C58325 | CC BY 4.0 | 600 | 450 `ru_pure`, 150 `ru_mix` |
+| Kaggle "Roman Urdu Cyber Abuse Dataset", Muhammad Hassan Tariq (`hassan7838/roman-urdu-cyber-abuse-dataset`) | CC BY-SA 4.0 | 300 | `ru_mix` (150 abusive `H`, 150 ordinary `O`) |
+
+- Raw files go in `data/external/raw/` (gitignored; download them by hand from the links above).
+- Filters:
+  - length 20 to 400 characters and at least 4 words;
+  - denylist;
+  - text with encoding damage is skipped;
+  - exact duplicates, and near-duplicates (Jaccard 0.8) against the new rows and dataset v1;
+  - leakage check against seeds and test (Jaccard 0.5).
+  - Surface comes from the build's language heuristic.
+- Maximum Jaccard of a new row: 0.092 against the test set and 0.098 against the seeds. 6 new rows contain a trigger word and are marked as hard negatives.
+- Half the new rows (400 train, 50 val) replace synthetic plain SAFE `user_input` rows, and the rest are added. The replaced ids are listed in `data/processed/external_report.json`.
+- Result:
+  - train 4,378 rows (1,986 INJECTION, 2,392 SAFE; `en` 523, `ru_mix` 3,453, `ru_pure` 402);
+  - val 548 rows (251 INJECTION, 297 SAFE);
+  - hashes: train `432bb6cb72e76b2d26f6182da6247f0b82c19d73a990192a2e1572229b8e3604`, val `0b99621ae20e22beef8b69ce25faf3c93e0a14ed6ef3aa27ab4fdd02489e32cf`, dataset `f0f78baa7487829851159175e9509e0e257743e664112403a9f4afa816547afa`.
+- Token check: train maximum 218 tokens, val maximum 205; worst-case window 419. Fits 512.
+- Quality: the AI coding assistant spot-checked 100 new rows. They are real human text; some are rude, crude, political, or religious, and that is fine for SAFE (rude is not injection). These rows were not fully reviewed.
+- **Licensing:** the CC BY-SA rows mean that any published copy of `train.jsonl` / `val.jsonl` must be shared under CC BY-SA 4.0 with the attributions above.
+- Label share is now about 45% INJECTION / 55% SAFE (v1 was 50/50).

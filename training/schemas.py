@@ -44,6 +44,7 @@ class Origin(StrEnum):
     SEED = "seed"
     SYNTHETIC = "synthetic"
     TEST = "test"
+    EXTERNAL = "external"  # human-written public datasets, SAFE only (D42)
 
 
 class DataRow(BaseModel):

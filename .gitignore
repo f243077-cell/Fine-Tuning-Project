@@ -28,6 +28,7 @@ outputs/
 # Large data
 data/synthetic/*
 !data/synthetic/.gitkeep
+data/external/raw/
 demo_rag/chroma/
 
 # Editors / OS
