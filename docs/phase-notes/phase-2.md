@@ -1,6 +1,6 @@
 # Phase 2: Synthetic data generation
 
-Branch / commit: `main` (D14). Status: **build `75482df3` failed the 200-row review (24% bad rows, D30). Next: improve prompts, regenerate, rebuild, review again.** Gate 2 is not reached.
+Branch / commit: `main` (D14). Status: **v1 (24%) and v2 (30.5%) both failed the 200-row review (D30, D34). Waiting for an owner decision on the Roman Urdu data source.** Gate 2 is not reached.
 
 ## Done (Claude Code)
 

@@ -26,6 +26,6 @@ hard_negative_min_share_of_safe: 0.5
 seed: 1234
 
 # v2 (D31): judge filter from training/judge_data.py, and hard negatives must contain a trigger word.
-judgements_path: data/synthetic/judgements.jsonl
+judgements_path: null                    # judge disabled: unreliable on the T4 run (D33)
 judge_min_coherence: 4
 hard_negative_needs_trigger: true

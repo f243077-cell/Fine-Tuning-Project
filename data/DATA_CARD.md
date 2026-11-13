@@ -1,6 +1,6 @@
 # Data card: RU-Guard training data v1
 
-Status: **build `75482df3` failed the 200-row review (bad-row rate 24%); not approved for training. Prompts must be improved and the data regenerated (D30).** The numbers below come from the runs on 2026-11-13: generation on Colab (`data/processed/generation_manifest.json`) and the build (`data/processed/build_report.json`). The review numbers are "not run" until `scripts/apply_review.py` has been run.
+Status: **two builds failed the 200-row review; nothing is approved for training.** v1 build `75482df3` (6,600 raw rows): 24% bad rows (D30). v2 build `f9fdcb8a` (stricter prompts, 8,000 raw rows; now in `data/processed/`): 30.5% bad rows (D34). In v2, English rows are 3% bad; Roman Urdu rows are 32% (`ru_mix`) and 40% (`ru_pure`) bad, mostly incoherent text. The sections below describe v1 unless marked v2.
 
 ## Purpose
 
@@ -93,3 +93,14 @@ The dataset v1 hash (after the review is applied) is recorded here at Gate 2.
 - The seeds and the test set were written by the same author (D22). The leakage filter removes near-copies, but shared attack *patterns* remain by design.
 - The language-mix filter is a word-list heuristic. It can drop valid rows that use rare spellings, and it can keep rows whose label is borderline. One of the 80 seeds (an all-English booking confirmation labeled `ru_mix`) fails it.
 - Payloads are placeholders (secret words, `example.com`, fictional tools). The model learns the structure of an instruction aimed at an AI, not harmful topics.
+
+## v2 build (2026-11-13)
+
+- Generation: 8,000 rows, Qwen2.5-14B-Instruct-AWQ, stricter prompts (D31), commit `76653c9`, 3,781 s on a Colab T4. The judge pass was disabled as unreliable (D32, D33).
+- `python -m training.build_dataset --config training/configs/build.yaml`:
+  - Dropped: language mix 461, denylist 2, leakage 32, near duplicate 5, balance cap 3,000.
+  - Relabeled: 586 hard negatives without a trigger word became plain SAFE.
+  - Result: 4,000 train and 500 val rows. Maximum Jaccard 0.464 against the test set, 0.492 against the seeds.
+  - Hashes: train `8377a074...`, val `7f625cea...`, dataset `f9fdcb8aeb095bd5beba98d6fa98aa750c5fe7f495b3562f6fb310fbc074352c`.
+- Token check: largest 291 tokens (fits 512).
+- AI review of 200 rows (`data/review/review_sample.csv`): 139 keep, 61 drop, 30.5%. Not applied.
