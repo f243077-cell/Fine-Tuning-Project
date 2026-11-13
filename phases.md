@@ -78,13 +78,13 @@ Claude Code:
 
 **Goal:** about 4,000 clean training rows and 500 validation rows, with a data card.
 
-- [ ] `training/generate_data.py`: loads Qwen2.5-7B-Instruct in 4-bit (try vLLM first; flag to fall back to Transformers + bitsandbytes). Builds few-shot prompts from the seeds for each cell (`attack_type` x `surface` x `source` x `label`), requires varied Roman Urdu spellings, benign placeholder payloads only, and about 15% English. Resumable, writes JSONL shards, fixed seed, configurable temperature/top_p.
-- [ ] `docs/colab/02_generate.md`: exact cells, expected runtime, Drive output path, what to copy back.
-- [ ] `training/build_dataset.py`: normalize, Pydantic-validate, remove exact and near-duplicates (character n-gram Jaccard) within the set and **against seeds and test**, language-mix heuristic, length limits, safety denylist scan (drop rows with real harmful-content keywords), balance labels, split train/val, write `data/processed/train.jsonl` and `val.jsonl`.
-- [ ] Token-length report with the Qwen tokenizer (dev-only dependency): confirm system prompt + window + label fit `max_seq_len` 512; if not, adjust `WINDOW_CHARS` in `Architecture.md` 6.2 and note it in the decision log.
-- [ ] `scripts/sample_for_review.py` (200 random rows to CSV) and `scripts/apply_review.py` (apply keep/fix/drop, report the bad-row rate).
-- [ ] `data/DATA_CARD.md`: sources, counts per cell, filters and drop rates, known limits, dataset hash.
-- [ ] Tests: dedup, leakage check against a fixture test set, split determinism, denylist.
+- [x] `training/generate_data.py`: loads Qwen2.5-7B-Instruct in 4-bit (try vLLM first; flag to fall back to Transformers + bitsandbytes). Builds few-shot prompts from the seeds for each cell (`attack_type` x `surface` x `source` x `label`), requires varied Roman Urdu spellings, benign placeholder payloads only, and about 15% English. Resumable, writes JSONL shards, fixed seed, configurable temperature/top_p.
+- [x] `docs/colab/02_generate.md`: exact cells, expected runtime, Drive output path, what to copy back.
+- [x] `training/build_dataset.py`: normalize, Pydantic-validate, remove exact and near-duplicates (character n-gram Jaccard) within the set and **against seeds and test**, language-mix heuristic, length limits, safety denylist scan (drop rows with real harmful-content keywords), balance labels, split train/val, write `data/processed/train.jsonl` and `val.jsonl`.
+- [x] Token-length report with the Qwen tokenizer (dev-only dependency): confirm system prompt + window + label fit `max_seq_len` 512; if not, adjust `WINDOW_CHARS` in `Architecture.md` 6.2 and note it in the decision log.
+- [x] `scripts/sample_for_review.py` (200 random rows to CSV) and `scripts/apply_review.py` (apply keep/fix/drop, report the bad-row rate).
+- [x] `data/DATA_CARD.md`: sources, counts per cell, filters and drop rates, known limits, dataset hash.
+- [x] Tests: dedup, leakage check against a fixture test set, split determinism, denylist.
 
 **[HUMAN]:** run the Colab generation; review the 200 sampled rows; decide go or no-go.
 

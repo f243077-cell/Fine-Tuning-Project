@@ -76,6 +76,11 @@ python scripts/validate_data.py data/seeds/seeds.jsonl   # Phase 1 onward
 python scripts/eda.py data/seeds/seeds.jsonl             # figures to docs/figures/
 python scripts/lock_test.py                              # owner only, once, after the test set is final
 python scripts/verify_test_lock.py                       # Phase 1 onward
+python -m training.generate_data --config training/configs/generate.yaml --out /tmp/gen --dry-run  # prompt preview; real run on Colab (docs/colab/02_generate.md)
+python -m training.build_dataset --config training/configs/build.yaml   # Phase 2: data/synthetic -> data/processed
+python scripts/token_report.py data/processed/train.jsonl data/processed/val.jsonl
+python scripts/sample_for_review.py --n 200              # writes data/review/review_sample.csv
+python scripts/apply_review.py data/review/review_sample.csv --dry-run
 python evals/eval_guard.py --model ru-guard-0.5b --split test   # Phase 3 onward
 python evals/gate.py                                     # Phase 5 onward
 ```

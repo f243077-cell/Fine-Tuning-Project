@@ -1,0 +1,26 @@
+# Dataset build (Phase 2). Read by training/build_dataset.py.
+synthetic_glob: data/synthetic/shards/*.jsonl
+seeds_path: data/seeds/seeds.jsonl
+test_path: data/eval/test.jsonl          # read only, for leakage removal; never trained on
+out_dir: data/processed
+denylist_path: training/configs/denylist.yaml
+
+min_chars: 15
+max_chars: 1000                          # WINDOW_CHARS (Architecture.md 6.2): one window per row
+ngram: 5                                 # character n-grams for near-duplicate Jaccard
+near_dup_threshold: 0.8                  # within the synthetic set
+leak_threshold: 0.5                      # against seeds and the test set (stricter)
+
+# Language-mix heuristic: share of Roman Urdu / English function words among word tokens.
+lang:
+  en_max_ru: 0.06                        # en rows: at most this share of Roman Urdu markers
+  ru_mix_min_ru: 0.12                    # ru_mix rows: at least this share of Roman Urdu markers
+  ru_pure_min_ru: 0.20                   # ru_pure rows: at least this share of Roman Urdu markers
+  ru_pure_max_en: 0.10                   # ru_pure rows: at most this share of English markers
+  tool_output_factor: 0.5                # tool outputs (JSON keys, ids): Roman Urdu minimums x this
+  min_tokens: 3
+
+train_size: 4000
+val_size: 500
+hard_negative_min_share_of_safe: 0.5
+seed: 1234

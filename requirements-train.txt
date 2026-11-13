@@ -1,6 +1,11 @@
-# Colab only (installed and pinned in Phases 2 and 4 after a successful Colab install)
+# Colab only. Colab already ships torch, transformers, and accelerate.
+# Pin these from data/synthetic/manifest.json ("versions") after the first successful Colab run.
+# Phase 2 (data generation):
+vllm            # first choice (AWQ 4-bit checkpoint)
+bitsandbytes    # fallback backend (--backend hf) and Phase 4 QLoRA
+PyYAML
+# Phase 4 (fine-tuning):
 unsloth
 transformers
 peft
 trl
-bitsandbytes

@@ -1,0 +1,38 @@
+# Safety denylist for synthetic rows (Phase 2). A row whose normalized text contains any of these
+# word prefixes is dropped. The dataset teaches the injection *structure* with benign payloads, so
+# real harmful topics never belong in it. Matching is a word-start match on normalized text.
+terms:
+  # weapons and explosives
+  - bomb
+  - explosive
+  - detonat
+  - grenade
+  - firearm
+  - nerve agent
+  - ricin
+  - anthrax
+  - bum banan
+  - barood
+  # malware and intrusion
+  - malware
+  - ransomware
+  - keylogger
+  - trojan
+  - botnet
+  - ddos
+  - rootkit
+  - exploit code
+  - reverse shell
+  # drugs
+  - cocaine
+  - heroin
+  - methamphetamine
+  - meth lab
+  # self-harm
+  - suicide
+  - self-harm
+  - self harm
+  - kill yourself
+  - khudkushi
+  - khud kushi
+  - zehar

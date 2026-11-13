@@ -5,3 +5,7 @@ numpy==2.5.4
 matplotlib==3.11.2
 seaborn==0.13.2
 httpx==0.28.1
+# Phase 2 (pinned after a successful install, 2026-11-13)
+PyYAML==6.0.3
+transformers==5.22.2   # Qwen tokenizer for scripts/token_report.py only (no torch needed)
+jinja2==3.1.6          # required by transformers for chat templates

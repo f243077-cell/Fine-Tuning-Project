@@ -1,5 +1,6 @@
 """Read and write DataRow JSONL files with line-level error reporting."""
 
+import hashlib
 import json
 from collections.abc import Iterable
 from pathlib import Path
@@ -7,6 +8,16 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from training.schemas import DataRow
+
+
+def content_sha256(path: Path) -> str:
+    """SHA-256 of the file with CRLF folded to LF, so Windows and Linux checkouts agree."""
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
+def dataset_sha256(train_hash: str, val_hash: str) -> str:
+    """One dataset hash from the train and val file hashes (recorded in DATA_CARD.md)."""
+    return hashlib.sha256(f"{train_hash}\n{val_hash}\n".encode()).hexdigest()
 
 
 def format_validation_error(err: ValidationError) -> str:

@@ -1,7 +1,10 @@
 """Hashing helpers for the frozen test-set lock (data/eval/test.lock)."""
 
-import hashlib
 from pathlib import Path
+
+from training.jsonl import content_sha256
+
+__all__ = ["DEFAULT_TEST", "content_sha256", "format_lock", "lock_path_for", "read_lock", "verify"]
 
 DEFAULT_TEST = Path(__file__).resolve().parents[1] / "data" / "eval" / "test.jsonl"
 
@@ -9,11 +12,6 @@ DEFAULT_TEST = Path(__file__).resolve().parents[1] / "data" / "eval" / "test.jso
 def lock_path_for(jsonl: Path) -> Path:
     """Lock file that freezes a JSONL file (test.jsonl -> test.lock)."""
     return jsonl.with_suffix(".lock")
-
-
-def content_sha256(path: Path) -> str:
-    """SHA-256 of the file with CRLF folded to LF, so Windows and Linux checkouts agree."""
-    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 def format_lock(digest: str, jsonl: Path) -> str:

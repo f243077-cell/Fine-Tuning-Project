@@ -27,7 +27,7 @@ THIRD_PARTY = {
     "fastapi", "starlette", "pydantic", "uvicorn", "httpx", "yaml", "pytest",
     "pandas", "numpy", "matplotlib", "seaborn",
     "langchain_core", "langgraph", "chromadb", "tiktoken", "mcp",
-    "transformers", "peft", "trl", "bitsandbytes", "unsloth", "torch", "datasets",
+    "transformers", "peft", "trl", "bitsandbytes", "unsloth", "torch", "datasets", "vllm",
     "slowapi", "presidio_analyzer", "presidio_anonymizer", "opentelemetry",
 }
 

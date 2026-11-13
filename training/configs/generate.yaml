@@ -1,0 +1,27 @@
+# Synthetic data generation (Phase 2). Read by training/generate_data.py.
+backend: vllm                          # vllm first; use --backend hf if vLLM fails on the T4
+vllm_model: Qwen/Qwen2.5-7B-Instruct-AWQ   # official 4-bit AWQ checkpoint
+vllm_quantization: awq                 # set to null to let vLLM auto-detect
+vllm_enforce_eager: false              # set true if CUDA graph capture runs out of memory
+hf_model: Qwen/Qwen2.5-7B-Instruct     # loaded in 4-bit NF4 with bitsandbytes
+hf_batch_size: 6
+max_model_len: 4096
+gpu_memory_utilization: 0.90
+
+seed: 1234
+temperature: 0.9
+top_p: 0.95
+max_new_tokens: 1024
+items_per_call: 5                      # examples requested per call
+shots: 3                               # few-shot seeds per prompt
+batch_prompts: 64                      # prompts per generate() call
+max_attempt_factor: 3.0                # give up on a cell after target/items * factor calls
+
+# Raw target. build_dataset.py filters and balances this down to about 4,000 train + 500 val.
+raw_total: 6600
+injection_share: 0.5
+hard_negative_share_of_safe: 0.5       # 25% of all rows
+surface_share: {en: 0.15, ru_mix: 0.45, ru_pure: 0.40}
+source_share: {user_input: 0.5, retrieved_chunk: 0.25, tool_output: 0.25}
+
+seeds_path: data/seeds/seeds.jsonl
