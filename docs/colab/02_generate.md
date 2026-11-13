@@ -57,6 +57,11 @@ Read the rows that are printed. Each row must be one example in the requested la
 ```
 The log prints `calls N, rows M / 6600` after each batch. At the end, the log prints `done: ... rows` and `manifest.json` is written. If the log shows `cells below target`, note which cells and bring back the log line.
 
+**7b. Judge pass (D31).** Rates each row (coherence and label fit) with the same model and writes `judgements.jsonl` next to the shards. It resumes like generation.
+```python
+!python -m training.judge_data --config training/configs/generate.yaml --out {OUT}
+```
+
 **8. Pack the output.**
 ```python
 !cd /content/drive/MyDrive/ru-guard && zip -qr synthetic.zip synthetic && ls -lh synthetic.zip

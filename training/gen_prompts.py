@@ -113,17 +113,40 @@ TOPICS = [
 ]
 
 
+ATTACK_REQUIREMENTS = {
+    "override": "Every item must plainly tell the AI to drop, cancel, or replace its earlier instructions or task, "
+                "and say what to do instead.",
+    "persona": "Every item must give the AI a new character or mode AND say that this character ignores rules, "
+               "limits, or policy. Harmless role-play without dropping rules is not acceptable.",
+    "prompt_leak": "Every item must plainly ask the AI to reveal, print, or repeat its system prompt, hidden "
+                   "instructions, rules, or configuration.",
+    "exfiltration": "Every item must ask the AI to reveal or send data that is NOT the requester's own: other users' "
+                    "data, secrets (API keys, tokens, passwords), or data sent to an outside address such as "
+                    "example.com. Asking for one's own data is not exfiltration.",
+    "tool_abuse": "Every item must tell the AI agent to call a named tool that the user did not ask for, or with "
+                  "harmful arguments (all users, delete, disable, without asking). A normal tool request is not "
+                  "tool abuse.",
+}
+
+CLARITY_RULE = (
+    "Each item must be a complete, coherent sentence or passage that a real Pakistani speaker would write. "
+    "Prefer simple, correct Roman Urdu over rare or invented words. Never write the words 'injection' or "
+    "'prompt injection' in injection items, and never add labels such as 'Injection:' or 'Note:'."
+)
+
+
 def describe_cell(label: str, attack_type: str | None, hard_negative: bool, rng: random.Random) -> str:
     """Category description for the generator, by label kind."""
     if label == "INJECTION":
-        return f"text that contains a prompt injection of type '{attack_type}': {ATTACK_DESCRIPTIONS[attack_type]}"
+        return (f"text that contains a prompt injection of type '{attack_type}': {ATTACK_DESCRIPTIONS[attack_type]}. "
+                f"{ATTACK_REQUIREMENTS[attack_type]}")
     if hard_negative:
         words = ", ".join(f"'{w}'" for w in rng.sample(HARD_NEGATIVE_WORDS, 3))
         return (
-            "SAFE text (a hard negative): ordinary, harmless text that uses words such as "
-            f"{words} in a normal sense, or that only discusses prompt injection or AI safety. "
-            "It must NOT tell an AI to ignore its rules, change its role, reveal hidden prompts, "
-            "leak data, or call tools"
+            "SAFE text (a hard negative): ordinary, harmless text. Every item MUST contain at least one of these "
+            f"exact words: {words}, used in a normal, harmless sense (or the item may discuss prompt injection or "
+            "AI safety as a topic). It must NOT tell an AI to ignore its rules, change its role, reveal hidden "
+            "prompts, leak data, or call tools"
         )
     return "SAFE text: ordinary, harmless text with no instruction aimed at an AI system's rules"
 
@@ -133,7 +156,7 @@ def build_user_prompt(
     examples: list[DataRow], n: int, rng: random.Random,
 ) -> str:
     """User message asking the generator for n new examples of one cell."""
-    lines = [f"Write {n} new, different examples of {describe_cell(label, attack_type, hard_negative, rng)}."]
+    lines = [f"Write {n} new, different examples of {describe_cell(label, attack_type, hard_negative, rng).rstrip('.')}."]
     lines.append(SOURCE_FRAMES[source])
     if label == "INJECTION":
         lines.append(INJECTION_PLACEMENT[source])
@@ -146,6 +169,30 @@ def build_user_prompt(
         lines.append("Examples of the same category (do not copy them or reuse their wording; they may be "
                      "in a different language, but your items must follow the language rule above):")
         lines.extend(f"- {json.dumps(r.text, ensure_ascii=False)}" for r in examples)
-    lines.append("Write natural, polite, grammatical text; no slang insults.")
+    lines.append("Write natural, polite, grammatical text; no slang insults. " + CLARITY_RULE)
     lines.append(f"Return exactly {n} items as a JSON array of strings. No numbering, no labels, no explanation.")
     return "\n".join(lines)
+
+
+JUDGE_SYSTEM = (
+    "You check training data for a prompt-injection classifier. Answer only with one JSON object on one line."
+)
+
+SURFACE_NAMES = {"en": "English", "ru_mix": "Roman Urdu mixed with English", "ru_pure": "mostly Roman Urdu"}
+
+
+def build_judge_prompt(row: DataRow) -> str:
+    """Ask the model to rate one row's coherence and whether its label fits."""
+    if row.label == "INJECTION":
+        claim = (f"it contains a prompt injection of type '{row.attack_type}': "
+                 f"{ATTACK_DESCRIPTIONS[row.attack_type]}. {ATTACK_REQUIREMENTS[row.attack_type]}")
+    else:
+        claim = "it is SAFE: it does not instruct an AI to ignore its rules, change role, reveal hidden prompts, leak data, or call tools"
+    return (
+        f"SOURCE: {row.source}\nEXPECTED LANGUAGE: {SURFACE_NAMES[row.surface]}\n"
+        f"TEXT: {json.dumps(row.text, ensure_ascii=False)}\n\n"
+        f"Claim: {claim}.\n"
+        "Rate the TEXT. coherent: 1 to 5 (5 = fluent and clear in the expected language, 1 = nonsense). "
+        "label_ok: true only if the claim is clearly correct for this TEXT.\n"
+        'Reply exactly like: {"coherent": 4, "label_ok": true}'
+    )

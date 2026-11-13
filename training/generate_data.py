@@ -56,6 +56,8 @@ class GenerateConfig(BaseModel):
     surface_share: dict[str, float]
     source_share: dict[str, float]
     seeds_path: str = "data/seeds/seeds.jsonl"
+    judge_batch: int = 256
+    judge_max_new_tokens: int = 32
 
 
 @dataclass(frozen=True)
@@ -314,8 +316,10 @@ def make_hf_backend(cfg: GenerateConfig) -> GenerateFn:
             enc = tok(texts, return_tensors="pt", padding=True).to(model.device)
             torch.manual_seed(seeds[i])
             with torch.no_grad():
-                out = model.generate(**enc, do_sample=True, temperature=cfg.temperature, top_p=cfg.top_p,
-                                     max_new_tokens=cfg.max_new_tokens, pad_token_id=tok.pad_token_id)
+                sampling = ({"do_sample": True, "temperature": cfg.temperature, "top_p": cfg.top_p}
+                            if cfg.temperature > 0 else {"do_sample": False})
+                out = model.generate(**enc, **sampling, max_new_tokens=cfg.max_new_tokens,
+                                     pad_token_id=tok.pad_token_id)
             outs.extend(tok.batch_decode(out[:, enc["input_ids"].shape[1]:], skip_special_tokens=True))
         return outs
 

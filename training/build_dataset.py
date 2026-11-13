@@ -18,6 +18,7 @@ from pathlib import Path
 import yaml
 from pydantic import BaseModel
 
+from training.gen_prompts import HARD_NEGATIVE_WORDS
 from training.jsonl import content_sha256, dataset_sha256, read_rows, write_rows
 from training.normalize import normalize_text
 from training.schemas import DataRow
@@ -68,6 +69,9 @@ class BuildConfig(BaseModel):
     val_size: int = 500
     hard_negative_min_share_of_safe: float = 0.5
     seed: int = 1234
+    judgements_path: str | None = None
+    judge_min_coherence: int = 4
+    hard_negative_needs_trigger: bool = True
 
 
 @dataclass
@@ -165,6 +169,49 @@ def verify_test_lock(test_path: Path) -> None:
     expected = lock.read_text(encoding="utf-8").split()[0]
     if content_sha256(test_path) != expected:
         raise SystemExit(f"HASH MISMATCH for {test_path}; the frozen test set changed. Tell the owner.")
+
+
+HN_TRIGGERS = tuple(HARD_NEGATIVE_WORDS) + ("injection", "jailbreak", "ai safety", "hidden", "raaz", "hukm")
+
+
+def has_trigger(text: str) -> bool:
+    """True if the normalized text contains a hard-negative trigger word (word-start match)."""
+    norm = normalize_text(text)
+    return any(re.search(rf"(?<![a-z]){re.escape(normalize_text(w))}", norm) for w in HN_TRIGGERS)
+
+
+def load_judgements(path: Path) -> dict[str, dict]:
+    """Judge records by row id (from training/judge_data.py)."""
+    with path.open(encoding="utf-8") as f:
+        return {rec["id"]: rec for rec in (json.loads(line) for line in f if line.strip())}
+
+
+def apply_judgements(rows: list[DataRow], judged: dict[str, dict], min_coherence: int,
+                     report: Report) -> list[DataRow]:
+    """Drop rows without a judgement, with low coherence, or whose label the judge rejected."""
+    kept = []
+    for r in rows:
+        rec = judged.get(r.id)
+        if rec is None:
+            report.dropped["judge_missing"] += 1
+        elif rec["coherent"] < min_coherence:
+            report.dropped["judge_incoherent"] += 1
+        elif not rec["label_ok"]:
+            report.dropped["judge_label"] += 1
+        else:
+            kept.append(r)
+    return kept
+
+
+def relabel_hard_negatives(rows: list[DataRow], report: Report) -> list[DataRow]:
+    """Hard negatives without any trigger word become plain SAFE rows (the target is unchanged)."""
+    out = []
+    for r in rows:
+        if r.hard_negative and not has_trigger(r.text):
+            r = r.model_copy(update={"hard_negative": False})
+            report.extra["hard_negative_relabeled_plain"] = report.extra.get("hard_negative_relabeled_plain", 0) + 1
+        out.append(r)
+    return out
 
 
 def load_synthetic(pattern: str, report: Report) -> list[DataRow]:
@@ -292,7 +339,11 @@ def build(cfg: BuildConfig) -> dict:
     rows = load_synthetic(cfg.synthetic_glob, report)
     if not rows:
         raise SystemExit(f"no synthetic rows match {cfg.synthetic_glob}")
+    if cfg.judgements_path:
+        rows = apply_judgements(rows, load_judgements(Path(cfg.judgements_path)), cfg.judge_min_coherence, report)
     rows = filter_rows(rows, cfg, load_denylist(Path(cfg.denylist_path)), report)
+    if cfg.hard_negative_needs_trigger:
+        rows = relabel_hard_negatives(rows, report)
     rows = remove_near_duplicates(rows, seeds + test, cfg, report)
     clean = len(rows)
     rng = random.Random(cfg.seed)
@@ -307,6 +358,7 @@ def build(cfg: BuildConfig) -> dict:
     result = {
         "input_rows": report.input_rows,
         "dropped": dict(report.dropped),
+        "relabeled": dict(report.extra),
         "parse_errors_sample": report.parse_errors[:10],
         "clean_rows_before_balance": clean,
         "train": counts(train),

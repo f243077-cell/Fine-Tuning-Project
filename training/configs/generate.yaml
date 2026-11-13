@@ -18,10 +18,14 @@ batch_prompts: 64                      # prompts per generate() call
 max_attempt_factor: 3.0                # give up on a cell after target/items * factor calls
 
 # Raw target. build_dataset.py filters and balances this down to about 4,000 train + 500 val.
-raw_total: 6600
+raw_total: 8000                        # v2: more headroom for the judge filter (D31)
 injection_share: 0.5
 hard_negative_share_of_safe: 0.5       # 25% of all rows
 surface_share: {en: 0.15, ru_mix: 0.45, ru_pure: 0.40}
 source_share: {user_input: 0.5, retrieved_chunk: 0.25, tool_output: 0.25}
 
 seeds_path: data/seeds/seeds.jsonl
+
+# Judge pass (training/judge_data.py, D31): temperature 0, short JSON answers.
+judge_batch: 256
+judge_max_new_tokens: 32
