@@ -82,10 +82,11 @@ def translate_one(row: DataRow, surface: str, raw: str) -> DataRow | None:
 
 
 def run_translate(rows: list[DataRow], generate: GenerateFn, out_dir: Path, shares: dict[str, float],
-                  batch: int, seed: int, only: str | None = None) -> dict[str, int]:
+                  batch: int, seed: int, only: str | None = None, as_surface: str | None = None) -> dict[str, int]:
     """Write final rows to out_dir/shards/rows.jsonl and per-source status to out_dir/progress.jsonl.
 
     With `only`, handle just the rows whose target surface is `only` (to redo one surface, D37).
+    With `as_surface`, translate every handled row into that surface instead (D38).
     """
     shard = out_dir / "shards" / "rows.jsonl"
     shard.parent.mkdir(parents=True, exist_ok=True)
@@ -96,7 +97,7 @@ def run_translate(rows: list[DataRow], generate: GenerateFn, out_dir: Path, shar
     counts = {"kept_en": 0, "translated": 0, "failed": 0}
     for start in range(0, len(todo), batch):
         chunk = todo[start:start + batch]
-        targets = [assign_surface(r.id, shares) for r in chunk]
+        targets = [as_surface or assign_surface(r.id, shares) for r in chunk]
         need = [(r, s) for r, s in zip(chunk, targets) if s != "en"]
         prompts = [[{"role": "system", "content": TRANSLATE_SYSTEM},
                     {"role": "user", "content": build_translate_prompt(r.text, s, random.Random(f"{seed}|{r.id}"))}]
@@ -125,6 +126,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--backend", choices=["vllm", "hf"])
     ap.add_argument("--only", choices=list(SURFACE_ORDER), help="redo only the rows assigned to this surface")
+    ap.add_argument("--as", dest="as_surface", choices=["ru_mix", "ru_pure"], help="translate into this surface instead")
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     cfg = load_config(args.config)
@@ -137,7 +139,7 @@ def main(argv: list[str] | None = None) -> int:
     backend = args.backend or cfg.backend
     generate = make_vllm_backend(tcfg) if backend == "vllm" else make_hf_backend(tcfg)
     counts = run_translate(rows, generate, args.out, cfg.translate_surface_share, cfg.translate_batch, cfg.seed,
-                           only=args.only)
+                           only=args.only, as_surface=args.as_surface)
     log.info("done: %s", counts)
     return 0
 

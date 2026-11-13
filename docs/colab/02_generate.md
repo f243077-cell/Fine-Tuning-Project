@@ -132,4 +132,4 @@ OUT = "/content/drive/MyDrive/ru-guard/synthetic_v3"
 ```python
 !nohup python -m training.translate_data --config training/configs/generate_en.yaml --in {EN} --out /content/drive/MyDrive/ru-guard/synthetic_v3_pure --only ru_pure > /content/drive/MyDrive/ru-guard/gen_v3_pure.log 2>&1 &
 ```
-Locally, keep the non-`ru_pure` rows of `synthetic_v3` in `data/synthetic/shards/rows.jsonl`, and put the new rows next to them as `data/synthetic/shards/rows_pure.jsonl`. The build reads every `shards/*.jsonl` file.
+Dataset v3.2 (D38) instead translates those rows into `ru_mix`: add `--as ru_mix` and use `--out /content/drive/MyDrive/ru-guard/synthetic_v3_mix2`. Locally, keep the non-`ru_pure` rows of `synthetic_v3` in `data/synthetic/shards/rows.jsonl`, and put the new rows next to them as `data/synthetic/shards/rows_pure.jsonl`. The build reads every `shards/*.jsonl` file.
