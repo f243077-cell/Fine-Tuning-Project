@@ -1,0 +1,20 @@
+{
+ "reviewed": 200,
+ "keep": 176,
+ "fix": 0,
+ "drop": 24,
+ "bad_row_rate": 0.12,
+ "verdict": "review prompts",
+ "by_label": {
+  "INJECTION|drop": 13,
+  "INJECTION|keep": 88,
+  "SAFE|drop": 11,
+  "SAFE|keep": 88
+ },
+ "sha256": {
+  "train": "794da339052aacda1d022a695afc514b6fb7aa13595ebe89a730bb076505eef9",
+  "val": "0efb30030d74c1b4a78ad018e2fcdc274d20728489625332ce91637a54138f77",
+  "dataset": "c09b65da87caefa87cb3c553c0630fe533702f6197157ba69b4285ab2868d300"
+ },
+ "review_csv_sha256": "e6c77d93677b702905b43e0c650f509ee7d62e8617b6073bf8b7592c23302919"
+}

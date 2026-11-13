@@ -1,6 +1,6 @@
 # Phase 2: Synthetic data generation
 
-Branch / commit: `main` (D14). Status: **v3.2 (en and `ru_mix` only, D38) has 12% bad rows in the 200-row review (D40): above the 10% target, below the 15% regenerate limit. Stopped at Gate 2 for the owner's decision.** Earlier builds: v1 24%, v2 30.5%, v3 23% (`ru_pure` 44%).
+Branch / commit: `main` (D14). Status: **Gate 2 passed (D41).** Dataset v1 is the v3.2 build (en and `ru_mix` only, D38) with its review applied: 3,977 train and 499 val rows, hash `c09b65da...`. The review found 12% bad rows (D40). The owner delegated the go decision. Phase 3 starts when the owner says "start phase 3". Earlier builds: v1 24%, v2 30.5%, v3 23% (`ru_pure` 44%).
 
 ## Done (Claude Code)
 

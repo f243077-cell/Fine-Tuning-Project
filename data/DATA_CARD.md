@@ -1,6 +1,6 @@
 # Data card: RU-Guard training data v1
 
-Status: **v3.2 build `21b2a10b` (en and `ru_mix` only, D38; now in `data/processed/`) has a 12% bad-row rate in the 200-row review (D40). That is above the 10% target but below the 15% regenerate limit, so it waits for the owner's Gate 2 decision.** Earlier builds failed: v1 `75482df3` 24% (D30), v2 `f9fdcb8a` 30.5% (D34), v3 `297f48cb` 23% (D36; `ru_pure` 44%). The sections below describe v1 unless marked v2, v3, or v3.2.
+Status: **Dataset v1 is approved (Gate 2, D41).** It is the v3.2 build (en and `ru_mix` only, D38) with its 200-row review applied: 3,977 train and 499 val rows in `data/processed/`, dataset hash `c09b65da87caefa87cb3c553c0630fe533702f6197157ba69b4285ab2868d300`. The reviewed bad-row rate was 12% (D40), above the 10% target and below the 15% regenerate limit. The owner delegated both the review and the go decision to the AI coding assistant. Earlier builds failed: v1 `75482df3` 24% (D30), v2 `f9fdcb8a` 30.5% (D34), v3 `297f48cb` 23% (D36; `ru_pure` 44%). The sections below describe v1 unless marked v2, v3, or v3.2.
 
 ## Purpose
 
@@ -81,7 +81,11 @@ Build (before review): `75482df3c6491016a14908affcafa73d3df12b075377d2abb2226b09
 - train `b239cc814494438efee3a2f56e7a7c033c7bf2a5ffb7420e13029e7f5e2963b3`;
 - val `b73cb58a0f84b65142e8e071b111848572d1b5ce07133612224c361b5739b8b7`.
 
-The dataset v1 hash (after the review is applied) is recorded here at Gate 2.
+**Dataset v1 (Gate 2, 2026-11-13):** v3.2 build after `python scripts/apply_review.py data/review/review_sample.csv`. The 24 dropped rows were removed; there were no fixes.
+- train `794da339052aacda1d022a695afc514b6fb7aa13595ebe89a730bb076505eef9` (3,977 rows: 1,986 INJECTION, 1,991 SAFE);
+- val `0efb30030d74c1b4a78ad018e2fcdc274d20728489625332ce91637a54138f77` (499 rows: 251 INJECTION, 248 SAFE);
+- dataset `c09b65da87caefa87cb3c553c0630fe533702f6197157ba69b4285ab2868d300`;
+- review sheet sha256 `e6c77d93...`; details in `data/processed/review_report.json`.
 
 ## Known limits
 
