@@ -35,7 +35,9 @@ def render_modelfile(path: Path, text: str, source: str) -> str:
 @pytest.mark.parametrize("path", MODELFILES, ids=lambda p: p.name)
 def test_modelfile_matches_training_prompt(path: Path) -> None:
     """Same string for every fixture, the same SYSTEM text, and the stop token from training."""
-    body = path.read_text(encoding="utf-8")
+    raw = path.read_bytes()
+    assert b"\r" not in raw, "CRLF in a Modelfile puts \\r into the Ollama template (.gitattributes forces LF)"
+    body = raw.decode("utf-8")
     assert modelfile_block(body, "SYSTEM") == SYSTEM_PROMPT
     assert 'PARAMETER stop "<|im_end|>"' in body
     for text, source in FIXTURES:

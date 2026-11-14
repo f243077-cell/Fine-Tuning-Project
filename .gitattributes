@@ -5,3 +5,4 @@ Dockerfile* text eol=lf
 *.jsonl text eol=lf
 *.csv text eol=lf
 *.lock text eol=lf
+models/Modelfile.* text eol=lf
