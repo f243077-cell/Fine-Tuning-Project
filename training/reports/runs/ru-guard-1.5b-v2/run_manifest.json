@@ -1,0 +1,75 @@
+{
+  "run_name": "ru-guard-1.5b-v2",
+  "config": {
+    "run_name": "ru-guard-1.5b-v2",
+    "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "max_seq_len": 512,
+    "load_in_4bit": true,
+    "lora": {
+      "r": 16,
+      "alpha": 32,
+      "dropout": 0.05,
+      "target_modules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+      ]
+    },
+    "train": {
+      "epochs": 3,
+      "learning_rate": 0.0002,
+      "lr_scheduler": "cosine",
+      "warmup": 0.03,
+      "per_device_batch": 4,
+      "grad_accum": 8,
+      "weight_decay": 0.0,
+      "optim": "adamw_8bit",
+      "fp16": true,
+      "logging_steps": 10,
+      "seed": 1234
+    },
+    "data": {
+      "train_path": "data/processed/train_v2.jsonl",
+      "val_path": "data/processed/val.jsonl",
+      "include_en": true
+    },
+    "val_gen": {
+      "n": 200,
+      "batch_size": 16,
+      "max_new_tokens": 8
+    }
+  },
+  "git_commit": "3fe4c5438080c4ad80c360d1225156a0d895d97b",
+  "data": {
+    "train_sha256": "bdc2564e000e1f3552a4647d4641ddfe87678838d4e8ac0c48ec15e97d242e64",
+    "val_sha256": "0b99621ae20e22beef8b69ce25faf3c93e0a14ed6ef3aa27ab4fdd02489e32cf",
+    "train_rows": 5678,
+    "val_rows": 548,
+    "dropped_long": {
+      "train": 0,
+      "val": 0
+    }
+  },
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.17.0",
+    "trl": "1.15.0",
+    "peft": "0.21.3",
+    "unsloth": "2026.11.4",
+    "unsloth_zoo": "2026.11.4",
+    "bitsandbytes": "0.50.2",
+    "datasets": "4.8.5"
+  },
+  "gpu": "Tesla T4",
+  "command": "/kaggle/working/ru-guard/training/train_qlora.py --config training/configs/qwen2.5-1.5b.yaml --out /kaggle/working/runs --set run_name=ru-guard-1.5b-v2 --set data.train_path=data/processed/train_v2.jsonl",
+  "train_runtime_seconds": 1922.3,
+  "train_loss": 0.043288951394674,
+  "global_step": 534,
+  "resumed_from": null,
+  "peak_gpu_memory_gb": 2.55
+}
