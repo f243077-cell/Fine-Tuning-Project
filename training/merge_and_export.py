@@ -11,6 +11,7 @@ llama.cpp on first use.
 import argparse
 import hashlib
 import json
+import shutil
 import sys
 from pathlib import Path
 
@@ -39,11 +40,12 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
-def find_gguf(root: Path, quant: str) -> Path:
-    """The GGUF file Unsloth wrote for one quant (<model>.<QUANT>.gguf in root or a sibling folder)."""
-    hits = [p for p in root.parent.rglob("*.gguf") if quant.upper() in p.name.upper()]
+def find_gguf(build: Path, quant: str) -> Path:
+    """The GGUF file Unsloth wrote for one quant (<model>.<QUANT>.gguf in build or build + '_gguf')."""
+    hits = [p for d in (build, Path(f"{build}_gguf")) if d.exists() for p in d.rglob("*.gguf")
+            if quant.upper() in p.name.upper()]
     if not hits:
-        raise FileNotFoundError(f"no {quant} GGUF under {root}")
+        raise FileNotFoundError(f"no {quant} GGUF under {build}")
     return max(hits, key=lambda p: p.stat().st_mtime)
 
 
@@ -65,6 +67,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--max-seq-len", type=int, default=512)
     ap.add_argument("--quants", nargs="+", default=list(QUANTS))
+    ap.add_argument("--build-dir", type=Path, default=None,
+                    help="scratch folder for the GGUF build (local disk is faster than Drive); deleted afterwards")
     args = ap.parse_args(argv)
 
     from unsloth import FastLanguageModel
@@ -80,19 +84,21 @@ def main(argv: list[str] | None = None) -> int:
     merged = out / "merged"
     model.save_pretrained_merged(str(merged), tok, save_method="merged_16bit")
     gguf_dir = out / "gguf"
-    model.save_pretrained_gguf(str(gguf_dir), tok, quantization_method=list(args.quants))
+    gguf_dir.mkdir(parents=True, exist_ok=True)
+    build = args.build_dir or (out / "_gguf_build")
+    model.save_pretrained_gguf(str(build), tok, quantization_method=list(args.quants))
     files = {}
     for q in args.quants:
-        src = find_gguf(gguf_dir, q)
+        src = find_gguf(build, q)
         dst = gguf_dir / f"{args.name}-{q.upper()}.gguf"
-        if src != dst:
-            dst.parent.mkdir(parents=True, exist_ok=True)
-            src.replace(dst)
+        shutil.move(str(src), str(dst))
         files[q.upper()] = {"file": dst.name, "bytes": dst.stat().st_size, "sha256": sha256_file(dst)}
         print(f"{dst} {dst.stat().st_size / 1e6:.0f} MB", flush=True)
     write_json(out / "export_manifest.json", {"name": args.name, "adapter": str(args.adapter),
                                               "gguf": files, "sanity": sanity, "versions": package_versions(),
                                               "command": " ".join(sys.argv)})
+    for tmp in (build, Path(f"{build}_gguf")):  # Unsloth's intermediate fp16 copy; only the GGUF files are kept
+        shutil.rmtree(tmp, ignore_errors=True)
     return 0
 
 

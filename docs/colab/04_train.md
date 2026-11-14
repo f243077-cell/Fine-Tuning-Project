@@ -22,6 +22,10 @@
 
 Checkpoints are written at the end of every epoch. If the session drops, the same command resumes from the last saved epoch.
 
+## Fastest path: the notebook
+
+Open `notebooks/04_train.ipynb` from GitHub. In Colab: File, then Open notebook, then GitHub. In Kaggle: File, then Import Notebook, then GitHub. Choose the T4 GPU, then Run all. The notebook runs the cells below in the same order. Every step is skipped when its output already exists, so after a disconnect, just Run all again.
+
 ## Cells (paste in order)
 
 **1. Runtime.** Runtime, then Change runtime type, then **T4 GPU**. Then:
