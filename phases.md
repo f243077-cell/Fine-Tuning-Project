@@ -137,13 +137,13 @@ Claude Code:
 
 **Goal:** the headline results, the model decision, and the regression thresholds.
 
-- [ ] Run `evals/eval_guard.py` on the test set for both models (Q4_K_M and Q8_0) and all baselines, same normalizer.
-- [ ] `evals/bench_latency.py`: p50 and p95 over 200 windows on the owner's CPU, cold vs warm.
-- [ ] Error analysis: confusion by `attack_type`; list all false negatives and false positives; group by cause (spelling variance, hard negative, indirect source, guard-targeting, windowing).
-- [ ] `evals/reports/EVAL_REPORT.md`: tables with CIs, charts, EN vs Roman Urdu gap, latency, limitations, honest misses.
-- [ ] Choose the deployed model and quantization; write the reasoning in a draft `MODEL_CARD.md`.
-- [ ] Optional, **one** data-v2 loop only: if a target is missed, add targeted synthetic rows for the top error clusters (never test items), retrain once, re-evaluate, document.
-- [ ] `evals/thresholds.json` = release metrics minus a 2-point tolerance; `evals/gate.py` exits non-zero if any metric is below its threshold. Test it with a degraded-predictions fixture.
+- [x] Run `evals/eval_guard.py` on the test set for both models (Q4_K_M and Q8_0) and all baselines, same normalizer.
+- [x] `evals/bench_latency.py`: p50 and p95 over 200 windows on the owner's CPU, cold vs warm.
+- [x] Error analysis: confusion by `attack_type`; list all false negatives and false positives; group by cause (spelling variance, hard negative, indirect source, guard-targeting, windowing).
+- [x] `evals/reports/EVAL_REPORT.md`: tables with CIs, charts, EN vs Roman Urdu gap, latency, limitations, honest misses.
+- [x] Choose the deployed model and quantization; write the reasoning in a draft `MODEL_CARD.md`.
+- [x] Optional, **one** data-v2 loop only: if a target is missed, add targeted synthetic rows for the top error clusters (never test items), retrain once, re-evaluate, document.
+- [x] `evals/thresholds.json` = release metrics minus a 2-point tolerance; `evals/gate.py` exits non-zero if any metric is below its threshold. Test it with a degraded-predictions fixture.
 
 **Acceptance:** report complete with CIs; thresholds file exists; gate passes on the release model and fails on the fixture.
 

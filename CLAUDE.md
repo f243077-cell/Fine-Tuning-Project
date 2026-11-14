@@ -88,6 +88,11 @@ python -m training.merge_and_export --adapter <run>/adapter --name ru-guard-0.5b
 python scripts/smoke_ollama_model.py --model ru-guard-0.5b --tokenizer Qwen/Qwen2.5-0.5B-Instruct   # Phase 4 acceptance
 python scripts/plot_training.py training/reports/runs/ru-guard-0.5b* --out docs/figures/training_0.5b.png
 python evals/gate.py                                     # Phase 5 onward
+bash scripts/register_model.sh ru-guard-1.5b-v2          # deployed model (D49), GGUF in models/
+python evals/eval_guard.py --model ollama:ru-guard-1.5b-v2 --split test   # Phase 5 headline run
+python evals/error_analysis.py evals/reports/runs/ru-guard-1.5b-v2 --out evals/reports/errors_ru-guard-1.5b-v2.md
+python evals/bench_latency.py --model ru-guard-1.5b-v2   # cold/warm p50, p95 on CPU
+python evals/gate.py --make evals/reports/runs/ru-guard-1.5b-v2   # rewrite evals/thresholds.json (release only)
 ```
 Training and generation scripts run on Colab, not here. Local runs are limited to tiny smoke tests.
 

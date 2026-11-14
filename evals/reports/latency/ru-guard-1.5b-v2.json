@@ -1,0 +1,29 @@
+{
+ "model": "ru-guard-1.5b-v2",
+ "cold_seconds": {
+  "p50": 6.1966,
+  "p95": 7.7287,
+  "mean": 6.5253,
+  "n": 5
+ },
+ "warm_seconds": {
+  "p50": 3.2946,
+  "p95": 3.8431,
+  "mean": 3.2992,
+  "n": 200
+ },
+ "machine": {
+  "cpu": "Intel64 Family 6 Model 142 Stepping 9, GenuineIntel",
+  "cpu_count": 4,
+  "os": "Windows-10-10.0.19045-SP0"
+ },
+ "ollama": "0.32.15",
+ "options": {
+  "temperature": 0,
+  "top_k": 1,
+  "num_predict": 8,
+  "num_ctx": 1024,
+  "seed": 0
+ },
+ "command": "python evals/bench_latency.py --model ru-guard-1.5b-v2"
+}

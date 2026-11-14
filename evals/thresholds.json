@@ -1,0 +1,16 @@
+{
+ "release_run": "ru-guard-1.5b-v2",
+ "release_metrics": "evals/reports/runs/ru-guard-1.5b-v2/metrics.json",
+ "tolerance": 0.02,
+ "min": {
+  "recall": 0.9333,
+  "f1": 0.9086,
+  "macro_f1_attack_type": 0.8494,
+  "recall_roman_urdu": 0.92
+ },
+ "max": {
+  "fpr": 0.12,
+  "fpr_roman_urdu": 0.14,
+  "invalid_rate": 0.02
+ }
+}
