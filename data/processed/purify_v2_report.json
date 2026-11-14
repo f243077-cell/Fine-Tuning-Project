@@ -1,0 +1,24 @@
+{
+  "input_train_rows": 4378,
+  "kept": {
+    "injection": 700,
+    "hard_negative": 450,
+    "safe": 150
+  },
+  "dropped": {
+    "too_much_english": 117,
+    "language": 36,
+    "unchanged": 40
+  },
+  "attack_types": {
+    "exfiltration": 132,
+    "tool_abuse": 141,
+    "prompt_leak": 146,
+    "persona": 150,
+    "override": 131
+  },
+  "new_rows": 1300,
+  "train_v2_rows": 5678,
+  "train_v2_sha256": "bdc2564e000e1f3552a4647d4641ddfe87678838d4e8ac0c48ec15e97d242e64",
+  "train_v1_sha256": "432bb6cb72e76b2d26f6182da6247f0b82c19d73a990192a2e1572229b8e3604"
+}

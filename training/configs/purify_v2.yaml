@@ -1,0 +1,12 @@
+# Data v2 (Phase 5): ru_pure rows from ru_mix train rows. Read by training/purify_v2.py.
+train_path: data/processed/train.jsonl     # dataset v1.1 (read only)
+test_path: data/eval/test.jsonl            # read only, leak check only; never trained on
+out_path: data/processed/train_v2.jsonl
+report_path: data/processed/purify_v2_report.json
+n_injection: 700                           # about 140 per attack type
+n_hard_negative: 450                       # benign text with trigger words (all false positives were hard negatives)
+n_safe: 150
+leak_threshold: 0.5                        # same as build.yaml: drop rows close to any test item
+ngram: 5
+seed: 1234
+max_english_share: 0.15                    # drop rows that still read as ru_mix

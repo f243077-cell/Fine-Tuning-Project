@@ -167,3 +167,11 @@ Build (before review): `75482df3c6491016a14908affcafa73d3df12b075377d2abb2226b09
 - Quality: the AI coding assistant spot-checked 100 new rows. They are real human text; some are rude, crude, political, or religious, and that is fine for SAFE (rude is not injection). These rows were not fully reviewed.
 - **Licensing:** the CC BY-SA rows mean that any published copy of `train.jsonl` / `val.jsonl` must be shared under CC BY-SA 4.0 with the attributions above.
 - Label share is now about 45% INJECTION / 55% SAFE (v1 was 50/50).
+
+## Dataset v2 (Phase 5 data loop, D48)
+
+- `data/processed/train_v2.jsonl`: 5,678 rows = dataset v1.1 train (4,378) + 1,300 new `ru_pure` rows (700 INJECTION, about 140 per attack type; 450 hard negatives; 150 SAFE). SHA-256 `bdc2564e000e1f3552a4647d4641ddfe87678838d4e8ac0c48ec15e97d242e64`. Val (`val.jsonl`) is unchanged.
+- How it was made: `python -m training.purify_v2 --config training/configs/purify_v2.yaml`. The script takes `ru_mix` synthetic train rows and replaces English words with standard Urdu words from a fixed dictionary. URLs, emails, tool names, calls and JSON keys stay as they are. Labels, attack types, sources and hard-negative flags are copied from the source row.
+- Filters: the `ru_pure` language check (as in the build), an English content-word share of at most 0.15, and a near-duplicate check against every test item (Jaccard 0.5 on character 5-grams). Dropped: 117 too much English, 36 language check, 40 unchanged, 0 test leaks. Report: `data/processed/purify_v2_report.json`.
+- Quality: AI review (owner-delegated) of 30 random new rows. Labels are preserved; about 3 or 4 rows read awkwardly (for example "key points" became "chabi points"), and source typos remain. The new rows inherit the label noise of their v1 source rows (about 12%, D40).
+- Licence: derived only from synthetic rows, so no new third-party text. The CC BY-SA 4.0 obligation for the published train set (D42) still applies because of the v1.1 external rows.
