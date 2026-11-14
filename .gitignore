@@ -19,7 +19,7 @@ models/**/*.gguf
 *.bin
 adapters/
 outputs/
-runs/
+/runs/
 models/export/
 
 # Databases

@@ -1,0 +1,75 @@
+{
+  "run_name": "ru-guard-0.5b-2ep",
+  "config": {
+    "run_name": "ru-guard-0.5b-2ep",
+    "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "max_seq_len": 512,
+    "load_in_4bit": true,
+    "lora": {
+      "r": 16,
+      "alpha": 32,
+      "dropout": 0.05,
+      "target_modules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+      ]
+    },
+    "train": {
+      "epochs": 2,
+      "learning_rate": 0.0002,
+      "lr_scheduler": "cosine",
+      "warmup": 0.03,
+      "per_device_batch": 8,
+      "grad_accum": 4,
+      "weight_decay": 0.0,
+      "optim": "adamw_8bit",
+      "fp16": true,
+      "logging_steps": 10,
+      "seed": 1234
+    },
+    "data": {
+      "train_path": "data/processed/train.jsonl",
+      "val_path": "data/processed/val.jsonl",
+      "include_en": true
+    },
+    "val_gen": {
+      "n": 200,
+      "batch_size": 16,
+      "max_new_tokens": 8
+    }
+  },
+  "git_commit": "4ce93268b99aedf36fe80f8bda5430de5d1fe384",
+  "data": {
+    "train_sha256": "432bb6cb72e76b2d26f6182da6247f0b82c19d73a990192a2e1572229b8e3604",
+    "val_sha256": "0b99621ae20e22beef8b69ce25faf3c93e0a14ed6ef3aa27ab4fdd02489e32cf",
+    "train_rows": 4378,
+    "val_rows": 548,
+    "dropped_long": {
+      "train": 0,
+      "val": 0
+    }
+  },
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.14.1+cu130",
+    "transformers": "5.17.0",
+    "trl": "1.15.0",
+    "peft": "0.21.3",
+    "unsloth": "2026.11.4",
+    "unsloth_zoo": "2026.11.4",
+    "bitsandbytes": "0.50.2",
+    "datasets": "4.8.5"
+  },
+  "gpu": "Tesla T4",
+  "command": "/content/ru-guard/training/train_qlora.py --config training/configs/qwen2.5-0.5b.yaml --out /content/drive/MyDrive/ru-guard/runs --set run_name=ru-guard-0.5b-2ep --set train.epochs=2",
+  "train_runtime_seconds": 380.0,
+  "train_loss": 0.09298844324649196,
+  "global_step": 274,
+  "resumed_from": null,
+  "peak_gpu_memory_gb": 1.02
+}
