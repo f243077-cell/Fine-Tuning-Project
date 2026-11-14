@@ -10,7 +10,9 @@ EXPORT="${EXPORT:-/kaggle/working/export}"
 OUT="${OUT:-/kaggle/working/eval_v2}"
 cd "$(dirname "$0")/.."
 
+cd "$(dirname "$0")/.." && git pull -q || true
 if ! command -v ollama >/dev/null; then
+  command -v zstd >/dev/null || (apt-get update -qq && apt-get install -y -qq zstd >/dev/null)  # installer needs it
   curl -fsSL https://ollama.com/install.sh | sh
 fi
 if ! curl -s http://localhost:11434/api/version >/dev/null; then
