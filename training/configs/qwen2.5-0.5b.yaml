@@ -1,0 +1,35 @@
+# QLoRA run for ru-guard-0.5b (Phase 4). Read by training/train_qlora.py.
+# Starting values from PRD.md section 11 and Architecture.md section 10. Tune on val only, never on test.
+run_name: ru-guard-0.5b
+base_model: Qwen/Qwen2.5-0.5B-Instruct
+max_seq_len: 512
+load_in_4bit: true                 # NF4 with double quantization (Unsloth default for 4-bit)
+
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+
+train:
+  epochs: 3
+  learning_rate: 2.0e-4
+  lr_scheduler: cosine
+  warmup: 0.03                     # ratio of total steps (transformers 5: warmup_steps as a float)
+  per_device_batch: 8
+  grad_accum: 4                    # effective batch 32
+  weight_decay: 0.0
+  optim: adamw_8bit
+  fp16: true                       # the free T4 has no bfloat16
+  logging_steps: 10
+  seed: 1234
+
+data:
+  train_path: data/processed/train.jsonl
+  val_path: data/processed/val.jsonl
+  include_en: true                 # ablation: false drops surface=en rows from train (val unchanged)
+
+val_gen:                           # generation-based val metrics at the end of each epoch
+  n: 200                           # fixed, label-stratified subset of val
+  batch_size: 16
+  max_new_tokens: 8

@@ -66,3 +66,10 @@ def test_evaluate_cuts() -> None:
     assert res["cuts"]["surface"]["en"]["recall"]["point"] == 0.0
     assert res["cuts"]["hard_negative"]["True"]["fpr"]["point"] == 1.0
     assert res["cuts"]["attack_type"]["SAFE"]["n"]["point"] == 2.0
+
+
+def test_training_grammar_matches_eval_grammar() -> None:
+    """training/val_metrics.py restates the output grammar (it may not import evals); keep them equal."""
+    from evals.metrics import ATTACK_TYPES, OUTPUT_RE
+    from training import val_metrics
+    assert val_metrics.OUTPUT_RE.pattern == OUTPUT_RE.pattern and val_metrics.ATTACK_TYPES == ATTACK_TYPES

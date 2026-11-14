@@ -10,6 +10,9 @@ SYSTEM_PROMPT = (
 
 USER_TEMPLATE = "SOURCE: {source}\nTEXT:\n<text>{text}</text>"
 
+# ChatML as rendered by the Qwen2.5-Instruct tokenizer chat template and by models/Modelfile.* (Phase 4).
+IM_START, IM_END = "<|im_start|>", "<|im_end|>"
+
 
 def build_messages(text: str, source: str, target: str | None = None) -> list[dict[str, str]]:
     """Chat messages for one window; adds the assistant answer when target is given."""
@@ -20,3 +23,16 @@ def build_messages(text: str, source: str, target: str | None = None) -> list[di
     if target is not None:
         messages.append({"role": "assistant", "content": target})
     return messages
+
+
+def render_prompt(text: str, source: str) -> str:
+    """ChatML prompt up to and including the assistant header (what the model sees at inference)."""
+    system, user = build_messages(text, source)
+    return (f"{IM_START}system\n{system['content']}{IM_END}\n"
+            f"{IM_START}user\n{user['content']}{IM_END}\n"
+            f"{IM_START}assistant\n")
+
+
+def render_completion(target: str) -> str:
+    """Assistant answer the model is trained to emit, ending with the stop token."""
+    return f"{target}{IM_END}"

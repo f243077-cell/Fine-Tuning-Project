@@ -82,6 +82,11 @@ python scripts/token_report.py data/processed/train.jsonl data/processed/val.jso
 python scripts/sample_for_review.py --n 200              # writes data/review/review_sample.csv
 python scripts/apply_review.py data/review/review_sample.csv --dry-run
 python evals/eval_guard.py --model ru-guard-0.5b --split test   # Phase 3 onward
+python evals/compare.py                                  # Phase 3: evals/reports/baselines.md
+python -m training.train_qlora --config training/configs/qwen2.5-0.5b.yaml --dry-run   # Phase 4: tokenize only (CPU); real run on Colab (docs/colab/04_train.md)
+python -m training.merge_and_export --adapter <run>/adapter --name ru-guard-0.5b --out <dir>   # Phase 4, Colab GPU
+python scripts/smoke_ollama_model.py --model ru-guard-0.5b --tokenizer Qwen/Qwen2.5-0.5B-Instruct   # Phase 4 acceptance
+python scripts/plot_training.py training/reports/runs/ru-guard-0.5b* --out docs/figures/training_0.5b.png
 python evals/gate.py                                     # Phase 5 onward
 ```
 Training and generation scripts run on Colab, not here. Local runs are limited to tiny smoke tests.

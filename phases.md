@@ -115,15 +115,15 @@ Claude Code:
 
 **Goal:** `ru-guard-0.5b` and `ru-guard-1.5b` as GGUF files that load in Ollama and emit valid labels.
 
-- [ ] `training/configs/qwen2.5-0.5b.yaml` and `qwen2.5-1.5b.yaml` (starting hyperparameters from `PRD.md` section 11 and `Architecture.md` section 10).
-- [ ] `training/train_qlora.py`: load the base model in 4-bit NF4 (Unsloth), attach LoRA (PEFT config), build chat-format data with the **shared template**, train with TRL `SFTTrainer` using **assistant-only loss**, fp16 (T4 has no bfloat16), evaluate on val each epoch, checkpoint every epoch to Drive, resume support, fixed seed, plain CSV logs (no external trackers).
-- [ ] Val metric callback or script: generation-based macro-F1 on a val subset (not only loss).
-- [ ] `docs/colab/04_train.md`: exact cells, expected runtime and memory, resume steps if the session drops.
-- [ ] `training/merge_and_export.py`: merge the adapter, export GGUF Q4_K_M and Q8_0 (confirm the current llama.cpp or Unsloth export commands first), run a 5-prompt sanity check.
-- [ ] `models/Modelfile.0.5b` and `models/Modelfile.1.5b` with the same ChatML template as training; `scripts/register_model.sh`.
-- [ ] `training/tests/test_template_parity.py`: the training formatter and the Modelfile template render identical prompt strings for fixture inputs.
+- [x] `training/configs/qwen2.5-0.5b.yaml` and `qwen2.5-1.5b.yaml` (starting hyperparameters from `PRD.md` section 11 and `Architecture.md` section 10).
+- [x] `training/train_qlora.py`: load the base model in 4-bit NF4 (Unsloth), attach LoRA (PEFT config), build chat-format data with the **shared template**, train with TRL `SFTTrainer` using **assistant-only loss**, fp16 (T4 has no bfloat16), evaluate on val each epoch, checkpoint every epoch to Drive, resume support, fixed seed, plain CSV logs (no external trackers).
+- [x] Val metric callback or script: generation-based macro-F1 on a val subset (not only loss).
+- [x] `docs/colab/04_train.md`: exact cells, expected runtime and memory, resume steps if the session drops.
+- [x] `training/merge_and_export.py`: merge the adapter, export GGUF Q4_K_M and Q8_0 (confirm the current llama.cpp or Unsloth export commands first), run a 5-prompt sanity check.
+- [x] `models/Modelfile.0.5b` and `models/Modelfile.1.5b` with the same ChatML template as training; `scripts/register_model.sh`.
+- [x] `training/tests/test_template_parity.py`: the training formatter and the Modelfile template render identical prompt strings for fixture inputs.
 - [ ] Time-boxed ablations on the 0.5B model only: LoRA r=8 vs 16; with vs without `en` data; 2 vs 3 epochs.
-- [ ] `scripts/plot_training.py`: loss and val-F1 curves with matplotlib.
+- [x] `scripts/plot_training.py`: loss and val-F1 curves with matplotlib.
 
 **[HUMAN]:** run Colab training; keep adapters on Drive; copy GGUF files to local `models/`.
 
