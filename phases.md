@@ -122,7 +122,7 @@ Claude Code:
 - [x] `training/merge_and_export.py`: merge the adapter, export GGUF Q4_K_M and Q8_0 (confirm the current llama.cpp or Unsloth export commands first), run a 5-prompt sanity check.
 - [x] `models/Modelfile.0.5b` and `models/Modelfile.1.5b` with the same ChatML template as training; `scripts/register_model.sh`.
 - [x] `training/tests/test_template_parity.py`: the training formatter and the Modelfile template render identical prompt strings for fixture inputs.
-- [ ] Time-boxed ablations on the 0.5B model only: LoRA r=8 vs 16; with vs without `en` data; 2 vs 3 epochs.
+- [x] Time-boxed ablations on the 0.5B model only: LoRA r=8 vs 16; with vs without `en` data; 2 vs 3 epochs.
 - [x] `scripts/plot_training.py`: loss and val-F1 curves with matplotlib.
 
 **[HUMAN]:** run Colab training; keep adapters on Drive; copy GGUF files to local `models/`.

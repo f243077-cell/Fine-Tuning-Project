@@ -6,11 +6,14 @@ transformers==5.20.2
 accelerate==1.15.0
 PyYAML==6.0.3
 bitsandbytes           # fallback backend (--backend hf) and Phase 4 QLoRA; not used in the Phase 2 run
-# Phase 4 (fine-tuning). Source-checked set (2026-11-14): Unsloth 2026.11.4 needs trl<=1.15.0, transformers<=5.17.0.
-# A separate Colab install from the Phase 2 vLLM stack (docs/colab/04_train.md cell 4); confirm after the run.
+# Phase 4 (fine-tuning). Confirmed by the 2026-11-14 run (Colab T4, Python 3.13.16; training/reports/runs/*/run_manifest.json).
+# A separate install from the Phase 2 vLLM stack (notebooks/04_train.ipynb cell 4), so these stay commented here.
 # unsloth==2026.11.4
 # unsloth_zoo==2026.11.4
 # trl==1.15.0
 # transformers==5.17.0
 # peft==0.21.3
-# datasets               # pulled in by unsloth/trl; version recorded in run_manifest.json
+# torch==2.14.1          # +cu130, preinstalled on Colab
+# bitsandbytes==0.50.2
+# datasets==4.8.5
+# accelerate==1.15.0
