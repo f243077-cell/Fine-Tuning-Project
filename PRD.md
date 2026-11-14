@@ -210,6 +210,8 @@ All evaluation runs on the frozen test set; compare **fine-tuned vs baselines** 
 | Golden-set correctness change with guard on | no worse than -3 points (at most 1 of 30 questions) |
 | Invalid-output rate | <= 1% |
 
+Confirmed at Gate 3 (D44). Each target is judged on its point estimate, and the 95% CI is reported next to it. With 150 SAFE test rows, FPR <= 3% allows at most 4 false flags, and the CI upper end is near 6% even when the target is met.
+
 ## 14. Acceptance criteria (release v1.0)
 
 1. Frozen test set intact (hash matches) and all headline numbers reproducible from one documented command.
