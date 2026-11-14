@@ -102,8 +102,8 @@ Claude Code:
 - [x] `evals/baselines.py`: (1) regex/keyword rules for English and Roman Urdu; (2) Qwen2.5-1.5B-Instruct zero-shot; (3) the same few-shot from seeds; (4) Llama Guard zero-shot (note that it targets content safety, not injection; run through whichever free local path works; record the exact version). Stretch: Guardrails AI or NeMo Guardrails if an offline free rail works within one day.
 - [x] `evals/eval_guard.py`: one runner for all models with the **same normalizer and prompt format**; strict output grammar; writes predictions JSONL and metrics JSON.
 - [x] `evals/compare.py`: tables and matplotlib charts to `evals/reports/baselines.md`.
-- [ ] Run all baselines on the 300 test rows. Record commands and versions.
-- [ ] If baselines make a PRD target unrealistic, propose a change to `PRD.md` section 13 (do not edit targets without the owner's approval).
+- [x] Run all baselines on the 300 test rows. Record commands and versions.
+- [x] If baselines make a PRD target unrealistic, propose a change to `PRD.md` section 13 (do not edit targets without the owner's approval).
 
 **Acceptance:** baseline table with CIs on all 300 rows; invalid-output rates; report committed; metrics tests green.
 
