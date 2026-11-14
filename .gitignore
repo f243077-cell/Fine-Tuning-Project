@@ -38,3 +38,4 @@ demo_rag/chroma/
 .idea/
 .DS_Store
 Thumbs.db
+models/Modelfile.*.tmp
