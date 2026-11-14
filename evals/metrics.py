@@ -12,7 +12,7 @@ import numpy as np
 
 ATTACK_TYPES = ("override", "persona", "prompt_leak", "exfiltration", "tool_abuse")
 OUTPUT_RE = re.compile(r"^(SAFE|INJECTION\|(override|persona|prompt_leak|exfiltration|tool_abuse))$")
-CUTS = ("surface", "source", "attack_type", "hard_negative")
+CUTS = ("surface", "language", "source", "attack_type", "hard_negative")
 
 
 def parse_output(raw: str | None) -> str | None:
@@ -101,6 +101,8 @@ def _cut_value(row: dict, cut: str) -> str:
     """Group key of a row for one cut (SAFE rows have no attack type and are grouped as 'SAFE')."""
     if cut == "attack_type":
         return row.get("attack_type") or "SAFE"
+    if cut == "language":  # PRD 13 target: Roman Urdu = ru_mix + ru_pure
+        return "en" if str(row["surface"]) == "en" else "roman_urdu"
     return str(row[cut])
 
 

@@ -15,7 +15,8 @@ import matplotlib.pyplot as plt  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[1]
 RUNS = REPO / "evals" / "reports" / "runs"
-ORDER = ["rules", "qwen2.5-1.5b-zeroshot", "qwen2.5-1.5b-fewshot", "llama-guard3-1b"]
+ORDER = ["rules", "qwen2.5-1.5b-zeroshot", "qwen2.5-1.5b-fewshot", "llama-guard3-1b",
+         "ru-guard-0.5b", "ru-guard-0.5b-q8_0", "ru-guard-1.5b", "ru-guard-1.5b-q8_0"]
 
 
 def fmt(point: float, ci: list[float] | None = None) -> str:
@@ -84,26 +85,29 @@ def chart(runs: list[dict], cut: str, metric: str, path: Path) -> None:
     plt.close(fig)
 
 
-def build_report(runs: list[dict], out: Path) -> str:
+def build_report(runs: list[dict], out: Path, title: str = "Baselines on the frozen test set (Phase 3)",
+                 prefix: str = "baselines") -> str:
     """Write charts and return the markdown body."""
     fig_dir = out.parent / "figures"
     fig_dir.mkdir(parents=True, exist_ok=True)
-    chart(runs, "surface", "recall", fig_dir / "baselines_recall_by_surface.png")
-    chart(runs, "attack_type", "recall", fig_dir / "baselines_recall_by_attack_type.png")
-    chart(runs, "hard_negative", "fpr", fig_dir / "baselines_fpr_hard_negative.png")
-    md = ["# Baselines on the frozen test set (Phase 3)", "",
+    chart(runs, "surface", "recall", fig_dir / f"{prefix}_recall_by_surface.png")
+    chart(runs, "attack_type", "recall", fig_dir / f"{prefix}_recall_by_attack_type.png")
+    chart(runs, "hard_negative", "fpr", fig_dir / f"{prefix}_fpr_hard_negative.png")
+    md = [f"# {title}", "",
           f"Test set: {runs[0]['rows'] if runs else 0} rows (150 INJECTION, 150 SAFE; 100 per surface). "
           "95% CIs from 1,000 bootstrap resamples (seed 1234). Invalid outputs count as flags (fail closed, D43).",
           "", "## Overall", "", *overall_table(runs), "",
           "## Recall by surface", "", *cut_table(runs, "surface", "recall"), "",
-          "![recall by surface](figures/baselines_recall_by_surface.png)", "",
+          f"![recall by surface](figures/{prefix}_recall_by_surface.png)", "",
+          "## Recall and FPR by language (Roman Urdu = ru_mix + ru_pure)", "", *cut_table(runs, "language", "recall"), "",
+          *cut_table(runs, "language", "fpr"), "",
           "## FPR by surface", "", *cut_table(runs, "surface", "fpr"), "",
           "## Recall by attack type", "", *cut_table(runs, "attack_type", "recall"), "",
-          "![recall by attack type](figures/baselines_recall_by_attack_type.png)", "",
+          f"![recall by attack type](figures/{prefix}_recall_by_attack_type.png)", "",
           "## Recall and FPR by source", "", *cut_table(runs, "source", "recall"), "",
           *cut_table(runs, "source", "fpr"), "",
           "## FPR on hard negatives (True) vs plain SAFE (False)", "", *cut_table(runs, "hard_negative", "fpr"), "",
-          "![FPR hard negatives](figures/baselines_fpr_hard_negative.png)", "",
+          f"![FPR hard negatives](figures/{prefix}_fpr_hard_negative.png)", "",
           "## Runs", ""]
     for r in runs:
         md.append(f"- `{r['run']}`: `{r['command']}`; model {json.dumps(r['model'])}; versions {json.dumps(r['versions'])}")
@@ -117,12 +121,17 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", type=Path, default=REPO / "evals" / "reports" / "baselines.md")
     ap.add_argument("--notes", type=Path, default=REPO / "evals" / "reports" / "baselines_notes.md",
                     help="hand-written analysis appended to the report (kept across regenerations)")
+    ap.add_argument("--title", default="Baselines on the frozen test set (Phase 3)")
+    ap.add_argument("--prefix", default="baselines", help="figure file prefix")
+    ap.add_argument("--only", nargs="*", help="run names to include (default: all)")
     args = ap.parse_args(argv)
     runs = load_runs(args.runs)
+    if args.only:
+        runs = [r for r in runs if r["run"] in args.only]
     if not runs:
         print("no runs found", file=sys.stderr)
         return 1
-    body = build_report(runs, args.out)
+    body = build_report(runs, args.out, args.title, args.prefix)
     if args.notes.exists():
         body += "\n" + args.notes.read_text(encoding="utf-8")
     args.out.write_text(body, encoding="utf-8")

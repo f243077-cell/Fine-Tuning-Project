@@ -79,7 +79,8 @@ def versions(info: dict, url: str) -> dict:
     if info.get("type") == "ollama":
         out["ollama"] = httpx.get(f"{url}/api/version", timeout=10).json().get("version")
         tags = httpx.get(f"{url}/api/tags", timeout=10).json().get("models", [])
-        out["model_digest"] = next((m["digest"] for m in tags if m["name"] == info["model"]), None)
+        names = {info["model"], f"{info['model']}:latest"}  # Ollama lists an untagged model as <name>:latest
+        out["model_digest"] = next((m["digest"] for m in tags if m["name"] in names), None)
     return out
 
 
