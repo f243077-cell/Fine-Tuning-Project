@@ -1,0 +1,122 @@
+# Nightly on main (docs/understanding/03-ci-cd-pipeline.png): fetch GGUF -> full eval (300 rows) + gate ->
+# attack suites (ASR guard off/on, golden-set quality delta, Promptfoo red-team, DeepEval attack tests) -> reports.
+# The chat model (qwen2.5:1.5b-instruct) runs on the runner CPU. If that is too slow, run it by hand with a smaller
+# ASR sample (workflow_dispatch input asr_sample, e.g. 10); the report then says so.
+name: nightly
+
+on:
+  schedule:
+    - cron: "17 2 * * *"
+  workflow_dispatch:
+    inputs:
+      asr_sample:
+        description: "ASR scenarios to run (0 = all 36)"
+        default: "0"
+
+permissions:
+  contents: read
+
+env:
+  MODEL_TAG: model-v1
+  GGUF_NAME: ru-guard-1.5b-v2-Q4_K_M.gguf
+  GGUF_SHA256: 52b5472abc1419f8c43645a733dd4dd9ee9e6e8b1be7de974d61dd988f8022e7
+  OLLAMA_VERSION: 0.32.15
+  CHAT_MODEL: qwen2.5:1.5b-instruct
+  PIP_DEFAULT_TIMEOUT: "120"
+  DEEPEVAL_TELEMETRY_OPT_OUT: "YES"
+  PROMPTFOO_DISABLE_TELEMETRY: "1"
+  PROMPTFOO_DISABLE_UPDATE: "1"
+  PROMPTFOO_DISABLE_SHARING: "1"
+
+jobs:
+  nightly:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+            requirements-demo.txt
+            requirements-redteam.txt
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - name: Install
+        run: pip install -r requirements.txt -r requirements-dev.txt -r requirements-demo.txt -r requirements-redteam.txt
+      - name: Per-run secrets (never stored)
+        run: |
+          echo "GUARD_API_KEY=$(python -c 'import secrets; print(secrets.token_urlsafe(24))')" >> "$GITHUB_ENV"
+          echo "AUDIT_SALT=$(python -c 'import secrets; print(secrets.token_urlsafe(24))')" >> "$GITHUB_ENV"
+      - name: Cache GGUF
+        uses: actions/cache@v6
+        with:
+          path: models/${{ env.GGUF_NAME }}
+          key: gguf-${{ env.GGUF_SHA256 }}
+      - name: Fetch GGUF from the Release
+        run: |
+          url="https://github.com/${{ github.repository }}/releases/download/${MODEL_TAG}/${GGUF_NAME}"
+          [ -f "models/$GGUF_NAME" ] || curl -fL --retry 5 -o "models/$GGUF_NAME" "$url"
+          echo "$GGUF_SHA256  models/$GGUF_NAME" | sha256sum -c -
+      - name: Install and start Ollama
+        run: |
+          curl -fsSL https://ollama.com/install.sh | OLLAMA_VERSION="$OLLAMA_VERSION" sh
+          curl -sf http://127.0.0.1:11434/api/version || (nohup ollama serve > ollama.log 2>&1 &)
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:11434/api/version && break; sleep 2; done
+      - name: Register guard model and pull the chat model
+        run: bash scripts/register_model.sh ru-guard-1.5b-v2
+      - name: Full eval (300 rows)
+        run: python evals/eval_guard.py --model ollama:ru-guard-1.5b-v2 --split test --ollama-url http://127.0.0.1:11434 --out ci_runs
+      - name: Gate (full)
+        run: python evals/gate.py --metrics ci_runs/ru-guard-1.5b-v2/metrics.json
+      - name: Start guard-api
+        run: |
+          mkdir -p ci_data
+          GUARD_MODEL=ru-guard-1.5b-v2 OLLAMA_URL=http://127.0.0.1:11434 DB_PATH=ci_data/guard.db \
+            nohup uvicorn guard.app.main:app --port 8001 > guard.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:8001/health && break; sleep 2; done
+      - name: Build the demo index (legacy index with poisoned docs, so G2 is measured)
+        run: |
+          python docker/fetch_embedding_model.py
+          GUARD_URL=http://127.0.0.1:8001 CHROMA_PATH=ci_data/chroma python -m demo_rag.ingest --guard off --report
+      - name: Start demo-rag
+        run: |
+          GUARD_URL=http://127.0.0.1:8001 OLLAMA_URL=http://127.0.0.1:11434 CHROMA_PATH=ci_data/chroma \
+            ALLOW_GUARD_TOGGLE=true GUARD_ENABLED=true nohup uvicorn demo_rag.app.main:app --port 8002 > demo.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:8002/health && break; sleep 2; done
+      - name: ASR guard off and on
+        env:
+          GUARD_URL: http://127.0.0.1:8001
+        run: |
+          sample="${{ github.event.inputs.asr_sample || '0' }}"
+          extra=""; [ "$sample" != "0" ] && extra="--sample $sample"
+          python evals/run_asr.py --guard off $extra
+          python evals/run_asr.py --guard on $extra
+      - name: Golden-set quality guard off and on
+        run: |
+          python evals/run_quality.py --guard off
+          python evals/run_quality.py --guard on
+      - name: Promptfoo red-team (guard on)
+        run: npx -y promptfoo@0.125.1 eval -c evals/promptfoo/promptfooconfig.yaml -o evals/reports/promptfoo/results.json --no-cache --max-concurrency 1 --no-table
+      - name: DeepEval attack tests
+        env:
+          DEMO_URL: http://127.0.0.1:8002
+        run: pytest -q evals/redteam
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: nightly-reports
+          path: |
+            ci_runs/
+            evals/reports/asr/
+            evals/reports/quality/
+            evals/reports/promptfoo/
+            demo_rag/reports/
+            ci_data/traces.jsonl
+            *.log
+          if-no-files-found: ignore

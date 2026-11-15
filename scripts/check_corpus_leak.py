@@ -24,7 +24,7 @@ TEST = REPO / "data" / "eval" / "test.jsonl"
 NGRAM, THRESHOLD = 5, 0.5
 DEFAULT_PATHS = [REPO / "demo_rag" / "corpus", REPO / "demo_rag" / "corpus_poisoned",
                  REPO / "evals" / "attack_suite.yaml", REPO / "evals" / "golden_set.yaml",
-                 REPO / "gateway" / "notes"]
+                 REPO / "gateway" / "notes", REPO / "evals" / "promptfoo"]
 
 
 def _yaml_strings(node: object) -> list[str]:

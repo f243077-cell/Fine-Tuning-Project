@@ -19,7 +19,7 @@ from guard.scanner import ModelScanner, Scanner
 from guard.schemas import (BatchRequest, BatchResponse, BatchResult, HealthResponse, ScannerError, ScanRequest,
                            ScanResponse, Source, StatsResponse, Verdict)
 from guard.security import BodySizeLimit, make_limiter, rate_limit_handler, require_api_key
-from guard.telemetry import enable_console, get_tracer
+from guard.telemetry import configure, enable_console, get_tracer
 
 logger = logging.getLogger("guard")
 
@@ -94,6 +94,7 @@ def create_app(settings: Settings | None = None, chat_client: ChatClient | None 
         logging.getLogger("httpx").setLevel(logging.WARNING)  # one INFO line per Ollama call is noise
         if not settings.api_key:
             logger.error("GUARD_API_KEY is not set: every /v1 request will get 401")
+        configure(settings.otel_exporter, settings.otel_file)
         if settings.otel_console:
             enable_console()
         client = chat_client

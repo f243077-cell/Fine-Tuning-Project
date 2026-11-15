@@ -122,10 +122,15 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--ollama-url", default=os.environ.get("OLLAMA_URL", "http://localhost:11434"))
     ap.add_argument("--chat-model", default=os.environ.get("CHAT_MODEL", "qwen2.5:1.5b-instruct"))
     ap.add_argument("--only", help="comma-separated scenario kinds")
+    ap.add_argument("--sample", type=int, default=0,
+                    help="run N scenarios spread over the suite (slow runners); the report records it")
     args = ap.parse_args(argv)
     suite = yaml.safe_load(SUITE.read_text(encoding="utf-8"))["scenarios"]
     if args.only:
         suite = [s for s in suite if s["kind"] in args.only.split(",")]
+    if args.sample and args.sample < len(suite):
+        step = len(suite) / args.sample
+        suite = [suite[int(i * step)] for i in range(args.sample)]
     guard = GuardClient.from_env(fail_mode="closed") if args.guard == "on" else None
     guard_model = guard.health().model if guard else None
     records = []
@@ -142,6 +147,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"{i}/{len(suite)} {sc['id']}: {'SUCCESS' if res['success'] else 'defended'}", flush=True)
     n, s = len(records), sum(r["success"] for r in records)
     report = {"guard": args.guard, "chat_model": args.chat_model, "guard_model": guard_model,
+              "sample": args.sample or None,
               "overall": {"success": s, "n": n, "asr": round(s / n, 3) if n else 0.0},
               "tables": {k: table(records, k) for k in ("kind", "surface", "attack_type")},
               "command": " ".join(["python", "evals/run_asr.py", *(argv or sys.argv[1:])]), "records": records}

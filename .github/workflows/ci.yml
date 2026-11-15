@@ -1,19 +1,54 @@
+# Every pull request and push to main (docs/understanding/03-ci-cd-pipeline.png, Architecture.md section 15):
+#   fast checks (tests, no model) -> fetch GGUF from the GitHub Release -> smoke eval (100 rows) -> gate.py.
+# Until the owner publishes the Release asset, the smoke job reports a warning and skips the model steps.
 name: ci
 
 on:
   pull_request:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+env:
+  MODEL_TAG: model-v1                          # GitHub Release that holds the GGUF
+  GGUF_NAME: ru-guard-1.5b-v2-Q4_K_M.gguf
+  GGUF_SHA256: 52b5472abc1419f8c43645a733dd4dd9ee9e6e8b1be7de974d61dd988f8022e7
+  OLLAMA_VERSION: 0.32.15
+  PIP_DEFAULT_TIMEOUT: "120"
+
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  fast:
+    name: Fast checks (tests, no model)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+            requirements-demo.txt
+      - name: Install
+        run: pip install -r requirements.txt -r requirements-dev.txt -r requirements-demo.txt
+      - name: Test lock
+        run: python scripts/verify_test_lock.py
+      - name: Tests (stub scanner, fakes; no model)
+        run: pytest -q
+
+  smoke:
+    name: Smoke eval (100 rows) and gate
+    needs: fast
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
@@ -22,5 +57,48 @@ jobs:
             requirements-dev.txt
       - name: Install
         run: pip install -r requirements.txt -r requirements-dev.txt
-      - name: Test
-        run: pytest -q
+      - name: Check the Release asset
+        id: asset
+        run: |
+          url="https://github.com/${{ github.repository }}/releases/download/${MODEL_TAG}/${GGUF_NAME}"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          if curl -sfIL "$url" > /dev/null; then echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::GGUF not found at $url. The smoke eval and gate are skipped until the owner publishes the Release (phases.md, Phase 8)."
+          fi
+      - name: Cache GGUF
+        if: steps.asset.outputs.available == 'true'
+        uses: actions/cache@v6
+        with:
+          path: models/${{ env.GGUF_NAME }}
+          key: gguf-${{ env.GGUF_SHA256 }}
+      - name: Fetch GGUF
+        if: steps.asset.outputs.available == 'true'
+        run: |
+          [ -f "models/$GGUF_NAME" ] || curl -fL --retry 5 -o "models/$GGUF_NAME" "${{ steps.asset.outputs.url }}"
+          echo "$GGUF_SHA256  models/$GGUF_NAME" | sha256sum -c -
+      - name: Install and start Ollama
+        if: steps.asset.outputs.available == 'true'
+        run: |
+          curl -fsSL https://ollama.com/install.sh | OLLAMA_VERSION="$OLLAMA_VERSION" sh
+          curl -sf http://127.0.0.1:11434/api/version || (nohup ollama serve > ollama.log 2>&1 &)
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:11434/api/version && break; sleep 2; done
+      - name: Register model
+        if: steps.asset.outputs.available == 'true'
+        run: SKIP_CHAT_MODEL=1 bash scripts/register_model.sh ru-guard-1.5b-v2
+      - name: Smoke eval (100 rows)
+        if: steps.asset.outputs.available == 'true'
+        run: python evals/eval_guard.py --model ollama:ru-guard-1.5b-v2 --split test --subset smoke --ollama-url http://127.0.0.1:11434 --out ci_runs
+      - name: Merge gate
+        if: steps.asset.outputs.available == 'true'
+        run: python evals/gate.py --thresholds evals/thresholds_smoke.json --metrics ci_runs/ru-guard-1.5b-v2-smoke/metrics.json
+      - name: Upload smoke report
+        if: always() && steps.asset.outputs.available == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: smoke-eval
+          path: |
+            ci_runs/
+            ollama.log
+          if-no-files-found: ignore

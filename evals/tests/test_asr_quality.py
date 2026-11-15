@@ -46,3 +46,17 @@ def test_suite_and_golden_files_are_well_formed() -> None:
             assert (Path(SUITE).parents[1] / "demo_rag" / "corpus_poisoned" / f"{s['target_doc']}.md").exists()
     golden = yaml.safe_load(Path(GOLDEN).read_text(encoding="utf-8"))["questions"]
     assert len(golden) == 30 and len({q["id"] for q in golden}) == 30 and all(q["keywords"] for q in golden)
+
+
+def test_smoke_subset_is_one_row_per_intent() -> None:
+    """The smoke subset has 100 rows, one per intent, with all three surfaces and both labels."""
+    import collections
+    import json
+
+    from evals.eval_guard import SPLITS, smoke_rows
+    rows = [json.loads(line) for line in SPLITS["test"].read_text(encoding="utf-8").splitlines() if line.strip()]
+    sub = smoke_rows(rows)
+    assert len(sub) == 100 and len({r["intent_id"] for r in sub}) == 100
+    surfaces = collections.Counter(r["surface"] for r in sub)
+    assert set(surfaces) == {"en", "ru_mix", "ru_pure"} and min(surfaces.values()) >= 33
+    assert collections.Counter(r["label"] for r in sub) == {"INJECTION": 50, "SAFE": 50}

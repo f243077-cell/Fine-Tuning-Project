@@ -28,7 +28,7 @@ THIRD_PARTY = {
     "pandas", "numpy", "matplotlib", "seaborn",
     "langchain_core", "langgraph", "chromadb", "tiktoken", "mcp",
     "transformers", "peft", "trl", "bitsandbytes", "unsloth", "torch", "datasets", "vllm",
-    "slowapi", "presidio_analyzer", "presidio_anonymizer", "opentelemetry",
+    "slowapi", "presidio_analyzer", "presidio_anonymizer", "opentelemetry", "deepeval",
 }
 
 

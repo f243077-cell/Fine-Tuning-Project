@@ -179,7 +179,7 @@ Claude Code:
 
 - [x] `client/ruguard_client`: sync and async clients for `/v1/scan` and `/v1/scan/batch`, Pydantic response models, timeouts and retries. It imports nothing else from the repo. Tests use `httpx.MockTransport`.
 - [x] Extend `tests/test_boundaries.py` to cover `client/`, `demo_rag/`, and `gateway/`; it must stay green.
-- [ ] **[HUMAN]** Corpus: Claude Code drafts about 30 English documents about an invented company and 6 poisoned-document templates (benign placeholder payloads only) in `demo_rag/corpus/` and `demo_rag/corpus_poisoned/`. The owner writes or reviews about 10 Roman Urdu documents and the Roman Urdu poisoned ones. Nothing is copied from the test set; add a near-duplicate check against `data/eval/test.jsonl` (read-only). *(Drafted 2026-11-15: 30 English and 10 Roman Urdu docs, 6 English and 3 Roman Urdu poisoned docs; `scripts/check_corpus_leak.py` max Jaccard 0.135. Owner review of the Roman Urdu docs pending.)*
+- [x] **[HUMAN]** Corpus: Claude Code drafts about 30 English documents about an invented company and 6 poisoned-document templates (benign placeholder payloads only) in `demo_rag/corpus/` and `demo_rag/corpus_poisoned/`. The owner writes or reviews about 10 Roman Urdu documents and the Roman Urdu poisoned ones. Nothing is copied from the test set; add a near-duplicate check against `data/eval/test.jsonl` (read-only). *(Drafted 2026-11-15: 30 English and 10 Roman Urdu docs, 6 English and 3 Roman Urdu poisoned docs; `scripts/check_corpus_leak.py` max Jaccard 0.135. Owner review deferred: the owner reviews them when running the app, D54.)*
 - [x] `demo_rag/ingest.py`: chunk (300 to 800 tokens with tiktoken, small overlap), **G0** scan each chunk through `client/`, embed into Chroma with its default embedding function, send flagged chunks to quarantine; `python -m demo_rag.ingest --report` prints a quarantine report.
 - [x] `demo_rag/graph.py`: LangGraph nodes `guard_input`, `retrieve`, `guard_chunks`, `build_prompt` (`<documents>` tags, token budget, canary token), `generate` (Ollama chat model, temperature 0), `validate_output`, as in `Architecture.md` section 12. `GUARD_ENABLED` flag, `guard_events` reducer, `recursion_limit` always set.
 - [x] `demo_rag/validate.py` (**G4**): Pydantic answer schema, citation presence, canary-token leak check; retry once, then refuse.
@@ -202,8 +202,8 @@ Claude Code:
 
 **Goal:** regressions cannot reach `main` unnoticed.
 
-- [ ] OpenTelemetry exporter configuration (console or file by default). Langfuse self-hosted is a **stretch**; do not block on it.
-- [ ] `evals/promptfoo/promptfooconfig.yaml` with Roman Urdu red-team cases against the `demo-rag` endpoint (guard on); list failing cases.
+- [x] OpenTelemetry exporter configuration (console or file by default). Langfuse self-hosted is a **stretch**; do not block on it.
+- [x] `evals/promptfoo/promptfooconfig.yaml` with Roman Urdu red-team cases against the `demo-rag` endpoint (guard on); list failing cases.
 - [ ] DeepEval pytest-style attack tests (expect refusal and no canary leak).
 - [ ] Extend CI: **PR smoke eval** (100-row subset, Ollama on the runner, GGUF from the GitHub Release) with `evals/gate.py`; **nightly** full eval, ASR and golden-set quality delta (`run_asr.py`, `run_quality.py`), Promptfoo; upload reports as artifacts. Nightly may use a 10-attack subset if the runner is too slow for the chat model; say so in the report. The workflows should match the pipeline in `docs/understanding/03-ci-cd-pipeline.png`; if they differ, update `Architecture.md` section 15 and note the stale picture.
 - [ ] **[HUMAN]** creates the GitHub Release with the GGUF asset (check current size limits); keep the repo public for free standard-runner minutes.

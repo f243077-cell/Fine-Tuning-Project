@@ -54,6 +54,14 @@ def scan(scanner, text: str, source: str) -> tuple[str, str | None, float]:
     return " || ".join(raws), "SAFE", total
 
 
+def smoke_rows(rows: list) -> list:
+    """One row per intent with the surface rotating en, ru_mix, ru_pure: 100 of the 300 test rows.
+
+    The test file is ordered in intent triplets, so row i is kept when i % 3 == (i // 3) % 3.
+    """
+    return [r for i, r in enumerate(rows) if i % 3 == (i // 3) % 3]
+
+
 def make_scanner(name: str, url: str):
     """(scanner, run name, model info) for a --model value."""
     if name == "rules":
@@ -90,7 +98,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--model", required=True)
     ap.add_argument("--split", choices=list(SPLITS), default="test")
     ap.add_argument("--ollama-url", default="http://localhost:11434")
-    ap.add_argument("--limit", type=int, help="first N rows only (smoke runs)")
+    ap.add_argument("--limit", type=int, help="first N rows only (quick local checks)")
+    ap.add_argument("--subset", choices=["smoke"], help="smoke: one row per intent, surfaces rotating (100 test rows), for the PR smoke eval")
     ap.add_argument("--out", type=Path, default=REPO / "evals" / "reports" / "runs")
     args = ap.parse_args(argv)
     path = SPLITS[args.split]
@@ -100,8 +109,11 @@ def main(argv: list[str] | None = None) -> int:
     if errors:
         raise SystemExit(f"data errors: {errors[:3]}")
     rows = rows[: args.limit] if args.limit else rows
+    if args.subset == "smoke":
+        rows = smoke_rows(rows)
     scanner, run_name, info = make_scanner(args.model, args.ollama_url)
-    out_dir = args.out / f"{run_name}{'' if args.split == 'test' else '-' + args.split}"
+    suffix = ("" if args.split == "test" else "-" + args.split) + ("-smoke" if args.subset else "")
+    out_dir = args.out / f"{run_name}{suffix}"
     out_dir.mkdir(parents=True, exist_ok=True)
     records = []
     with (out_dir / "predictions.jsonl").open("w", encoding="utf-8", newline="\n") as f:

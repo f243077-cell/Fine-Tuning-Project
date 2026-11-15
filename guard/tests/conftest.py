@@ -63,7 +63,8 @@ class FakeChat:
 def make_settings(tmp_path: Path, **overrides) -> Settings:
     """Test settings: temp DB, fixed key and salt, small limits."""
     base = Settings(guard_model="ru-guard-test", api_key=API_KEY, audit_salt="test-salt",
-                    db_path=str(tmp_path / "guard.db"), rate_limit="1000/minute")
+                    db_path=str(tmp_path / "guard.db"), rate_limit="1000/minute",
+                    otel_exporter="none")
     return replace(base, **overrides)
 
 

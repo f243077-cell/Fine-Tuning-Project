@@ -36,6 +36,8 @@ class Settings:
     concurrency: int = 2
     rate_limit: str = "120/minute"
     otel_console: bool = False
+    otel_exporter: str = "file"
+    otel_file: str = "traces.jsonl"
 
 
 def get_settings() -> Settings:
@@ -65,4 +67,7 @@ def get_settings() -> Settings:
         concurrency=_int("SCAN_CONCURRENCY", 2),
         rate_limit=os.environ.get("RATE_LIMIT", "120/minute"),
         otel_console=os.environ.get("OTEL_CONSOLE", "false").lower() == "true",
+        otel_exporter=os.environ.get("OTEL_EXPORTER", "file").strip().lower(),
+        otel_file=os.environ.get("OTEL_FILE", os.path.join(os.path.dirname(os.environ.get("DB_PATH", "guard.db")) or ".",
+                                                            "traces.jsonl")),
     )

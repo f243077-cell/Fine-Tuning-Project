@@ -1,0 +1,3 @@
+# Live red-team tests (Phase 8): DeepEval attack tests in evals/redteam (nightly CI; not needed for unit tests).
+# Used with deterministic metrics only (no judge model, no paid API). Telemetry off: DEEPEVAL_TELEMETRY_OPT_OUT=YES.
+deepeval==4.3.4

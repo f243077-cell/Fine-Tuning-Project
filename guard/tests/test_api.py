@@ -212,3 +212,25 @@ def test_spans_recorded_without_text(client: TestClient) -> None:
     for s in spans:
         assert all(ATTACK not in str(v) for v in s.attributes.values())
     exporter.shutdown()
+
+
+def test_file_exporter_writes_json_lines(app_client: Callable[..., TestClient], tmp_path: Path) -> None:
+    """OTEL_EXPORTER=file appends one JSON object per span, with latency and no raw text."""
+    import json
+
+    path = tmp_path / "traces.jsonl"
+    c = app_client(otel_exporter="file", otel_file=str(path))
+    scan(c)
+    spans = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+    names = {s["name"] for s in spans}
+    assert {"scan", "normalize", "ollama.call", "policy"} <= names
+    assert all(s["duration_ms"] is not None for s in spans)
+    assert ATTACK not in path.read_text(encoding="utf-8")
+
+
+def test_bad_exporter_name_fails() -> None:
+    """An unknown exporter name is rejected."""
+    from guard.telemetry import configure
+
+    with pytest.raises(ValueError):
+        configure("zipkin", "x")

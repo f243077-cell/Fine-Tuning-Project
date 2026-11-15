@@ -1,6 +1,6 @@
 # Phase 7: Reference RAG, client SDK, and MCP gateway
 
-Branch / commit: `main`. Status: **done except the owner's review of the Roman Urdu texts; waiting at Gate 7.**
+Branch / commit: `main`. Status: **done; Gate 7 passed (owner-delegated, 2026-11-15). The owner reviews the Roman Urdu texts when running the app (D54).**
 
 ## Done
 - `client/ruguard_client`: sync and async clients for `/v1/scan`, `/v1/scan/batch`, `/health`, `/v1/stats`; Pydantic models; retries on transport errors, 429, and bodiless 502/503/504; `fail_mode` closed (default), open, or raise (D53). Tests use `httpx.MockTransport`. `evals/parity.py` and `evals/bench_latency.py --guard-url` now use it.
