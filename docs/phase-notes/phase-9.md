@@ -1,6 +1,6 @@
 # Phase 9: Flutter playground
 
-Branch / commit: `main`. Status: **done; waiting at Gate 9 (owner demo).**
+Branch / commit: `main`. Status: **done; Gate 9 passed (owner-delegated, 2026-11-15, D56).**
 
 ## Done
 - `flutter_app/` (Flutter 3.47.7, Riverpod 3.5, `http` 1.6; no other packages): five screens, Scan, Compare, Chat, Attack library and History. Base URLs and the local guard-api key come from `--dart-define` at run time. The app has no provider key, and nothing secret is committed.
@@ -26,3 +26,4 @@ Branch / commit: `main`. Status: **done; waiting at Gate 9 (owner demo).**
 - Target platform: web (Chrome). Windows desktop needs Visual Studio with the C++ workload, which is not installed. Android was not run.
 - The chat answer in `app_chat.png` is wrong: it says 6 months, but the Sitara motor warranty is 2 years. Retrieval returned the loyalty-points doc, which mentions "6 mahine izafi warranty". This is a demo_rag quality issue (the chat model and retrieval), not a guard issue.
 - During the screenshot run, someone clicked in the visible Playwright browser, so two screenshots were retaken.
+- Carried over to Phase 10: check the first CI run with the real smoke eval (`c34bb0b`, started 2026-11-15 17:55 UTC), then run the gate drill (an untuned base model under the guard's name must fail `gate.py`) and delete the drill branch.
