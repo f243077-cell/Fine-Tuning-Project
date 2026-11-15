@@ -1,6 +1,6 @@
 # Phase 6: Guard service
 
-Branch / commit: `main`. Status: **done; waiting at Gate 6** (owner follows the quickstart from a clean clone).
+Branch / commit: `main`. Status: **done; Gate 6 passed (owner-delegated, 2026-11-15: "start phase 7"). The clean-clone quickstart was not run; the full `ollama` container path is still untested on this machine.**
 
 ## Done
 - `guard/scanner.py`: normalize, overlapping windows (`WINDOW_CHARS` 1000, `OVERLAP_CHARS` 200), parallel window calls bounded by a semaphore (`SCAN_CONCURRENCY` 2), one retry per window on any error, strict output regex, any-window-flags rule (D50).

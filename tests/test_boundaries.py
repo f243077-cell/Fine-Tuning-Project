@@ -100,6 +100,16 @@ def _write(root: Path, rel: str, code: str) -> None:
         ("demo_rag/e.py", "from guard import scanner\n"),
         ("gateway/f.py", "import some_other_project\n"),
         ("guard/app/g.py", "from ...training import schemas\n"),
+        # Phase 7: client/, demo_rag/, gateway/, and evals/ reach the guard only over HTTP through client/.
+        ("client/ruguard_client/h.py", "from training.normalize import normalize_text\n"),
+        ("client/i.py", "import demo_rag\n"),
+        ("demo_rag/app/j.py", "from guard.app.main import app\n"),
+        ("demo_rag/k.py", "from evals.metrics import evaluate\n"),
+        ("demo_rag/l.py", "from training.normalize import normalize_text\n"),
+        ("gateway/m.py", "from guard.scanner import ModelScanner\n"),
+        ("gateway/n.py", "from demo_rag.graph import build_graph\n"),
+        ("evals/o.py", "from guard.policy import decide\n"),
+        ("evals/p.py", "import demo_rag.ingest\n"),
     ],
 )
 def test_detects_violation(tmp_path: Path, rel: str, code: str) -> None:
@@ -114,4 +124,7 @@ def test_allows_permitted_imports(tmp_path: Path) -> None:
     _write(tmp_path, "guard/app/ok2.py", "from ..scanner import StubScanner\n")
     _write(tmp_path, "guard/ok4.py", "from training import normalize\n")
     _write(tmp_path, "demo_rag/ok3.py", "from client.ruguard_client import x\n")
+    _write(tmp_path, "gateway/ok5.py", "from client.ruguard_client import GuardClient\nimport mcp\nimport chromadb\n")
+    _write(tmp_path, "evals/ok6.py", "from client.ruguard_client import GuardClient\nfrom training.normalize import x\n")
+    _write(tmp_path, "client/ruguard_client/ok7.py", "from client.ruguard_client.models import ScanResult\nimport httpx\n")
     assert find_violations(tmp_path) == []
