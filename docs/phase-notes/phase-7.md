@@ -31,6 +31,6 @@ Branch / commit: `main`. Status: **done except the owner's review of the Roman U
 - The corpus docs are shorter than 300 tokens, so each doc is one chunk (the 300 to 800 token range applies only to longer docs).
 - Indirect attacks did not succeed against qwen2.5:1.5b-instruct even unguarded, so the ASR suite cannot show G2's value on this model. A weaker or more obedient chat model, or stronger poisoned texts, would be needed to show it.
 - The Roman Urdu answer quality of the 1.5B chat model is the main quality limit (7 of 10 correct with the guard on).
-- The Docker demo image build is recorded below. The full compose path with the `ollama` container is still untested here (slow link; D52).
+- Docker: the demo-rag image builds (1.26 GB) and runs with `docker-compose.host-ollama.yml`. At start it ran G0 (9 of 9 poisoned chunks quarantined, 0 of 40 clean flagged); `/chat` answered a Roman Urdu and an English question with citations, blocked an attack, and `/chat/stream` sent 7 events. The full compose path with the `ollama` container is still untested here (slow link; D52).
 - Ragas (optional) not run.
 - Diagrams: no picture in `docs/understanding/` is made stale (the graph and checkpoints match Architecture.md section 12).
