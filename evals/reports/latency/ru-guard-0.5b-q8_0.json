@@ -1,15 +1,16 @@
 {
  "model": "ru-guard-0.5b:q8_0",
+ "via": "ollama",
  "cold_seconds": {
-  "p50": 4.9927,
-  "p95": 5.6036,
-  "mean": 5.1341,
+  "p50": 2.21,
+  "p95": 2.6818,
+  "mean": 2.3015,
   "n": 5
  },
  "warm_seconds": {
-  "p50": 3.1012,
-  "p95": 3.7149,
-  "mean": 3.1324,
+  "p50": 0.4634,
+  "p95": 0.7216,
+  "mean": 0.4684,
   "n": 200
  },
  "machine": {
@@ -25,5 +26,5 @@
   "num_ctx": 1024,
   "seed": 0
  },
- "command": "python evals/bench_latency.py --model ru-guard-0.5b:q8_0 --n 200 --cold 5"
+ "command": "python evals/bench_latency.py --model ru-guard-0.5b:q8_0"
 }

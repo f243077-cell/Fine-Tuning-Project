@@ -1,0 +1,13 @@
+# Override: run only guard-api in Docker and use the Ollama already running on the host (no ollama image pull).
+#   docker compose -f docker-compose.yml -f docker-compose.host-ollama.yml up --build -d guard-api
+# Register the model on the host first: bash scripts/register_model.sh ru-guard-1.5b-v2
+services:
+  ollama:
+    profiles: ["container-ollama"]   # not started with this override
+
+  guard-api:
+    environment:
+      OLLAMA_URL: http://host.docker.internal:11434
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on: !reset []

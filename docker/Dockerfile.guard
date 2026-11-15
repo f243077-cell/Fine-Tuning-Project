@@ -6,7 +6,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# The pip cache mount keeps finished downloads between builds; timeout and retries help on slow links.
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --timeout 120 --retries 10 -r requirements.txt
 
 # guard/ imports only training/normalize.py from the repo (Architecture.md section 5).
 COPY training/__init__.py training/normalize.py training/
@@ -17,7 +19,7 @@ USER guard
 
 EXPOSE 8001
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
     CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8001/health', timeout=4).status == 200 else 1)"
 
 CMD ["uvicorn", "guard.app.main:app", "--host", "0.0.0.0", "--port", "8001"]

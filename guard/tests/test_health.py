@@ -1,51 +1,41 @@
 """Tests for GET /health and the stub scanner."""
 
 import asyncio
-from collections.abc import Iterator
+from pathlib import Path
 
-import pytest
 from fastapi.testclient import TestClient
 
-from guard.app.main import app, get_scanner
+from guard.app.main import create_app
 from guard.scanner import StubScanner
 from guard.schemas import ScanResult, Verdict
+from guard.tests.conftest import FakeChat, make_settings
 
 
-class DownScanner(StubScanner):
-    """Stub scanner whose backend is unreachable."""
-
-    name = "down"
-
-    async def healthy(self) -> bool:
-        """Always unhealthy."""
-        return False
-
-
-@pytest.fixture
-def client() -> Iterator[TestClient]:
-    """Test client with dependency overrides cleared afterwards."""
-    with TestClient(app) as c:
-        yield c
-    app.dependency_overrides.clear()
-
-
-def test_health_ok(client: TestClient, monkeypatch: pytest.MonkeyPatch) -> None:
-    """Health returns 200 with model and scanner names."""
-    monkeypatch.setenv("GUARD_MODEL", "ru-guard-test")
-    r = client.get("/health")
+def test_health_ok(client: TestClient) -> None:
+    """Health returns 200 with model and scanner names, without an API key."""
+    r = client.get("/health", headers={"X-API-Key": ""})
     assert r.status_code == 200
     body = r.json()
     assert body["status"] == "ok"
     assert body["model"] == "ru-guard-test"
-    assert body["scanner"] == "stub"
+    assert body["scanner"] == "ollama"
 
 
-def test_health_unavailable(client: TestClient) -> None:
-    """Health returns 503 when the scanner is down."""
-    app.dependency_overrides[get_scanner] = DownScanner
-    r = client.get("/health")
+def test_health_unavailable(tmp_path: Path) -> None:
+    """Health returns 503 when the model backend is down."""
+    chat = FakeChat()
+    chat.up = False
+    with TestClient(create_app(make_settings(tmp_path), chat_client=chat)) as c:
+        r = c.get("/health")
     assert r.status_code == 503
     assert r.json()["status"] == "unavailable"
+
+
+def test_stub_scanner_app(tmp_path: Path) -> None:
+    """An app built with the stub scanner reports scanner=stub and scans safe."""
+    with TestClient(create_app(make_settings(tmp_path), scanner=StubScanner()), headers={"X-API-Key": "test-key"}) as c:
+        assert c.get("/health").json()["scanner"] == "stub"
+        assert c.post("/v1/scan", json={"text": "hello", "source": "user_input"}).json()["verdict"] == "safe"
 
 
 def test_stub_scanner_returns_safe() -> None:

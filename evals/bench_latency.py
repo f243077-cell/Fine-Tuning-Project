@@ -5,6 +5,11 @@
 Uses val windows (never the test set). Cold = the model is unloaded (keep_alive 0) before each timed call,
 so the time includes loading. Warm = after 3 warm-up calls, n calls with the model resident.
 Writes evals/reports/latency/<model>.json.
+
+    python evals/bench_latency.py --model ru-guard-1.5b-v2 --guard-url http://localhost:8001 --tag service
+
+With --guard-url the warm calls go through guard-api POST /v1/scan (GUARD_API_KEY from env) and the cold run
+is skipped; --tag adds a suffix to the output file name.
 """
 
 import argparse
@@ -21,7 +26,7 @@ if str(REPO) not in sys.path:
 
 import httpx  # noqa: E402
 
-from evals.baselines import OLLAMA_OPTIONS, OllamaScanner  # noqa: E402
+from evals.baselines import OLLAMA_OPTIONS, OllamaScanner, http_client  # noqa: E402
 from training.jsonl import read_rows  # noqa: E402
 
 VAL = REPO / "data" / "processed" / "val.jsonl"
@@ -42,7 +47,7 @@ def summary(values: list[float]) -> dict[str, float]:
 
 def unload(url: str, model: str) -> None:
     """Ask Ollama to drop the model from memory."""
-    httpx.post(f"{url}/api/generate", json={"model": model, "keep_alive": 0}, timeout=60).raise_for_status()
+    http_client().post(f"{url}/api/generate", json={"model": model, "keep_alive": 0}, timeout=60).raise_for_status()
 
 
 def timed_call(scanner: OllamaScanner, text: str, source: str) -> float:
@@ -52,6 +57,21 @@ def timed_call(scanner: OllamaScanner, text: str, source: str) -> float:
     return time.perf_counter() - t0
 
 
+class ServiceScanner:
+    """Calls guard-api over HTTP; same call shape as OllamaScanner."""
+
+    def __init__(self, url: str) -> None:
+        """HTTP client with the API key from GUARD_API_KEY."""
+        self.http = httpx.Client(base_url=url, headers={"X-API-Key": os.environ.get("GUARD_API_KEY", "")},
+                                 timeout=120)
+
+    def __call__(self, text: str, source: str) -> tuple[str, str | None]:
+        """(verdict, None); raises on HTTP errors."""
+        r = self.http.post("/v1/scan", json={"text": text, "source": source})
+        r.raise_for_status()
+        return r.json()["verdict"], None
+
+
 def main(argv: list[str] | None = None) -> int:
     """CLI entry point."""
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
@@ -59,12 +79,16 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--n", type=int, default=200)
     ap.add_argument("--cold", type=int, default=5)
     ap.add_argument("--url", default="http://localhost:11434")
+    ap.add_argument("--guard-url", help="time POST /v1/scan on this guard-api instead of Ollama")
+    ap.add_argument("--tag", default="", help="suffix for the output file name")
     args = ap.parse_args(argv)
     rows, errors = read_rows(VAL)
     if errors:
         raise SystemExit(f"val errors: {errors[:3]}")
     rows = sorted(rows, key=lambda r: r.id)[: args.n]
     scanner = OllamaScanner(args.model, args.url, options=dict(OLLAMA_OPTIONS))
+    if args.guard_url:
+        scanner, args.cold = ServiceScanner(args.guard_url), 0
     cold = []
     for r in rows[: args.cold]:
         unload(args.url, args.model)
@@ -72,12 +96,12 @@ def main(argv: list[str] | None = None) -> int:
     for r in rows[:3]:
         scanner(r.text, str(r.source))
     warm = [timed_call(scanner, r.text, str(r.source)) for r in rows]
-    result = {"model": args.model, "cold_seconds": summary(cold), "warm_seconds": summary(warm),
+    result = {"model": args.model, "via": args.guard_url or "ollama", "cold_seconds": summary(cold) if cold else None, "warm_seconds": summary(warm),
               "machine": {"cpu": platform.processor(), "cpu_count": os.cpu_count(), "os": platform.platform()},
               "ollama": httpx.get(f"{args.url}/api/version", timeout=10).json().get("version"),
               "options": OLLAMA_OPTIONS, "command": " ".join(["python", "evals/bench_latency.py", *(argv or sys.argv[1:])])}
     OUT.mkdir(parents=True, exist_ok=True)
-    path = OUT / f"{args.model.replace(':', '-')}.json"
+    path = OUT / f"{args.model.replace(':', '-')}{'-' + args.tag if args.tag else ''}.json"
     path.write_text(json.dumps(result, indent=1) + "\n", encoding="utf-8")
     print(json.dumps({k: result[k] for k in ("model", "cold_seconds", "warm_seconds")}))
     return 0

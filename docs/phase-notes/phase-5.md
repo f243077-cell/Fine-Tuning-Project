@@ -18,7 +18,7 @@ Branch / commit: `main`. Status: **done; Gate 5 passed (owner-delegated, 2026-11
 - Best v1 (ru-guard-1.5b Q8_0): recall 0.887, FPR 0.100, `ru_pure` recall 0.68.
 - First v2 run on the Kaggle GPU: 1.5b-v2 Q8_0 recall 0.987, FPR 0.133; Q4_K_M recall 0.967, FPR 0.127, invalid 0.010.
 - CPU vs GPU check (0.5b-v2 Q4_K_M): same recall, FPR, F1 and invalid rate; 3 of 300 rows differ in attack type only.
-- Latency (CPU, warm p50): 0.5b 3.07 s, 1.5b 3.49 s, 1.5b-v2 3.29 s (p95 3.84 s; cold p50 6.20 s).
+- Latency (CPU, warm p50): 0.5b 3.07 s, 1.5b 3.49 s, 1.5b-v2 3.29 s (p95 3.84 s; cold p50 6.20 s). **Corrected in Phase 6 (D51):** these include about 2.7 s of HTTP client overhead per call. Re-measured warm p50: 0.5b 0.52 s, 1.5b 0.91 s, 1.5b-v2 0.88 s (p95 1.41 s).
 - Targets: Roman Urdu recall met (0.94), FPR <= 3% missed by every model, baseline beaten at matched FPR (0.953 vs 0.413 for llama-guard3-1b), `en` to `ru_pure` gap 6 points (met), invalid 0.000 (met). ASR and golden set: Phase 7.
 - Gate: `python evals/gate.py` PASS on the release run. Tests: 156 passed.
 

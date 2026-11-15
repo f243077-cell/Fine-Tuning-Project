@@ -155,17 +155,17 @@ Claude Code:
 
 **Goal:** a production-style local service that matches the contract in `Architecture.md` section 7.
 
-- [ ] `scanner.py`: windowing (`WINDOW_CHARS`, overlap, `MAX_CHARS`), async calls with a small semaphore, retry once, strict output regex, any-window-flags rule.
-- [ ] `ollama_client.py`: async httpx, timeouts, `keep_alive`, `temperature 0`, `num_predict 8`.
-- [ ] `policy.py`: action per source, `MODE`, `FAIL_MODE`.
-- [ ] `security.py`: API-key dependency, request-size limit, slowapi rate limiting.
-- [ ] `pii.py`: Presidio analyzer plus custom recognizers for CNIC (`#####-#######-#`) and Pakistani phone numbers; document the spaCy model download; tests.
-- [ ] `audit.py`: create tables, keyed hash (`AUDIT_SALT`), insert audit rows, insert masked quarantine rows.
-- [ ] Endpoints `/v1/scan`, `/v1/scan/batch`, `/health`, `/v1/stats`; Pydantic schemas; error codes 401, 413, 422, 429, 503.
-- [ ] OpenTelemetry spans (normalize, Ollama call, policy) with latency attributes.
-- [ ] Tests with a stub Ollama client: contract, windowing, fail modes, `MODE=log_only`, **audit contains no raw text**, PII masking.
-- [ ] **Parity test:** run 50 test rows through the service and through the evaluation harness locally with the real model; outputs must match (investigate any mismatch, usually a template issue).
-- [ ] Compose works end to end; README quickstart for the service.
+- [x] `scanner.py`: windowing (`WINDOW_CHARS`, overlap, `MAX_CHARS`), async calls with a small semaphore, retry once, strict output regex, any-window-flags rule.
+- [x] `ollama_client.py`: async httpx, timeouts, `keep_alive`, `temperature 0`, `num_predict 8`.
+- [x] `policy.py`: action per source, `MODE`, `FAIL_MODE`.
+- [x] `security.py`: API-key dependency, request-size limit, slowapi rate limiting.
+- [x] `pii.py`: Presidio analyzer plus custom recognizers for CNIC (`#####-#######-#`) and Pakistani phone numbers; document the spaCy model download; tests.
+- [x] `audit.py`: create tables, keyed hash (`AUDIT_SALT`), insert audit rows, insert masked quarantine rows.
+- [x] Endpoints `/v1/scan`, `/v1/scan/batch`, `/health`, `/v1/stats`; Pydantic schemas; error codes 401, 413, 422, 429, 503.
+- [x] OpenTelemetry spans (normalize, Ollama call, policy) with latency attributes.
+- [x] Tests with a stub Ollama client: contract, windowing, fail modes, `MODE=log_only`, **audit contains no raw text**, PII masking.
+- [x] **Parity test:** run 50 test rows through the service and through the evaluation harness locally with the real model; outputs must match (investigate any mismatch, usually a template issue).
+- [x] Compose works end to end; README quickstart for the service. (guard-api container verified against host Ollama with `docker-compose.host-ollama.yml`; the `ollama` container path is not run here, see `docs/phase-notes/phase-6.md`.)
 
 **Acceptance:** `docker compose up`, then `curl /v1/scan` returns correct verdicts on 5 examples; parity test passes; measured p95 recorded; `pytest -q` green.
 

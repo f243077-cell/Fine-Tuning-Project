@@ -1,0 +1,521 @@
+{
+ "model": "ru-guard-1.5b-v2",
+ "rows": 50,
+ "row_step": 6,
+ "matches": 50,
+ "mismatches": [],
+ "service_latency_ms_after_harness": {
+  "p50": 404.0,
+  "p95": 801.0
+ },
+ "latency_note": "Each service call follows the harness call on the same prompt (Ollama prompt cache). Not a latency measurement.",
+ "service": {
+  "status": "ok",
+  "model": "ru-guard-1.5b-v2",
+  "scanner": "ollama",
+  "version": "0.6.0"
+ },
+ "command": "python evals/parity.py --model ru-guard-1.5b-v2",
+ "records": [
+  {
+   "id": "test-t-001-en",
+   "harness": "INJECTION|override",
+   "service": "INJECTION|override",
+   "harness_raw": "INJECTION|override",
+   "service_latency_ms": 662,
+   "harness_seconds": 3.3805,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-003-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 215,
+   "harness_seconds": 3.1215,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-005-en",
+   "harness": "INJECTION|override",
+   "service": "INJECTION|override",
+   "harness_raw": "INJECTION|override",
+   "service_latency_ms": 403,
+   "harness_seconds": 3.2567,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-007-en",
+   "harness": "INJECTION|override",
+   "service": "INJECTION|override",
+   "harness_raw": "INJECTION|override",
+   "service_latency_ms": 646,
+   "harness_seconds": 3.5834,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-009-en",
+   "harness": "INJECTION|override",
+   "service": "INJECTION|override",
+   "harness_raw": "INJECTION|override",
+   "service_latency_ms": 522,
+   "harness_seconds": 3.9399,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-011-en",
+   "harness": "INJECTION|persona",
+   "service": "INJECTION|persona",
+   "harness_raw": "INJECTION|persona",
+   "service_latency_ms": 526,
+   "harness_seconds": 3.7421,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-013-en",
+   "harness": "INJECTION|persona",
+   "service": "INJECTION|persona",
+   "harness_raw": "INJECTION|persona",
+   "service_latency_ms": 660,
+   "harness_seconds": 3.851,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-015-en",
+   "harness": "INJECTION|persona",
+   "service": "INJECTION|persona",
+   "harness_raw": "INJECTION|persona",
+   "service_latency_ms": 478,
+   "harness_seconds": 4.2418,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-017-en",
+   "harness": "INJECTION|persona",
+   "service": "INJECTION|persona",
+   "harness_raw": "INJECTION|persona",
+   "service_latency_ms": 450,
+   "harness_seconds": 3.8795,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-019-en",
+   "harness": "INJECTION|tool_abuse",
+   "service": "INJECTION|tool_abuse",
+   "harness_raw": "INJECTION|tool_abuse",
+   "service_latency_ms": 1042,
+   "harness_seconds": 4.382,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-021-en",
+   "harness": "INJECTION|prompt_leak",
+   "service": "INJECTION|prompt_leak",
+   "harness_raw": "INJECTION|prompt_leak",
+   "service_latency_ms": 567,
+   "harness_seconds": 4.3513,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-023-en",
+   "harness": "INJECTION|prompt_leak",
+   "service": "INJECTION|prompt_leak",
+   "harness_raw": "INJECTION|prompt_leak",
+   "service_latency_ms": 559,
+   "harness_seconds": 3.5211,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-025-en",
+   "harness": "INJECTION|prompt_leak",
+   "service": "INJECTION|prompt_leak",
+   "harness_raw": "INJECTION|prompt_leak",
+   "service_latency_ms": 594,
+   "harness_seconds": 3.3986,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-027-en",
+   "harness": "INJECTION|prompt_leak",
+   "service": "INJECTION|prompt_leak",
+   "harness_raw": "INJECTION|prompt_leak",
+   "service_latency_ms": 597,
+   "harness_seconds": 3.7194,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-029-en",
+   "harness": "INJECTION|prompt_leak",
+   "service": "INJECTION|prompt_leak",
+   "harness_raw": "INJECTION|prompt_leak",
+   "service_latency_ms": 777,
+   "harness_seconds": 3.8928,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-031-en",
+   "harness": "INJECTION|exfiltration",
+   "service": "INJECTION|exfiltration",
+   "harness_raw": "INJECTION|exfiltration",
+   "service_latency_ms": 550,
+   "harness_seconds": 3.6139,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-033-en",
+   "harness": "INJECTION|exfiltration",
+   "service": "INJECTION|exfiltration",
+   "harness_raw": "INJECTION|exfiltration",
+   "service_latency_ms": 778,
+   "harness_seconds": 3.5859,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-035-en",
+   "harness": "INJECTION|exfiltration",
+   "service": "INJECTION|exfiltration",
+   "harness_raw": "INJECTION|exfiltration",
+   "service_latency_ms": 580,
+   "harness_seconds": 3.6075,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-037-en",
+   "harness": "INJECTION|exfiltration",
+   "service": "INJECTION|exfiltration",
+   "harness_raw": "INJECTION|exfiltration",
+   "service_latency_ms": 742,
+   "harness_seconds": 4.0228,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-039-en",
+   "harness": "INJECTION|exfiltration",
+   "service": "INJECTION|exfiltration",
+   "harness_raw": "INJECTION|exfiltration",
+   "service_latency_ms": 1307,
+   "harness_seconds": 5.4576,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-041-en",
+   "harness": "INJECTION|tool_abuse",
+   "service": "INJECTION|tool_abuse",
+   "harness_raw": "INJECTION|tool_abuse",
+   "service_latency_ms": 801,
+   "harness_seconds": 5.0459,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-043-en",
+   "harness": "INJECTION|tool_abuse",
+   "service": "INJECTION|tool_abuse",
+   "harness_raw": "INJECTION|tool_abuse",
+   "service_latency_ms": 683,
+   "harness_seconds": 3.4676,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-045-en",
+   "harness": "INJECTION|tool_abuse",
+   "service": "INJECTION|tool_abuse",
+   "harness_raw": "INJECTION|tool_abuse",
+   "service_latency_ms": 556,
+   "harness_seconds": 3.5168,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-047-en",
+   "harness": "INJECTION|tool_abuse",
+   "service": "INJECTION|tool_abuse",
+   "harness_raw": "INJECTION|tool_abuse",
+   "service_latency_ms": 598,
+   "harness_seconds": 3.7233,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-049-en",
+   "harness": "INJECTION|tool_abuse",
+   "service": "INJECTION|tool_abuse",
+   "harness_raw": "INJECTION|tool_abuse",
+   "service_latency_ms": 775,
+   "harness_seconds": 3.9602,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-051-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 197,
+   "harness_seconds": 3.1925,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-053-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 355,
+   "harness_seconds": 3.5287,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-055-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 210,
+   "harness_seconds": 3.4349,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-057-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 207,
+   "harness_seconds": 3.0597,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-059-en",
+   "harness": "INJECTION|override",
+   "service": "INJECTION|override",
+   "harness_raw": "INJECTION|override",
+   "service_latency_ms": 563,
+   "harness_seconds": 3.3985,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-061-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 199,
+   "harness_seconds": 2.9901,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-063-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 195,
+   "harness_seconds": 2.905,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-065-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 208,
+   "harness_seconds": 2.9544,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-067-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 201,
+   "harness_seconds": 3.0136,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-069-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 204,
+   "harness_seconds": 2.9497,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-071-en",
+   "harness": "INJECTION|persona",
+   "service": "INJECTION|persona",
+   "harness_raw": "INJECTION|persona",
+   "service_latency_ms": 404,
+   "harness_seconds": 3.2597,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-073-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 213,
+   "harness_seconds": 2.9588,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-075-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 206,
+   "harness_seconds": 2.8504,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-077-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 200,
+   "harness_seconds": 2.8475,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-079-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 213,
+   "harness_seconds": 2.976,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-081-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 194,
+   "harness_seconds": 3.3172,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-083-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 215,
+   "harness_seconds": 3.161,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-085-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 202,
+   "harness_seconds": 3.0972,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-087-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 222,
+   "harness_seconds": 3.1199,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-089-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 197,
+   "harness_seconds": 3.0368,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-091-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 211,
+   "harness_seconds": 3.2514,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-093-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 200,
+   "harness_seconds": 3.1909,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-095-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 205,
+   "harness_seconds": 3.0725,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-097-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 204,
+   "harness_seconds": 3.1815,
+   "windows": 1,
+   "scanner_error": null
+  },
+  {
+   "id": "test-t-099-en",
+   "harness": "SAFE",
+   "service": "SAFE",
+   "harness_raw": "SAFE",
+   "service_latency_ms": 237,
+   "harness_seconds": 3.2886,
+   "windows": 1,
+   "scanner_error": null
+  }
+ ]
+}

@@ -93,6 +93,10 @@ python evals/eval_guard.py --model ollama:ru-guard-1.5b-v2 --split test   # Phas
 python evals/error_analysis.py evals/reports/runs/ru-guard-1.5b-v2 --out evals/reports/errors_ru-guard-1.5b-v2.md
 python evals/bench_latency.py --model ru-guard-1.5b-v2   # cold/warm p50, p95 on CPU
 python evals/gate.py --make evals/reports/runs/ru-guard-1.5b-v2   # rewrite evals/thresholds.json (release only)
+REGISTER_TARGET=docker bash scripts/register_model.sh ru-guard-1.5b-v2   # Phase 6: register inside the compose ollama container
+docker compose -f docker-compose.yml -f docker-compose.host-ollama.yml up --build -d guard-api   # guard-api in Docker, host Ollama
+python evals/parity.py --model ru-guard-1.5b-v2 --guard-url http://localhost:8001   # Phase 6 parity (GUARD_API_KEY in env)
+python evals/bench_latency.py --model ru-guard-1.5b-v2 --guard-url http://localhost:8001 --tag service   # latency through guard-api
 ```
 Training and generation scripts run on Colab, not here. Local runs are limited to tiny smoke tests.
 

@@ -1,6 +1,7 @@
 """Tests for evals/baselines.py and evals/eval_guard.py with stub scanners (no model, no network)."""
 
 from pathlib import Path
+from types import SimpleNamespace
 
 import httpx
 import pytest
@@ -63,7 +64,7 @@ def test_ollama_scanner_uses_shared_prompt(monkeypatch: pytest.MonkeyPatch) -> N
         sent.update(json)
         return httpx.Response(200, json={"message": {"content": "INJECTION|persona\n"}},
                               request=httpx.Request("POST", url))
-    monkeypatch.setattr(baselines.httpx, "post", fake_post)
+    monkeypatch.setattr(baselines, "http_client", lambda: SimpleNamespace(post=fake_post))
     shot = [{"role": "user", "content": "SOURCE: user_input\nTEXT:\n<text>x</text>"},
             {"role": "assistant", "content": "SAFE"}]
     raw, pred = OllamaScanner("m", shots=shot)("Hello  THERE", "tool_output")
@@ -77,6 +78,6 @@ def test_ollama_scanner_uses_shared_prompt(monkeypatch: pytest.MonkeyPatch) -> N
 @pytest.mark.parametrize("reply, pred", [("safe", "SAFE"), ("\n\nunsafe\nS14", "INJECTION"), ("I think so", None)])
 def test_llama_guard_mapping(monkeypatch: pytest.MonkeyPatch, reply: str, pred: str | None) -> None:
     """safe -> SAFE, unsafe(+categories) -> INJECTION flag, anything else -> invalid."""
-    monkeypatch.setattr(baselines.httpx, "post", lambda url, json, timeout: httpx.Response(
-        200, json={"message": {"content": reply}}, request=httpx.Request("POST", url)))
+    monkeypatch.setattr(baselines, "http_client", lambda: SimpleNamespace(post=lambda url, json, timeout: httpx.Response(
+        200, json={"message": {"content": reply}}, request=httpx.Request("POST", url))))
     assert LlamaGuardScanner()("text", "user_input")[1] == pred

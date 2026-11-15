@@ -64,6 +64,21 @@ def rule_predict(text: str) -> str:
 
 
 # --- Ollama scanners ----------------------------------------------------------------------------------------
+_HTTP: httpx.Client | None = None
+
+
+def http_client() -> httpx.Client:
+    """One pooled HTTP client for all Ollama calls.
+
+    A new connection per call adds about 2.7 s on the owner's Windows machine (localhost resolves to ::1 first
+    and Ollama listens on IPv4 only, plus client setup), which inflated the Phase 5 latency numbers (D51).
+    """
+    global _HTTP
+    if _HTTP is None:
+        _HTTP = httpx.Client()
+    return _HTTP
+
+
 @dataclass
 class OllamaScanner:
     """Chat model behind Ollama using the shared prompt; optional few-shot turns before the query."""
@@ -83,7 +98,7 @@ class OllamaScanner:
         """(raw output, parsed label or None)."""
         body = {"model": self.model, "messages": self.messages(text, source), "stream": False,
                 "options": self.options}
-        r = httpx.post(f"{self.url}/api/chat", json=body, timeout=self.timeout)
+        r = http_client().post(f"{self.url}/api/chat", json=body, timeout=self.timeout)
         r.raise_for_status()
         raw = r.json()["message"]["content"]
         return raw, parse_output(raw)
@@ -124,7 +139,7 @@ class LlamaGuardScanner:
         """(raw output, 'SAFE' / 'INJECTION' flag, or None if the reply is not in Llama Guard's format)."""
         body = {"model": self.model, "messages": [{"role": "user", "content": normalize_text(text)}],
                 "stream": False, "options": {"temperature": 0, "top_k": 1, "num_predict": 10, "seed": 0}}
-        r = httpx.post(f"{self.url}/api/chat", json=body, timeout=self.timeout)
+        r = http_client().post(f"{self.url}/api/chat", json=body, timeout=self.timeout)
         r.raise_for_status()
         raw = r.json()["message"]["content"]
         clean = raw.strip()

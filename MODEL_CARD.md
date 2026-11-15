@@ -38,14 +38,14 @@ Out of scope: Urdu in Arabic script, other languages, content-safety moderation 
 | Invalid output | 0.000 |
 | Recall `en` / `ru_mix` / `ru_pure` | 0.980 / 0.960 / 0.920 |
 | FPR plain SAFE / hard negatives | 0.000 / 0.179 |
-| Latency per window (CPU, 4 cores) | warm p50 3.29 s, p95 3.84 s; cold p50 6.20 s |
+| Latency per window (CPU, 4 threads) | warm p50 0.88 s, p95 1.41 s; cold p50 3.95 s; through guard-api p50 0.91 s, p95 1.36 s |
 
 ## Why this model (D49)
 
 - Best recall, F1 and attack-type macro-F1 of all models measured on the CPU, with no invalid output.
 - It is the only model that meets the `en` to `ru_pure` recall-gap target (6 points against 10) and the Roman Urdu recall target (0.94 against 0.90).
-- Q4_K_M rather than Q8_0: the owner chose the smaller file for a faster download from Kaggle. On the first v2 training run (Kaggle GPU) Q8_0 had 2 points more recall (0.987 vs 0.967); Q4_K_M is about 10% faster on the CPU (measured on v1).
-- The 0.5B models are not clearly faster on this CPU (warm p50 3.07 s for v1 0.5b vs 3.29 s for 1.5b-v2) but miss more Roman Urdu attacks (0.5b-v2: `ru_pure` recall 0.86, FPR 0.127).
+- Q4_K_M rather than Q8_0: the owner chose the smaller file for a faster download from Kaggle. On the first v2 training run (Kaggle GPU) Q8_0 had 2 points more recall (0.987 vs 0.967); Q4_K_M is about 35% faster on the CPU (warm p50 0.91 s vs 1.37 s, measured on v1).
+- The 0.5B models are about 1.7 times faster on this CPU (warm p50 0.53 s for 0.5b-v2 vs 0.88 s for 1.5b-v2) but miss more Roman Urdu attacks (0.5b-v2: `ru_pure` recall 0.86, FPR 0.127). Accuracy on Roman Urdu was chosen over speed (D49, latency corrected in D51).
 
 ## Limitations
 
