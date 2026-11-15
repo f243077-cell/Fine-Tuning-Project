@@ -8,6 +8,7 @@ from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
+from fastapi.middleware.cors import CORSMiddleware
 from slowapi.errors import RateLimitExceeded
 
 from guard.audit import AuditRow, AuditStore
@@ -120,6 +121,9 @@ def create_app(settings: Settings | None = None, chat_client: ChatClient | None 
     app.state.limiter = limiter
     app.add_exception_handler(RateLimitExceeded, rate_limit_handler)
     app.add_middleware(BodySizeLimit, max_bytes=settings.max_body_bytes)
+    if settings.cors_origins:  # only for the browser playground (flutter_app); off by default
+        app.add_middleware(CORSMiddleware, allow_origins=list(settings.cors_origins), allow_methods=["GET", "POST"],
+                           allow_headers=["Content-Type", "X-API-Key"])
     auth = [Depends(require_api_key)]
 
     @app.get("/health", response_model=HealthResponse)

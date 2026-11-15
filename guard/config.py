@@ -38,6 +38,7 @@ class Settings:
     otel_console: bool = False
     otel_exporter: str = "file"
     otel_file: str = "traces.jsonl"
+    cors_origins: tuple[str, ...] = ()
 
 
 def get_settings() -> Settings:
@@ -70,4 +71,5 @@ def get_settings() -> Settings:
         otel_exporter=os.environ.get("OTEL_EXPORTER", "file").strip().lower(),
         otel_file=os.environ.get("OTEL_FILE", os.path.join(os.path.dirname(os.environ.get("DB_PATH", "guard.db")) or ".",
                                                             "traces.jsonl")),
+        cors_origins=tuple(o.strip() for o in os.environ.get("CORS_ORIGINS", "").split(",") if o.strip()),
     )

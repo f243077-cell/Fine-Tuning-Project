@@ -8,6 +8,7 @@ from contextlib import asynccontextmanager
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
@@ -87,6 +88,9 @@ def create_app(settings: Settings | None = None, deps: Deps | None = None) -> Fa
 
     app = FastAPI(title="RU-Guard demo-rag", lifespan=lifespan)
     app.state.settings = settings
+    if settings.cors_origins:  # only for the browser playground (flutter_app); off by default
+        app.add_middleware(CORSMiddleware, allow_origins=list(settings.cors_origins), allow_methods=["GET", "POST"],
+                           allow_headers=["Content-Type"])
 
     @app.post("/chat", response_model=ChatResponse)
     async def chat(request: Request, body: ChatRequest) -> ChatResponse:

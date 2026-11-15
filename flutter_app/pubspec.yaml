@@ -1,0 +1,32 @@
+name: ruguard_playground
+description: "RU-Guard playground: scan text, compare guard off and on, and chat with the guarded demo RAG."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.13.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: 3.5.0
+  http: 1.6.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/samples.json
+  fonts:
+    - family: InstrumentSerif
+      fonts:
+        - asset: assets/fonts/InstrumentSerif-Regular.ttf
+        - asset: assets/fonts/InstrumentSerif-Italic.ttf
+          style: italic
+    - family: InstrumentSans
+      fonts:
+        - asset: assets/fonts/InstrumentSans-Variable.ttf

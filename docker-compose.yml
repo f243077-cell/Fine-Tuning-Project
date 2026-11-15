@@ -21,6 +21,7 @@ services:
       MODE: ${MODE:-enforce}
       RATE_LIMIT: ${RATE_LIMIT:-120/minute}
       OLLAMA_KEEP_ALIVE: ${OLLAMA_KEEP_ALIVE:-30m}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
       DB_PATH: /data/guard.db
     volumes:
       - guard_data:/data
@@ -40,6 +41,7 @@ services:
       GUARD_ENABLED: ${GUARD_ENABLED:-true}
       ALLOW_GUARD_TOGGLE: ${ALLOW_GUARD_TOGGLE:-false}
       INGEST_GUARD: ${INGEST_GUARD:-on}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
     volumes:
       - demo_data:/data
     depends_on: [guard-api, ollama]

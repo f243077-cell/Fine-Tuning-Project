@@ -234,3 +234,13 @@ def test_bad_exporter_name_fails() -> None:
 
     with pytest.raises(ValueError):
         configure("zipkin", "x")
+
+
+def test_cors_only_when_configured(app_client: Callable[..., TestClient]) -> None:
+    """CORS headers appear only for the configured origin (default: none)."""
+    pre = {"Origin": "http://localhost:5173", "Access-Control-Request-Method": "POST",
+           "Access-Control-Request-Headers": "X-API-Key,Content-Type"}
+    off = app_client().options("/v1/scan", headers=pre)
+    assert "access-control-allow-origin" not in off.headers
+    on = app_client(cors_origins=("http://localhost:5173",)).options("/v1/scan", headers=pre)
+    assert on.headers["access-control-allow-origin"] == "http://localhost:5173"

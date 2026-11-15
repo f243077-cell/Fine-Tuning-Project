@@ -30,6 +30,7 @@ class Settings:
     top_k: int = 4
     context_tokens: int = 1500
     recursion_limit: int = 12
+    cors_origins: tuple[str, ...] = ()
 
 
 def get_settings() -> Settings:
@@ -50,4 +51,5 @@ def get_settings() -> Settings:
         top_k=int(os.environ.get("TOP_K", d.top_k)),
         context_tokens=int(os.environ.get("CONTEXT_TOKENS", d.context_tokens)),
         recursion_limit=int(os.environ.get("RECURSION_LIMIT", d.recursion_limit)),
+        cors_origins=tuple(o.strip() for o in os.environ.get("CORS_ORIGINS", "").split(",") if o.strip()),
     )

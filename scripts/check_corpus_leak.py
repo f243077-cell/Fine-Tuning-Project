@@ -8,6 +8,7 @@ normalize_text, with the same leak threshold as the dataset build (0.5). Exits 1
 """
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -24,7 +25,8 @@ TEST = REPO / "data" / "eval" / "test.jsonl"
 NGRAM, THRESHOLD = 5, 0.5
 DEFAULT_PATHS = [REPO / "demo_rag" / "corpus", REPO / "demo_rag" / "corpus_poisoned",
                  REPO / "evals" / "attack_suite.yaml", REPO / "evals" / "golden_set.yaml",
-                 REPO / "gateway" / "notes", REPO / "evals" / "promptfoo"]
+                 REPO / "gateway" / "notes", REPO / "evals" / "promptfoo",
+                 REPO / "flutter_app" / "assets" / "samples.json"]
 
 
 def _yaml_strings(node: object) -> list[str]:
@@ -45,7 +47,10 @@ def texts_of(path: Path) -> list[tuple[str, str]]:
     if path.suffix in (".yaml", ".yml"):
         strings = _yaml_strings(yaml.safe_load(path.read_text(encoding="utf-8")))
         return [(f"{path.name}#{i}", s) for i, s in enumerate(strings) if len(s) >= 20]
-    if path.suffix in (".md", ".txt", ".json"):
+    if path.suffix == ".json":
+        strings = _yaml_strings(json.loads(path.read_text(encoding="utf-8")))
+        return [(f"{path.name}#{i}", s) for i, s in enumerate(strings) if len(s) >= 20]
+    if path.suffix in (".md", ".txt"):
         paras = [p.strip() for p in path.read_text(encoding="utf-8").split("\n\n")]
         return [(f"{path.name}#{i}", p) for i, p in enumerate(paras) if len(p) >= 20]
     return []

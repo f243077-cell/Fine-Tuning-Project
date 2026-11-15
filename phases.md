@@ -219,13 +219,13 @@ Claude Code:
 
 **Goal:** a demo anyone can understand in 60 seconds.
 
-- [ ] `flutter_app/` with Riverpod; features `scan` and `chat`; http or dio client; base URL in config; **no provider keys in the app**.
-- [ ] Scan screen: text box, source selector, result card (verdict chip, attack type, action, latency ms). **No confidence percentage.**
-- [ ] Compare screen: the same attack with guard off vs on against `demo-rag` (`guard=on|off`, needs `ALLOW_GUARD_TOGGLE=true`), side by side.
-- [ ] Streaming chat screen (SSE from `demo-rag` `/chat/stream`) with a Stop button and citation chips; reuse the pattern from the study guide (6.1 and 6.2).
-- [ ] Built-in sample attack library (Roman Urdu and English).
-- [ ] History kept in memory (Riverpod state); do not add new dependencies.
-- [ ] Widget tests for the result card; manual test checklist; screenshots in `docs/figures/`.
+- [x] `flutter_app/` with Riverpod; features `scan` and `chat`; http or dio client; base URL in config; **no provider keys in the app**.
+- [x] Scan screen: text box, source selector, result card (verdict chip, attack type, action, latency ms). **No confidence percentage.**
+- [x] Compare screen: the same attack with guard off vs on against `demo-rag` (`guard=on|off`, needs `ALLOW_GUARD_TOGGLE=true`), side by side.
+- [x] Streaming chat screen (SSE from `demo-rag` `/chat/stream`) with a Stop button and citation chips; reuse the pattern from the study guide (6.1 and 6.2).
+- [x] Built-in sample attack library (Roman Urdu and English).
+- [x] History kept in memory (Riverpod state); do not add new dependencies.
+- [x] Widget tests for the result card; manual test checklist; screenshots in `docs/figures/`.
 
 **Acceptance:** the app runs (emulator, desktop, or web) against the local compose stack; screenshots committed.
 

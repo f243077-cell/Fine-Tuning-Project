@@ -39,3 +39,6 @@ demo_rag/chroma/
 .DS_Store
 Thumbs.db
 models/Modelfile.*.tmp
+
+# Playwright MCP scratch output
+.playwright-mcp/
