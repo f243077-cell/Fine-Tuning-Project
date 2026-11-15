@@ -6,6 +6,7 @@
 #   REGISTER_TARGET=docker bash scripts/register_model.sh ru-guard-1.5b-v2   # inside the compose "ollama" container
 # The GGUF files must be in models/ as <name>-<QUANT>.gguf. The template comes from models/Modelfile.<size>.
 # In docker mode, models/ is mounted read-only at /models in the container (docker-compose.yml).
+# It also pulls the demo chat model (CHAT_MODEL, default qwen2.5:1.5b-instruct) unless SKIP_CHAT_MODEL=1.
 set -euo pipefail
 
 name="${1:?usage: register_model.sh ru-guard-<size>[-vN] [q4_k_m|q8_0]}"
@@ -39,3 +40,13 @@ case "$target" in
   *) echo "REGISTER_TARGET must be local or docker, got $target" >&2; exit 1 ;;
 esac
 echo "registered $tag from $(basename "$gguf") ($target)"
+
+chat_model="${CHAT_MODEL:-qwen2.5:1.5b-instruct}"
+if [ "${SKIP_CHAT_MODEL:-0}" != "1" ]; then
+  if [ "$target" = "docker" ]; then
+    docker compose -f "$here/docker-compose.yml" exec -T ollama ollama pull "$chat_model" < /dev/null
+  else
+    ollama pull "$chat_model" < /dev/null
+  fi
+  echo "pulled chat model $chat_model ($target)"
+fi

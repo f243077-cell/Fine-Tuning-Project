@@ -26,6 +26,25 @@ services:
       - guard_data:/data
     depends_on: [ollama]
 
+  demo-rag:                      # reference app; start with: docker compose --profile demo up --build
+    profiles: ["demo"]
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.demo
+    ports: ["8002:8002"]
+    environment:
+      GUARD_URL: http://guard-api:8001
+      GUARD_API_KEY: ${GUARD_API_KEY:-}
+      OLLAMA_URL: http://ollama:11434
+      CHAT_MODEL: ${CHAT_MODEL:-qwen2.5:1.5b-instruct}
+      GUARD_ENABLED: ${GUARD_ENABLED:-true}
+      ALLOW_GUARD_TOGGLE: ${ALLOW_GUARD_TOGGLE:-false}
+      INGEST_GUARD: ${INGEST_GUARD:-on}
+    volumes:
+      - demo_data:/data
+    depends_on: [guard-api, ollama]
+
 volumes:
   ollama_data: {}
   guard_data: {}
+  demo_data: {}

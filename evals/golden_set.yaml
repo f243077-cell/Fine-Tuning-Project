@@ -1,0 +1,34 @@
+# Golden questions for answer quality (Phase 7). An answer is correct when every expected keyword appears in it
+# (case-insensitive, after normalize_text) and it cites at least one source. Deterministic; no judge model.
+# Answers come only from demo_rag/corpus. The owner reviews the Roman Urdu items (pending).
+questions:
+  - {id: g-en-01, surface: en, question: "How many days do I have to ask for a full refund?", keywords: ["14"]}
+  - {id: g-en-02, surface: en, question: "How long does a card refund take?", keywords: ["5", "7"]}
+  - {id: g-en-03, surface: en, question: "What is the warranty on the Sitara fan motor?", keywords: ["2"]}
+  - {id: g-en-04, surface: en, question: "Above what order value is delivery free?", keywords: ["5,000"]}
+  - {id: g-en-05, surface: en, question: "What is the delivery charge for an air cooler?", keywords: ["600"]}
+  - {id: g-en-06, surface: en, question: "How much power does the Sitara SF-56 fan use at full speed?", keywords: ["75"]}
+  - {id: g-en-07, surface: en, question: "What is the capacity of the Barq BP-20 power bank?", keywords: ["20,000"]}
+  - {id: g-en-08, surface: en, question: "How many hours of light does the Shams lantern give on low mode?", keywords: ["12"]}
+  - {id: g-en-09, surface: en, question: "How big is the water tank of the Hawa AC-40 cooler?", keywords: ["40"]}
+  - {id: g-en-10, surface: en, question: "How many lumens does the Chiragh LB-12 bulb give?", keywords: ["1,100"]}
+  - {id: g-en-11, surface: en, question: "Up to what order amount is cash on delivery available?", keywords: ["50,000"]}
+  - {id: g-en-12, surface: en, question: "How many Noorbagh Points do I earn for every Rs. 100 spent?", keywords: ["1"]}
+  - {id: g-en-13, surface: en, question: "What are the customer support hours on Sunday?", keywords: ["11", "5"]}
+  - {id: g-en-14, surface: en, question: "Where is the Karachi company store?", keywords: ["bahadurabad"]}
+  - {id: g-en-15, surface: en, question: "What is the inspection fee for an out-of-warranty repair?", keywords: ["500"]}
+  - {id: g-en-16, surface: en, question: "How much weight must the fan hook hold?", keywords: ["30"]}
+  - {id: g-en-17, surface: en, question: "How many days of annual leave do full-time employees get?", keywords: ["20"]}
+  - {id: g-en-18, surface: en, question: "What bulk discount applies to an order of 100 units or more?", keywords: ["12"]}
+  - {id: g-en-19, surface: en, question: "How much discount does the old fan exchange offer give?", keywords: ["1,500"]}
+  - {id: g-en-20, surface: en, question: "In which year was Noorbagh Electronics founded?", keywords: ["2011"]}
+  - {id: g-ru-01, surface: ru_mix, question: "Lahore mein delivery kitne din mein hoti hai?", keywords: ["2", "3"]}
+  - {id: g-ru-02, surface: ru_mix, question: "Chiragh bulb par kitni warranty hai?", keywords: ["6"]}
+  - {id: g-ru-03, surface: ru_mix, question: "Qiston ki suhulat kitne rupay se zyada ke order par milti hai?", keywords: ["20,000"]}
+  - {id: g-ru-04, surface: ru_mix, question: "Jumma ko stores kitne baje khulte hain?", keywords: ["3"]}
+  - {id: g-ru-05, surface: ru_mix, question: "Hawa cooler ke cooling pads kitni dafa saaf karne chahiye?", keywords: ["do hafte"]}
+  - {id: g-ru-06, surface: ru_mix, question: "Shams lantern ko poora charge hone mein kitni dhoop chahiye?", keywords: ["8"]}
+  - {id: g-ru-07, surface: ru_mix, question: "Gold member banne ke liye saal mein kitna kharch karna hota hai?", keywords: ["60,000"]}
+  - {id: g-ru-08, surface: ru_mix, question: "Bank transfer refund kitne din mein aata hai?", keywords: ["3"]}
+  - {id: g-ru-09, surface: ru_mix, question: "Kya Noorbagh ka staff OTP ya password maangta hai?", keywords: ["nahi"]}
+  - {id: g-ru-10, surface: ru_pure, question: "Pankha hil raha ho to sab se pehle kya dekhna chahiye?", keywords: ["screw"]}

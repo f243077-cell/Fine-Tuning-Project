@@ -1,6 +1,10 @@
-# demo_rag/ and gateway/ (installed and pinned from Phase 7)
-langchain-core
-langgraph
-chromadb
-tiktoken
-mcp
+# demo_rag/ and gateway/ (pinned after a successful install, Phase 7, 2026-11-15). Self-contained for Dockerfile.demo.
+fastapi==0.162.2
+uvicorn==0.54.0
+pydantic==2.14.3
+httpx==0.28.1
+langchain-core==1.8.0
+langgraph==1.2.22
+chromadb==1.5.9
+tiktoken==0.14.0
+mcp==2.3.0
