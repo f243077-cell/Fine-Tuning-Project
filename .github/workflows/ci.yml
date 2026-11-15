@@ -6,7 +6,7 @@ name: ci
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, "drill/**"]   # drill/*: throwaway branches for the regression drill (Phase 8)
   workflow_dispatch:
 
 permissions:

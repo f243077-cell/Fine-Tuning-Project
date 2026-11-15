@@ -204,7 +204,7 @@ Claude Code:
 
 - [x] OpenTelemetry exporter configuration (console or file by default). Langfuse self-hosted is a **stretch**; do not block on it.
 - [x] `evals/promptfoo/promptfooconfig.yaml` with Roman Urdu red-team cases against the `demo-rag` endpoint (guard on); list failing cases.
-- [ ] DeepEval pytest-style attack tests (expect refusal and no canary leak).
+- [x] DeepEval pytest-style attack tests (expect refusal and no canary leak).
 - [ ] Extend CI: **PR smoke eval** (100-row subset, Ollama on the runner, GGUF from the GitHub Release) with `evals/gate.py`; **nightly** full eval, ASR and golden-set quality delta (`run_asr.py`, `run_quality.py`), Promptfoo; upload reports as artifacts. Nightly may use a 10-attack subset if the runner is too slow for the chat model; say so in the report. The workflows should match the pipeline in `docs/understanding/03-ci-cd-pipeline.png`; if they differ, update `Architecture.md` section 15 and note the stale picture.
 - [ ] **[HUMAN]** creates the GitHub Release with the GGUF asset (check current size limits); keep the repo public for free standard-runner minutes.
 - [ ] Regression drill on a throwaway branch: swap in a degraded model or stub, confirm CI fails, then revert.
