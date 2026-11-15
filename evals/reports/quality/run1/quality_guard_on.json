@@ -1,0 +1,362 @@
+{
+ "guard": "on",
+ "rates": {
+  "overall": {
+   "n": 30,
+   "correct": 12,
+   "cited": 13,
+   "correct_rate": 0.4,
+   "citation_rate": 0.433
+  },
+  "en": {
+   "n": 20,
+   "correct": 12,
+   "cited": 12,
+   "correct_rate": 0.6,
+   "citation_rate": 0.6
+  },
+  "ru_mix": {
+   "n": 9,
+   "correct": 0,
+   "cited": 1,
+   "correct_rate": 0.0,
+   "citation_rate": 0.111
+  },
+  "ru_pure": {
+   "n": 1,
+   "correct": 0,
+   "cited": 0,
+   "correct_rate": 0.0,
+   "citation_rate": 0.0
+  }
+ },
+ "command": "python evals/run_quality.py --guard on",
+ "records": [
+  {
+   "id": "g-en-01",
+   "surface": "en",
+   "answer": "You have 14 days to ask for a full refund. [en-02-refund-policy]",
+   "sources": [
+    "en-02-refund-policy"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-02",
+   "surface": "en",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-03",
+   "surface": "en",
+   "answer": "The warranty on the Sitara ceiling fan motor is 2 years. [en-03-warranty]",
+   "sources": [
+    "en-03-warranty"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-04",
+   "surface": "en",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-05",
+   "surface": "en",
+   "answer": "The delivery charge for an air cooler is Rs. 600. [en-09-hawa-cooler]",
+   "sources": [
+    "en-09-hawa-cooler"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-06",
+   "surface": "en",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-07",
+   "surface": "en",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-08",
+   "surface": "en",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-09",
+   "surface": "en",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-10",
+   "surface": "en",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-11",
+   "surface": "en",
+   "answer": "Cash on delivery is available for orders up to Rs. 50,000. [en-11-payment-methods]",
+   "sources": [
+    "en-11-payment-methods"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-12",
+   "surface": "en",
+   "answer": "According to the document [en-12-loyalty], you earn 1 Noorbagh Point for every Rs. 100 spent.",
+   "sources": [
+    "en-12-loyalty"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-13",
+   "surface": "en",
+   "answer": "The customer support hours on Sunday are from 11 am to 5 pm. [en-21-careers]",
+   "sources": [
+    "en-21-careers"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-14",
+   "surface": "en",
+   "answer": "The Karachi company store is located at Shop 7, Bahadurabad Market. [en-14-store-locations]",
+   "sources": [
+    "en-14-store-locations"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-15",
+   "surface": "en",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-16",
+   "surface": "en",
+   "answer": "The fan hook must hold at least 30 kilograms. [en-16-fan-installation]",
+   "sources": [
+    "en-16-fan-installation"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-17",
+   "surface": "en",
+   "answer": "[en-22-leave-policy] Full-time employees get 20 days of annual leave.",
+   "sources": [
+    "en-22-leave-policy"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-18",
+   "surface": "en",
+   "answer": "The bulk discount of 12% applies to orders of 100 units or more. [en-07-barq-powerbank]",
+   "sources": [
+    "en-07-barq-powerbank"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-19",
+   "surface": "en",
+   "answer": "The old fan exchange offer gives customers Rs. 1,500 off a new Sitara fan. [en-26-exchange-offer]",
+   "sources": [
+    "en-26-exchange-offer"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-20",
+   "surface": "en",
+   "answer": "Noorbagh Electronics was founded in 2011 [en-01-company-overview].",
+   "sources": [
+    "en-01-company-overview"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-ru-01",
+   "surface": "ru_mix",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-02",
+   "surface": "ru_mix",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-03",
+   "surface": "ru_mix",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-04",
+   "surface": "ru_mix",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-05",
+   "surface": "ru_mix",
+   "answer": "Cooling pads of the Hawa cooler should be cleaned every two weeks in summer and replaced once a year. [en-09-hawa-cooler]",
+   "sources": [
+    "en-09-hawa-cooler"
+   ],
+   "refused": null,
+   "keyword_ok": false,
+   "cited": true,
+   "correct": false
+  },
+  {
+   "id": "g-ru-06",
+   "surface": "ru_mix",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-07",
+   "surface": "ru_mix",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-08",
+   "surface": "ru_mix",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-09",
+   "surface": "ru_mix",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-10",
+   "surface": "ru_pure",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  }
+ ]
+}

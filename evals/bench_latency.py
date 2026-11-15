@@ -26,6 +26,7 @@ if str(REPO) not in sys.path:
 
 import httpx  # noqa: E402
 
+from client.ruguard_client import GuardClient  # noqa: E402
 from evals.baselines import OLLAMA_OPTIONS, OllamaScanner, http_client  # noqa: E402
 from training.jsonl import read_rows  # noqa: E402
 
@@ -58,18 +59,15 @@ def timed_call(scanner: OllamaScanner, text: str, source: str) -> float:
 
 
 class ServiceScanner:
-    """Calls guard-api over HTTP; same call shape as OllamaScanner."""
+    """Calls guard-api through client/; same call shape as OllamaScanner."""
 
     def __init__(self, url: str) -> None:
-        """HTTP client with the API key from GUARD_API_KEY."""
-        self.http = httpx.Client(base_url=url, headers={"X-API-Key": os.environ.get("GUARD_API_KEY", "")},
-                                 timeout=120)
+        """Guard client with the API key from GUARD_API_KEY."""
+        self.guard = GuardClient(url, os.environ.get("GUARD_API_KEY", ""), fail_mode="raise")
 
     def __call__(self, text: str, source: str) -> tuple[str, str | None]:
-        """(verdict, None); raises on HTTP errors."""
-        r = self.http.post("/v1/scan", json={"text": text, "source": source})
-        r.raise_for_status()
-        return r.json()["verdict"], None
+        """(verdict, None); raises when guard-api is unreachable."""
+        return self.guard.scan(text, source).verdict, None
 
 
 def main(argv: list[str] | None = None) -> int:

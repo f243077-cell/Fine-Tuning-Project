@@ -10,6 +10,7 @@ from demo_rag.validate import citations_in, new_canary, validate_answer
 def test_citations_parsed_in_order_without_repeats() -> None:
     """[doc-id] citations are found once each, in order."""
     assert citations_in("a [en-02-x] b [ru-01-y] c [en-02-x] [other]") == ["en-02-x", "ru-01-y"]
+    assert citations_in("[doc-id:en-02-x] [doc-id = ru-01-y] [EN-03-z]") == ["en-02-x", "ru-01-y", "en-03-z"]
 
 
 def test_validate_rules() -> None:

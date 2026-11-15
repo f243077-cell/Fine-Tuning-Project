@@ -15,7 +15,10 @@ RUN useradd --create-home --uid 1000 demo && mkdir -p /app/.tiktoken /data && ch
 USER demo
 
 # Bake the tokenizer file and Chroma's default embedding model into the image (no download at start).
+# fetch_embedding_model.py resumes and retries, because Chroma's own downloader times out on slow links.
+COPY --chown=demo docker/fetch_embedding_model.py /tmp/fetch_embedding_model.py
 RUN python -c "import tiktoken; tiktoken.get_encoding('cl100k_base')" && \
+    python /tmp/fetch_embedding_model.py && \
     python -c "from chromadb.utils.embedding_functions import DefaultEmbeddingFunction as E; E()(['warm up'])"
 
 # demo_rag/ and gateway/ reach the guard only through client/ (Architecture.md section 5).

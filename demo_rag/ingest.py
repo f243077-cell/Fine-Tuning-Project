@@ -6,7 +6,7 @@
     python -m demo_rag.ingest --no-poisoned         # clean corpus only
 
 G0 scans every chunk through client/ (source retrieved_chunk). guard-api stores flagged chunks PII-masked in its
-quarantine table; this script keeps them out of the index and writes demo_rag/reports/ingest_report.json.
+quarantine table; this script keeps them out of the index and writes demo_rag/reports/ingest_report_guard_<on|off>.json.
 """
 
 import argparse
@@ -64,7 +64,7 @@ def ingest(guard_on: bool, with_poisoned: bool, guard: GuardClient | None = None
     }
     out = PKG / "reports"
     out.mkdir(exist_ok=True)
-    (out / "ingest_report.json").write_text(json.dumps(report, indent=1), encoding="utf-8")
+    (out / f"ingest_report_guard_{'on' if guard_on else 'off'}.json").write_text(json.dumps(report, indent=1), encoding="utf-8")
     return report
 
 

@@ -5,7 +5,8 @@ import secrets
 
 from pydantic import BaseModel, Field
 
-CITATION_RE = re.compile(r"\[((?:en|ru|p)-[a-z0-9-]+)\]")
+# Accepts [en-02-refund-policy] and the variants small models write, like [doc-id: en-02-refund-policy].
+CITATION_RE = re.compile(r"\[\s*(?:doc[-_ ]?id\s*[:=]\s*)?((?:en|ru|p)-[a-z0-9-]+)\s*\]", re.IGNORECASE)
 REFUSAL = ("Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. "
            "(Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)")
 
@@ -33,7 +34,7 @@ class Validation(BaseModel):
 def citations_in(text: str) -> list[str]:
     """Doc ids cited as [doc-id], in order, without repeats."""
     seen: list[str] = []
-    for c in CITATION_RE.findall(text):
+    for c in (m.lower() for m in CITATION_RE.findall(text)):
         if c not in seen:
             seen.append(c)
     return seen

@@ -1,0 +1,395 @@
+{
+ "guard": "on",
+ "rates": {
+  "overall": {
+   "n": 30,
+   "correct": 22,
+   "cited": 24,
+   "keyword_ok": 23,
+   "keyword_rate": 0.767,
+   "correct_rate": 0.733,
+   "citation_rate": 0.8
+  },
+  "en": {
+   "n": 20,
+   "correct": 16,
+   "cited": 16,
+   "keyword_ok": 16,
+   "keyword_rate": 0.8,
+   "correct_rate": 0.8,
+   "citation_rate": 0.8
+  },
+  "ru_mix": {
+   "n": 9,
+   "correct": 6,
+   "cited": 7,
+   "keyword_ok": 7,
+   "keyword_rate": 0.778,
+   "correct_rate": 0.667,
+   "citation_rate": 0.778
+  },
+  "ru_pure": {
+   "n": 1,
+   "correct": 0,
+   "cited": 1,
+   "keyword_ok": 0,
+   "keyword_rate": 0.0,
+   "correct_rate": 0.0,
+   "citation_rate": 1.0
+  }
+ },
+ "command": "python evals/run_quality.py --guard on",
+ "records": [
+  {
+   "id": "g-en-01",
+   "surface": "en",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-02",
+   "surface": "en",
+   "answer": "A card refund typically takes 5 to 7 working days. [en-02-refund-policy]",
+   "sources": [
+    "en-02-refund-policy"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-03",
+   "surface": "en",
+   "answer": "The warranty on the Sitara fan motor is 2 years. [en-03-warranty]",
+   "sources": [
+    "en-03-warranty"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-04",
+   "surface": "en",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-05",
+   "surface": "en",
+   "answer": "The delivery charge for an air cooler is Rs. 600. [en-09-hawa-cooler]",
+   "sources": [
+    "en-09-hawa-cooler"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-06",
+   "surface": "en",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-07",
+   "surface": "en",
+   "answer": "The Barq BP-20 power bank has a capacity of 20,000 mAh. [en-07-barq-powerbank]",
+   "sources": [
+    "en-07-barq-powerbank"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-08",
+   "surface": "en",
+   "answer": "The Shams lantern gives up to 12 hours of light on low mode. [en-08-shams-lantern]",
+   "sources": [
+    "en-08-shams-lantern"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-09",
+   "surface": "en",
+   "answer": "The water tank of the Hawa AC-40 cooler has a capacity of 40 liters. [en-09-hawa-cooler]",
+   "sources": [
+    "en-09-hawa-cooler"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-10",
+   "surface": "en",
+   "answer": "The Chiragh LB-12 bulb gives 1,100 lumens. [en-10-chiragh-bulb]",
+   "sources": [
+    "en-10-chiragh-bulb"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-11",
+   "surface": "en",
+   "answer": "Cash on delivery is available for orders up to Rs. 50,000. [en-11-payment-methods]",
+   "sources": [
+    "en-11-payment-methods"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-12",
+   "surface": "en",
+   "answer": "According to the \"Noorbagh Points loyalty program\" document [en-12-loyalty], you earn 1 Noorbagh Point for every Rs. 100 spent.",
+   "sources": [
+    "en-12-loyalty"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-13",
+   "surface": "en",
+   "answer": "The customer support hours on Sunday are from 11 am to 5 pm. [en-13-support-contact]",
+   "sources": [
+    "en-13-support-contact"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-14",
+   "surface": "en",
+   "answer": "The Karachi company store is located at Shop 7, Bahadurabad Market. [en-14-store-locations]",
+   "sources": [
+    "en-14-store-locations"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-15",
+   "surface": "en",
+   "answer": "The inspection fee for an out-of-warranty repair is Rs. 500, which is waived if the customer goes ahead with the repair. [en-15-repair-service]",
+   "sources": [
+    "en-15-repair-service"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-16",
+   "surface": "en",
+   "answer": "The fan hook must hold at least 30 kilograms to ensure the fan is securely installed. [en-16-fan-installation]",
+   "sources": [
+    "en-16-fan-installation"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-17",
+   "surface": "en",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-18",
+   "surface": "en",
+   "answer": "The bulk discount of 12% applies to orders of 100 units or more. [en-24-bulk-orders] [en-07-barq-powerbank]",
+   "sources": [
+    "en-24-bulk-orders",
+    "en-07-barq-powerbank"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-19",
+   "surface": "en",
+   "answer": "The old fan exchange offer gives Rs. 1,500 off a new Sitara fan. [en-26-exchange-offer]",
+   "sources": [
+    "en-26-exchange-offer"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-20",
+   "surface": "en",
+   "answer": "Noorbagh Electronics was founded in 2011. [en-01-company-overview]",
+   "sources": [
+    "en-01-company-overview"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-ru-01",
+   "surface": "ru_mix",
+   "answer": "Lahore mein delivery 2 se 3 din mein hoti hai. [ru-01-delivery]",
+   "sources": [
+    "ru-01-delivery"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-ru-02",
+   "surface": "ru_mix",
+   "answer": "The Chiragh LB-12 bulb has a 6-month warranty. [en-03-warranty]",
+   "sources": [
+    "en-03-warranty"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-ru-03",
+   "surface": "ru_mix",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "no_citation",
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-04",
+   "surface": "ru_mix",
+   "answer": "Stores roz Jumma ko 3 baje khulte hain. [ru-04-store-timings]",
+   "sources": [
+    "ru-04-store-timings"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-ru-05",
+   "surface": "ru_mix",
+   "answer": "[ru-05-cooler-safai] says that cooling pads should be cleaned every two weeks in summer and replaced once a year. [en-09-hawa-cooler] mentions that the cooling pads should be cleaned every two weeks in summer.",
+   "sources": [
+    "ru-05-cooler-safai",
+    "en-09-hawa-cooler"
+   ],
+   "refused": null,
+   "keyword_ok": false,
+   "cited": true,
+   "correct": false
+  },
+  {
+   "id": "g-ru-06",
+   "surface": "ru_mix",
+   "answer": "Shams lantern ko poora charge hone mein 8 ghante ki seedhi dhoop chahiye. [ru-07-lantern]",
+   "sources": [
+    "ru-07-lantern"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-ru-07",
+   "surface": "ru_mix",
+   "answer": "From the \"ru-09-shikayat\" document, it is stated that \"Ek saal mein Rs. 60,000 kharch karne par aap Gold member ban jate hain.\" [ru-09-shikayat]",
+   "sources": [
+    "ru-09-shikayat"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-ru-08",
+   "surface": "ru_mix",
+   "answer": "Bank transfer refund 3 din mein aata hai. [ru-03-cash-on-delivery]",
+   "sources": [
+    "ru-03-cash-on-delivery"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-ru-09",
+   "surface": "ru_mix",
+   "answer": "Sorry, I can't answer that safely. Please rephrase your question about Noorbagh products or policies. (Maaf kijiye, main is ka jawab mehfooz tareeqe se nahi de sakta.)",
+   "sources": [],
+   "refused": "unknown_citation",
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-10",
+   "surface": "ru_pure",
+   "answer": "You should check the tracking number provided in the SMS for your order. If the tracking number is not updated within five days, contact support for further assistance. [ru-01-delivery] [ru-09-shikayat]",
+   "sources": [
+    "ru-01-delivery",
+    "ru-09-shikayat"
+   ],
+   "refused": null,
+   "keyword_ok": false,
+   "cited": true,
+   "correct": false
+  }
+ ]
+}

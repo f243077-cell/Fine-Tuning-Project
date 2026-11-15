@@ -1,0 +1,338 @@
+{
+ "guard": "off",
+ "rates": {
+  "overall": {
+   "n": 30,
+   "correct": 1,
+   "cited": 1,
+   "correct_rate": 0.033,
+   "citation_rate": 0.033
+  },
+  "en": {
+   "n": 20,
+   "correct": 1,
+   "cited": 1,
+   "correct_rate": 0.05,
+   "citation_rate": 0.05
+  },
+  "ru_mix": {
+   "n": 9,
+   "correct": 0,
+   "cited": 0,
+   "correct_rate": 0.0,
+   "citation_rate": 0.0
+  },
+  "ru_pure": {
+   "n": 1,
+   "correct": 0,
+   "cited": 0,
+   "correct_rate": 0.0,
+   "citation_rate": 0.0
+  }
+ },
+ "command": "python evals/run_quality.py --guard off",
+ "records": [
+  {
+   "id": "g-en-01",
+   "surface": "en",
+   "answer": "You have 14 days to ask for a full refund.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-02",
+   "surface": "en",
+   "answer": "Card refunds typically take 5 to 7 working days.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-03",
+   "surface": "en",
+   "answer": "The Sitara ceiling fan motor has a 2-year warranty.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-04",
+   "surface": "en",
+   "answer": "Above Rs. 5,000, delivery is free for orders.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-05",
+   "surface": "en",
+   "answer": "The delivery charge for an air cooler is Rs. 600.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-06",
+   "surface": "en",
+   "answer": "The Sitara SF-56 fan uses 75 watts at full speed.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-07",
+   "surface": "en",
+   "answer": "The Barq BP-20 power bank has a capacity of 20,000 mAh.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-08",
+   "surface": "en",
+   "answer": "The Shams lantern gives up to 12 hours of light on low mode.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-09",
+   "surface": "en",
+   "answer": "The Hawa AC-40 cooler has a 40-litre water tank.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-10",
+   "surface": "en",
+   "answer": "The Chiragh LB-12 bulb gives approximately 1,100 lumens.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-11",
+   "surface": "en",
+   "answer": "Cash on delivery is available for orders up to Rs. 50,000.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-12",
+   "surface": "en",
+   "answer": "According to the document [en-12-loyalty], you earn 1 Noorbagh Point for every Rs. 100 spent.",
+   "sources": [
+    "en-12-loyalty"
+   ],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": true,
+   "correct": true
+  },
+  {
+   "id": "g-en-13",
+   "surface": "en",
+   "answer": "The customer support hours on Sunday are from 11 am to 5 pm.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-14",
+   "surface": "en",
+   "answer": "The Karachi company store is at Shop 7, Bahadurabad Market.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-15",
+   "surface": "en",
+   "answer": "The inspection fee for an out-of-warranty repair is Rs. 500.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-16",
+   "surface": "en",
+   "answer": "The fan hook must hold at least 30 kilograms.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-17",
+   "surface": "en",
+   "answer": "Full-time employees get 20 days of annual leave.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-18",
+   "surface": "en",
+   "answer": "The bulk discount of 12% applies to orders of 100 units or more.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-19",
+   "surface": "en",
+   "answer": "The old fan exchange offer gives customers Rs. 1,500 off a new Sitara fan.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-en-20",
+   "surface": "en",
+   "answer": "Noorbagh Electronics was founded in 2011.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-01",
+   "surface": "ru_mix",
+   "answer": "Lahore mein delivery 2 se 3 din mein hoti hai.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-02",
+   "surface": "ru_mix",
+   "answer": "Chiragh LED bulb par 6 mahine ki warranty hai.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-03",
+   "surface": "ru_mix",
+   "answer": "Qiston ki suhulat kitne rupay se zyada ke order par milti hai: 3, 6 ya 12 mahine ki qiston par mark-up aap ka bank tay karta hai.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-04",
+   "surface": "ru_mix",
+   "answer": "Jumma ko stores 3 baje khulte hain.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-05",
+   "surface": "ru_mix",
+   "answer": "Cooling pads of the Hawa cooler should be cleaned every two weeks in summer and replaced once a year.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-06",
+   "surface": "ru_mix",
+   "answer": "Shams lantern ko poora charge hone mein 8 ghante ki seedhi dhoop chahiye.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-07",
+   "surface": "ru_mix",
+   "answer": "Gold members ko har order par muft delivery milti hai, air cooler par bhi, aur Sitara pankhe par 6 mahine izafi warranty.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-08",
+   "surface": "ru_mix",
+   "answer": "Bank transfer refund 3 din mein aata hai.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-09",
+   "surface": "ru_mix",
+   "answer": "Apna order number tayyar rakhein. Yaad rakhein: Noorbagh ka staff kabhi aap se card ka PIN, OTP ya password nahi maangta.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": true,
+   "cited": false,
+   "correct": false
+  },
+  {
+   "id": "g-ru-10",
+   "surface": "ru_pure",
+   "answer": "Agar pankha hil raha hai, to sab se pehle tracking number SMS par aata hai.",
+   "sources": [],
+   "refused": null,
+   "keyword_ok": false,
+   "cited": false,
+   "correct": false
+  }
+ ]
+}

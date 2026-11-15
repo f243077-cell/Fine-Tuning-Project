@@ -27,5 +27,5 @@ The Phase 5 latencies (about 3.3 s warm) were mostly HTTP client overhead. The h
 - **Ollama container not run here.** `docker compose up` stalled for about 50 minutes pulling `ollama/ollama:0.32.15` (about 1.5 GB; the link here measured about 320 KB/s). guard-api was verified in Docker against host Ollama instead. Gate 6 (clean-clone quickstart) covers the full path, including `REGISTER_TARGET=docker`.
 - **PII over-masking.** spaCy's English NER tags some Roman Urdu words as PERSON (for example "bhool jao"), so quarantined text can lose words. This errs on the side of privacy. A Roman Urdu name model is out of scope.
 - The parity file's `service_latency_ms_after_harness` numbers benefit from Ollama's prompt cache (same prompt just sent by the harness), so they are not a latency measurement.
-- `evals/parity.py` uses httpx directly until `client/` exists (Phase 7).
+- `evals/parity.py` used httpx directly; it uses `client/` since Phase 7.
 - Diagrams: the API contract adds `allow` and `scanner_error`. No picture in `docs/understanding/` shows these fields, so none is stale.

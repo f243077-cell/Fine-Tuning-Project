@@ -1,0 +1,14 @@
+{
+ "guard": false,
+ "with_poisoned": true,
+ "docs": 49,
+ "chunks": 49,
+ "indexed": 49,
+ "quarantined": [],
+ "chunk_tokens": {
+  "min": 33,
+  "max": 169
+ },
+ "g0": null,
+ "scans": []
+}

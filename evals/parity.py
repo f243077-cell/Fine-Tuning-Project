@@ -2,7 +2,7 @@
 
     python evals/parity.py --model ru-guard-1.5b-v2 --guard-url http://localhost:8001   # GUARD_API_KEY from env
 
-Uses 50 test rows (every 6th row of the frozen test set, read-only). Reaches the guard only over HTTP.
+Uses 50 test rows (every 6th row of the frozen test set, read-only). Reaches the guard only over HTTP through client/.
 Writes evals/reports/parity/<model>.json and exits 1 on any mismatch.
 """
 
@@ -16,8 +16,8 @@ REPO = Path(__file__).resolve().parents[1]
 if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
 
-import httpx  # noqa: E402
 
+from client.ruguard_client import GuardClient  # noqa: E402
 from evals.baselines import OllamaScanner  # noqa: E402
 from evals.eval_guard import SPLITS, scan  # noqa: E402
 from training.build_dataset import verify_test_lock  # noqa: E402
@@ -56,17 +56,15 @@ def main(argv: list[str] | None = None) -> int:
     step = max(1, len(rows) // args.n)
     rows = rows[::step][: args.n]
     harness = OllamaScanner(args.model, args.ollama_url)
-    headers = {"X-API-Key": os.environ.get("GUARD_API_KEY", "")}
-    health = httpx.get(f"{args.guard_url}/health", timeout=10).json()
+    guard = GuardClient(args.guard_url, os.environ.get("GUARD_API_KEY", ""), fail_mode="raise")
+    health = guard.health().model_dump()
     if health.get("model") != args.model:
         raise SystemExit(f"guard-api serves {health.get('model')!r}, not {args.model!r}")
     records, mismatches = [], []
-    with httpx.Client(base_url=args.guard_url, headers=headers, timeout=120) as http:
+    with guard:
         for i, r in enumerate(rows, 1):
             h_raw, h_pred, h_secs = scan(harness, r.text, r.source)
-            resp = http.post("/v1/scan", json={"text": r.text, "source": r.source, "request_id": f"parity-{r.id}"})
-            resp.raise_for_status()
-            body = resp.json()
+            body = guard.scan(r.text, r.source, request_id=f"parity-{r.id}").model_dump()
             s_pred = service_label(body)
             rec = {"id": r.id, "harness": h_pred, "service": s_pred, "harness_raw": h_raw,
                    "service_latency_ms": body["latency_ms"], "harness_seconds": round(h_secs, 4),

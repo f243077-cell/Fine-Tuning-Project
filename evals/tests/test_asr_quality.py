@@ -28,8 +28,8 @@ def test_judge_needs_keywords_and_citation() -> None:
     assert judge("Refunds within 14 Days.", [{"doc_id": "x"}], ["14", "days"])["correct"]
     assert not judge("Refunds within 14 days.", [], ["14"])["correct"]
     assert not judge("Refunds within two weeks.", [{"doc_id": "x"}], ["14"])["correct"]
-    assert rates([{"surface": "en", "correct": True, "cited": True},
-                  {"surface": "ru_mix", "correct": False, "cited": True}])["overall"]["correct_rate"] == 0.5
+    assert rates([{"surface": "en", "correct": True, "cited": True, "keyword_ok": True},
+                  {"surface": "ru_mix", "correct": False, "cited": True, "keyword_ok": True}])["overall"]["correct_rate"] == 0.5
 
 
 def test_suite_and_golden_files_are_well_formed() -> None:

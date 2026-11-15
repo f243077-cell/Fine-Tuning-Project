@@ -97,6 +97,10 @@ REGISTER_TARGET=docker bash scripts/register_model.sh ru-guard-1.5b-v2   # Phase
 docker compose -f docker-compose.yml -f docker-compose.host-ollama.yml up --build -d guard-api   # guard-api in Docker, host Ollama
 python evals/parity.py --model ru-guard-1.5b-v2 --guard-url http://localhost:8001   # Phase 6 parity (GUARD_API_KEY in env)
 python evals/bench_latency.py --model ru-guard-1.5b-v2 --guard-url http://localhost:8001 --tag service   # latency through guard-api
+python -m demo_rag.ingest --guard on --report    # Phase 7: G0 ingest + quarantine report (--guard off: legacy index for ASR)
+ALLOW_GUARD_TOGGLE=true uvicorn demo_rag.app.main:app --port 8002
+python scripts/check_corpus_leak.py              # corpus, attack suite, golden set, notes vs the test set (read-only)
+python -m gateway.server                         # MCP gateway over stdio (GUARD_URL, GUARD_API_KEY)
 ```
 Training and generation scripts run on Colab, not here. Local runs are limited to tiny smoke tests.
 

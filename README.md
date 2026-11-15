@@ -95,3 +95,31 @@ pip install -r requirements.txt     # also installs the spaCy model en_core_web_
 bash scripts/register_model.sh ru-guard-1.5b-v2      # needs a local Ollama
 GUARD_API_KEY=... AUDIT_SALT=... uvicorn guard.app.main:app --port 8001
 ```
+
+## Reference RAG demo (`demo_rag`, Phase 7)
+
+A small bilingual RAG app about a fictional company, with guard checkpoints: G0 at ingest, G1 on the question,
+G2 on retrieved chunks, G4 on the answer (citations and a canary token). `GUARD_ENABLED=false` turns all of them
+into pass-throughs, so the same code measures guard off against guard on.
+
+```bash
+# Docker (needs the chat model: bash scripts/register_model.sh pulls qwen2.5:1.5b-instruct)
+docker compose --profile demo up --build -d
+curl -s -X POST localhost:8002/chat -H "Content-Type: application/json" -d '{"question": "Refund kitne din mein milta hai?"}'
+
+# Local
+python -m demo_rag.ingest --report          # G0: scans every chunk, keeps flagged ones out of the index
+uvicorn demo_rag.app.main:app --port 8002   # POST /chat, GET /chat/stream (SSE), GET /health
+```
+
+Measuring protection (demo-rag with `ALLOW_GUARD_TOGGLE=true`, on an index built with `python -m demo_rag.ingest --guard off`):
+
+```bash
+python evals/run_asr.py --guard off && python evals/run_asr.py --guard on          # evals/reports/asr/ASR.md
+python evals/run_quality.py --guard off && python evals/run_quality.py --guard on  # evals/reports/quality/QUALITY.md
+```
+
+MCP gateway (read-only tools `search_docs`, `scan_text`, `get_note`; every tool result is scanned and redacted when
+flagged): `GUARD_URL=http://localhost:8001 GUARD_API_KEY=... python -m gateway.server` (stdio).
+
+Python client: `from client.ruguard_client import GuardClient; GuardClient.from_env().scan("...", "user_input")`.
