@@ -1,6 +1,6 @@
 # Phase 10: Packaging and release
 
-Branch / commit: `main`. Status: **done; Gate 10 items done on 2026-11-16 (owner delegated them), except the Release page, the nightly button and the native-speaker review.**
+Branch / commit: `main`. Status: **done; Gate 10 items done on 2026-11-16 (owner delegated them), except the native-speaker review.**
 
 ## Done
 - `README.md` rewritten for release: why, results table, the five diagrams, a clean-clone quickstart (model from Release `model-v1` with a SHA-256 check), the demo app, gateway, client and playground, limitations, ethics, related work, licences.
@@ -28,8 +28,7 @@ Branch / commit: `main`. Status: **done; Gate 10 items done on 2026-11-16 (owner
 - Tag `v1.0.0` pushed.
 
 ## Still the owner's
-- Create the Release page for `v1.0.0` (needs a GitHub login): prefilled link in the final message; notes from `CHANGELOG.md`.
-- Optional: "Run workflow" on `nightly` (needs a login), or wait for the 02:17 UTC run.
+- Done 2026-11-17 through the owner's browser: Release page "RU-Guard v1.0.0" published (marked Latest, notes from `CHANGELOG.md`), and `nightly` run 2 started by hand (all 36 ASR scenarios); its result is not recorded here yet.
 - Native-speaker review of the test set, seeds and Roman Urdu demo texts (D22, D53, D54): an AI cannot stand in for it.
 
 ## Needs from the owner (Gate 10, as first written)
