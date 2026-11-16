@@ -5,11 +5,16 @@
 class AppConfig {
   const AppConfig({required this.guardUrl, required this.demoUrl, required this.guardApiKey});
 
-  factory AppConfig.fromEnvironment() => const AppConfig(
-        guardUrl: String.fromEnvironment('GUARD_URL', defaultValue: 'http://localhost:8001'),
-        demoUrl: String.fromEnvironment('DEMO_URL', defaultValue: 'http://localhost:8002'),
-        guardApiKey: String.fromEnvironment('GUARD_API_KEY'),
+  /// A URL starting with '/' (the hosted demo: GUARD_URL=/guard, DEMO_URL=/demo) is resolved against the page,
+  /// so the app calls its own origin and the deploy proxy adds the key on the server (no key in the build).
+  factory AppConfig.fromEnvironment() => AppConfig(
+        guardUrl: _absolute(const String.fromEnvironment('GUARD_URL', defaultValue: 'http://localhost:8001')),
+        demoUrl: _absolute(const String.fromEnvironment('DEMO_URL', defaultValue: 'http://localhost:8002')),
+        guardApiKey: const String.fromEnvironment('GUARD_API_KEY'),
       );
+
+  static String _absolute(String url) =>
+      url.startsWith('/') ? Uri.base.resolve(url).toString().replaceFirst(RegExp(r'/$'), '') : url;
 
   final String guardUrl;
   final String demoUrl;

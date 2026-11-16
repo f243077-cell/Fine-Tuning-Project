@@ -38,7 +38,7 @@ class GuardApi {
     try {
       r = await _http
           .post(Uri.parse('$baseUrl/v1/scan'),
-              headers: {'Content-Type': 'application/json', 'X-API-Key': apiKey},
+              headers: {'Content-Type': 'application/json', if (apiKey.isNotEmpty) 'X-API-Key': apiKey},
               body: jsonEncode({'text': text, 'source': source.wire}))
           .timeout(_timeout);
     } on TimeoutException {
