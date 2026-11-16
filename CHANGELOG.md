@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.0.0 (prepared 2026-11-16; the tag is created by the owner at Gate 10)
+## v1.0.0 (2026-11-16)
 
 First release. Deployed model: `ru-guard-1.5b-v2` (Qwen2.5-1.5B-Instruct, QLoRA, GGUF Q4_K_M), published as GitHub Release `model-v1`.
 
@@ -11,6 +11,7 @@ First release. Deployed model: `ru-guard-1.5b-v2` (Qwen2.5-1.5B-Instruct, QLoRA,
 - **Reference RAG, client, gateway (Phase 7).** `demo_rag` (LangGraph, Chroma) with four guard checkpoints and an on/off switch; `ruguard_client` (sync and async); an MCP gateway with three read-only tools and redaction; a 36-scenario attack suite, a 30-question golden set, and the ASR and quality runners.
 - **CI and red-team (Phase 8).** PR workflow (tests, then a 100-row smoke eval and score gate on the real model), nightly workflow (full eval, ASR, quality, Promptfoo, DeepEval), regression drills.
 - **Flutter playground (Phase 9).** Scan, guard off vs on, streaming chat with citations, attack library, history; web build; screenshots in `docs/figures/`.
+- **Gate 10 (2026-11-16).** Licences: code Apache-2.0 (`LICENSE`), released weights CC BY-SA 4.0 (D59). Live test suites: 40 integration and 37 performance tests against the running stack (`docs/TESTING.md`). Demo video (`docs/media/ru-guard-demo.webm`). The all-Docker quickstart was run from a fresh clone.
 - **Documents (Phase 10).** README with results and a clean-clone quickstart, final model card with a licence check, final data card, interview notes, demo script, PRD acceptance checklist.
 
 ### Results at release
@@ -21,6 +22,7 @@ First release. Deployed model: `ru-guard-1.5b-v2` (Qwen2.5-1.5B-Instruct, QLoRA,
 ### Changed during the build (corrections worth knowing)
 - **Latency numbers corrected (D51).** The Phase 5 figures (about 3.3 s per window) included about 2.7 s of HTTP client overhead per call. Re-measured for all models.
 - **Smoke gate margin set to 10 points (D57, D58).** The same model gives slightly different labels on a few borderline rows between environments (a different CPU or request order: 2 to 4 rows of 100); a 2-point margin on 100 rows is one flipped row. The gate checks that the model basically works. The full 300-row gate keeps 2 points and has not run on a CI runner yet.
+- **`scripts/register_model.sh` on Windows (Gate 10).** With `REGISTER_TARGET=docker` under Git Bash, `MSYS_NO_PATHCONV=1` passed `/c/...` to `docker.exe`, which read it as `C:\c\...`; the script now uses `pwd -W` when it exists. Found by the fresh-clone run.
 - **CI repaired (D55).** Every push from Phase 6 to Phase 7 failed at install because of a numpy pin that conflicted with Presidio.
 
 ### Known issues and limits

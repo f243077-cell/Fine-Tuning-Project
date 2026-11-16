@@ -1,6 +1,6 @@
 # Phase 10: Packaging and release
 
-Branch / commit: `main`. Status: **done except the owner's items; waiting at Gate 10 (owner publishes).**
+Branch / commit: `main`. Status: **done; Gate 10 items done on 2026-11-16 (owner delegated them), except the Release page, the nightly button and the native-speaker review.**
 
 ## Done
 - `README.md` rewritten for release: why, results table, the five diagrams, a clean-clone quickstart (model from Release `model-v1` with a SHA-256 check), the demo app, gateway, client and playground, limitations, ethics, related work, licences.
@@ -19,7 +19,20 @@ Branch / commit: `main`. Status: **done except the owner's items; waiting at Gat
 - A broken `ci.yml` was pushed once (commit `044c1ee`, run 54) and fixed in the next commit.
 - Nightly run 1 failed at install (deepeval 4.3.x vs huggingface-hub on `click`); DeepEval now runs in its own virtual environment (`requirements-redteam.txt`).
 
-## Needs from the owner (Gate 10)
+## Gate 10, done on 2026-11-16 (owner: "do these tasks by yourself")
+- Licence: code Apache-2.0 (`LICENSE`), weights CC BY-SA 4.0 (D59).
+- Branches `drill/untuned-model` and `diag/jitter` deleted (local and remote).
+- Testing (CLAUDE.md, last section): unit 301 passed; new live suites, integration 40 passed and performance 37 passed with host Ollama (`docs/TESTING.md`).
+- All-Docker quickstart from a fresh clone: works after a fix to `scripts/register_model.sh` (Windows path). Integration suite on that stack: 36 passed, 1 one-off label flip, 3 skipped.
+- Demo video `docs/media/ru-guard-demo.webm`, linked in the README.
+- Tag `v1.0.0` pushed.
+
+## Still the owner's
+- Create the Release page for `v1.0.0` (needs a GitHub login): prefilled link in the final message; notes from `CHANGELOG.md`.
+- Optional: "Run workflow" on `nightly` (needs a login), or wait for the 02:17 UTC run.
+- Native-speaker review of the test set, seeds and Roman Urdu demo texts (D22, D53, D54): an AI cannot stand in for it.
+
+## Needs from the owner (Gate 10, as first written)
 1. **Choose a licence** for the repository's code and add `LICENSE` (Apache-2.0 would match the models). Decide how to license the released weights (CC BY-SA rows in the training data, see the model card).
 2. **Record the demo** (`docs/DEMO.md`) and put the link in the README.
 3. **Run the all-Docker quickstart from a fresh clone** (`ollama` container path; never run here because the image download stalled).

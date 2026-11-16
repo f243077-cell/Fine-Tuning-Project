@@ -84,7 +84,7 @@ All are QLoRA fine-tunes of Qwen2.5-Instruct (Apache-2.0), Q4_K_M unless noted, 
 | UCI "Roman Urdu Data Set" (600 rows) | CC BY 4.0 | human-written SAFE rows in the training set |
 | Kaggle "Roman Urdu Cyber Abuse Dataset" (300 rows) | CC BY-SA 4.0 | human-written SAFE rows in the training set |
 
-Apache-2.0 allows the fine-tuned weights to be redistributed with the licence and notice kept. The CC BY-SA 4.0 rows mean any published copy of the training files must be shared under CC BY-SA 4.0 with attribution (`data/DATA_CARD.md`). Whether share-alike reaches model weights trained on such rows is not settled; the owner should decide how to license the released weights. The licence of this repository's own code is not yet chosen (see the Phase 10 note).
+Apache-2.0 allows the fine-tuned weights to be redistributed with the licence and notice kept. The CC BY-SA 4.0 rows mean any published copy of the training files must be shared under CC BY-SA 4.0 with attribution (`data/DATA_CARD.md`). Whether share-alike reaches model weights trained on such rows is not settled, so the released `ru-guard-*` weights are licensed **CC BY-SA 4.0** (attribution: RU-Guard, this repository), and the Qwen2.5 Apache-2.0 licence and notice still apply to the base-model parts. The repository's code is Apache-2.0 (`LICENSE`). Decision D59.
 
 ## Limitations
 

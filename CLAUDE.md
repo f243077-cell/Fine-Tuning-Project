@@ -3,9 +3,11 @@
 Read in this order: `PRD.md` (what and why), `Architecture.md` (how), `phases.md` (what to do now). Do not skim `phases.md`: it is your work queue. For pictures of the system, see `docs/understanding/README.md`.
 
 ## What this project is
+
 A small Qwen2.5 model fine-tuned with **QLoRA** to detect prompt injection in Roman Urdu, English, and mixed text. It runs as a local FastAPI service (`guard-api`) backed by Ollama, and can protect any RAG app, agent, or MCP gateway. This repo is **fully standalone**: it ships its own reference RAG app (`demo_rag/`), client SDK (`client/`), attack suite, and golden set, and depends on no other project. Everything must be **free**.
 
 ## How to work: phase by phase
+
 1. Open `phases.md`. Find the **first phase that has unchecked tasks**. Work **only** on that phase.
 2. Create or switch to a branch named `phase-<N>-<slug>`. Commit there. **Never push to `main`.** The owner merges.
 3. Start by restating the phase goal and your plan in 10 lines or fewer. Ask a question only if you are truly blocked; otherwise choose the simplest option and record the decision in the decision log of `Architecture.md`.
@@ -14,6 +16,7 @@ A small Qwen2.5 model fine-tuned with **QLoRA** to detect prompt injection in Ro
 6. **Human gates:** you cannot run Colab, write the test set, or review data. When a step needs the owner, write exact copy-paste instructions to `docs/colab/<step>.md` (or the relevant doc), list the files to bring back, and stop.
 
 ## Hard rules
+
 - **Free and whitelisted only.** Use only tools listed in `PRD.md` section 12. Do not add any dependency, service, or API that is not listed without asking first. No paid APIs, ever, in code, tests, or CI.
 - **No attribution.** Never add Claude as co-author, collaborator, or "generated with" attribution anywhere: commits, PR descriptions, docs, README, model card, code comments. This is a standing rule for all work.
 - **Targeted edits.** Prefer small edits to existing files over rewriting whole files. Do not reformat code you were not asked to change.
@@ -29,24 +32,26 @@ A small Qwen2.5 model fine-tuned with **QLoRA** to detect prompt injection in Ro
 - **Library APIs change** (Unsloth, TRL, llama.cpp, Ollama, Presidio, MCP SDK). Before using one, check the installed version, `--help`, or the package source. Do not guess from memory. Pin versions you tested.
 
 ## Quick reference
-| Item | Value |
-|---|---|
-| Labels | `SAFE` or `INJECTION|<attack_type>` |
-| attack_type | `override`, `persona`, `prompt_leak`, `exfiltration`, `tool_abuse` |
-| source | `user_input`, `retrieved_chunk`, `tool_output` |
-| surface | `en`, `ru_mix`, `ru_pure` |
-| Models | `ru-guard-0.5b`, `ru-guard-1.5b` (QLoRA on Qwen2.5-0.5B/1.5B-Instruct) |
-| Data generator | Qwen2.5-14B-Instruct-AWQ (4-bit) on free Colab (D29; PRD named 7B) |
-| guard-api | `:8001`, header `X-API-Key` (env `GUARD_API_KEY`) |
-| Ollama | `:11434` (serves `ru-guard-*` and the demo chat model) |
-| Reference RAG | `demo_rag/`, FastAPI `demo-rag` on `:8002`, chat model `qwen2.5:1.5b-instruct` via Ollama, flag `GUARD_ENABLED` |
-| Client SDK | `client/ruguard_client` (sync + async HTTP wrapper over `/v1/scan`) |
-| Policy | `FAIL_MODE=closed` default; `MODE=enforce|log_only` |
-| Normalizer | `training/normalize.py` (single source of truth, imported by `guard/`) |
-| Test lock | `data/eval/test.lock` |
-| Thresholds | `evals/thresholds.json` |
+
+| Item           | Value                                                                                                           |
+| -------------- | --------------------------------------------------------------------------------------------------------------- | -------------- |
+| Labels         | `SAFE` or `INJECTION                                                                                            | <attack_type>` |
+| attack_type    | `override`, `persona`, `prompt_leak`, `exfiltration`, `tool_abuse`                                              |
+| source         | `user_input`, `retrieved_chunk`, `tool_output`                                                                  |
+| surface        | `en`, `ru_mix`, `ru_pure`                                                                                       |
+| Models         | `ru-guard-0.5b`, `ru-guard-1.5b` (QLoRA on Qwen2.5-0.5B/1.5B-Instruct)                                          |
+| Data generator | Qwen2.5-14B-Instruct-AWQ (4-bit) on free Colab (D29; PRD named 7B)                                              |
+| guard-api      | `:8001`, header `X-API-Key` (env `GUARD_API_KEY`)                                                               |
+| Ollama         | `:11434` (serves `ru-guard-*` and the demo chat model)                                                          |
+| Reference RAG  | `demo_rag/`, FastAPI `demo-rag` on `:8002`, chat model `qwen2.5:1.5b-instruct` via Ollama, flag `GUARD_ENABLED` |
+| Client SDK     | `client/ruguard_client` (sync + async HTTP wrapper over `/v1/scan`)                                             |
+| Policy         | `FAIL_MODE=closed` default; `MODE=enforce                                                                       | log_only`      |
+| Normalizer     | `training/normalize.py` (single source of truth, imported by `guard/`)                                          |
+| Test lock      | `data/eval/test.lock`                                                                                           |
+| Thresholds     | `evals/thresholds.json`                                                                                         |
 
 ## Commands (keep this section accurate; update it when you change tooling)
+
 ```bash
 # Setup (WSL2 Ubuntu, Python 3.12)
 python3.12 -m venv .venv && source .venv/bin/activate
@@ -103,10 +108,14 @@ python scripts/check_corpus_leak.py              # corpus, attack suite, golden 
 python -m gateway.server                         # MCP gateway over stdio (GUARD_URL, GUARD_API_KEY)
 python evals/eval_guard.py --model ollama:ru-guard-1.5b-v2 --split test --subset smoke --out ci_runs   # Phase 8: the PR smoke eval (100 rows)
 python evals/gate.py --thresholds evals/thresholds_smoke.json --metrics ci_runs/ru-guard-1.5b-v2-smoke/metrics.json   # smoke gate (10-point margin)
+pytest -q tests/integration                      # live stack (docs/TESTING.md); skipped when guard-api is down
+PERF_OUT=evals/reports/perf/perf.json pytest -q tests/performance   # live stack with RATE_LIMIT=1000/minute
 ```
+
 Training and generation scripts run on Colab, not here. Local runs are limited to tiny smoke tests.
 
 ## Code conventions
+
 - Python 3.12, type hints on all function signatures, small functions, one-line docstrings.
 - Pydantic models for every external input and output (API bodies, JSONL rows, model output).
 - Config via environment variables and yaml files. No hard-coded paths, keys, or URLs.
@@ -116,10 +125,17 @@ Training and generation scripts run on Colab, not here. Local runs are limited t
 - Scripts over notebooks: notebooks only install, clone, mount Drive, and call a script.
 
 ## Definition of done (per task)
+
 Code written, test added or updated and passing, docs updated if behaviour or contracts changed, checkbox ticked in `phases.md`, and nothing outside the phase scope touched.
 
 ## Colab hand-off format
+
 When a step needs Colab, create `docs/colab/<step>.md` containing: the goal, the exact cells to paste in order, expected runtime and output, where files are saved on Drive, what to copy back and to which local path, and what to do if the session disconnects (resume instructions). Then stop and wait.
 
 ## When something is unclear
+
 Prefer the simplest design that satisfies `PRD.md`. Write the choice in the decision log (`Architecture.md` section 18) and continue. If it changes scope, metrics, or the whitelist, ask the owner first.
+
+## Testing after all app is completed:
+
+After app is finished and all phases setup completely then after it you have to perform Unit Testing,Integeration Testing and then Performance Testing and make sure almost 30 to 40 test cases for each test oky .

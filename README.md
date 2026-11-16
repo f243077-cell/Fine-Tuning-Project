@@ -53,7 +53,7 @@ CI runs the unit tests on every pull request, then a 100-row smoke eval and a sc
 
 ## Run it in 5 minutes
 
-You need Git, Python 3.12, and Docker with Compose. The downloads (the 1 GB model and, for the all-Docker path, about 1.5 GB of Ollama image) decide how long it takes.
+You need Git, Python 3.12, and Docker with Compose. The downloads (the 1 GB model and, for the all-Docker path, the Ollama image: 8.4 GB on disk for `ollama/ollama:0.32.15`, measured) decide how long it takes.
 
 ```bash
 git clone https://github.com/f243077-cell/Fine-Tuning-Project.git
@@ -118,7 +118,7 @@ python evals/run_quality.py --guard off && python evals/run_quality.py --guard o
 
 ![Guard off versus guard on](docs/figures/app_compare.png)
 
-Demo video: not recorded yet. The script and checklist are in [docs/DEMO.md](docs/DEMO.md).
+Demo video: [docs/media/ru-guard-demo.webm](docs/media/ru-guard-demo.webm) (88 s, silent screen recording of the playground on the owner's laptop, 2026-11-16). It follows the scan, compare and chat scenes of [docs/DEMO.md](docs/DEMO.md); waits for the CPU chat model are cut, so the answers appear faster than they do live (about 30 to 90 s each). A narrated version is still the owner's.
 
 ## Repository map
 
@@ -164,4 +164,5 @@ Attack examples use harmless placeholders only (a secret word, a fake link, a to
 
 - Base models: Qwen2.5-0.5B and 1.5B Instruct, Apache-2.0 (checked 2026-11-16). Details, and what share-alike means for the training data, are in [MODEL_CARD.md](MODEL_CARD.md) and [data/DATA_CARD.md](data/DATA_CARD.md).
 - Two public datasets (UCI Roman Urdu, CC BY 4.0; Kaggle Roman Urdu Cyber Abuse, CC BY-SA 4.0) contribute 900 SAFE rows to the training set.
-- The licence for this repository's own code has not been chosen yet.
+- Code: Apache-2.0 ([LICENSE](LICENSE)).
+- Released weights (`ru-guard-*` GGUF files): CC BY-SA 4.0, with the Qwen2.5 Apache-2.0 licence and notice kept. Share-alike is the cautious choice because some training rows are CC BY-SA 4.0 (decision D59).

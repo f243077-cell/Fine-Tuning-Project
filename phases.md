@@ -241,7 +241,7 @@ Claude Code:
 - [x] Final `MODEL_CARD.md` (intended use, data, evaluation, limits, **licence check of each base model**) and final `data/DATA_CARD.md`.
 - [x] `docs/INTERVIEW_NOTES.md`: a 5-minute whiteboard walkthrough that follows `docs/understanding/02-grand-workflow.png`, tradeoffs (QLoRA vs encoder, latency vs accuracy, fail-closed vs open), likely questions.
 - [x] Demo script and video checklist. **[HUMAN]** records the demo. *(Script and checklist: `docs/DEMO.md`. The owner records the demo; not recorded yet.)*
-- [ ] Tag `v1.0`, attach GGUF assets, write the changelog. *(`CHANGELOG.md` written. The tag and the v1.0 Release page are left to the owner at Gate 10, because they publish the release: see `docs/phase-notes/phase-10.md`.)*
+- [x] Tag `v1.0`, attach GGUF assets, write the changelog. *(`CHANGELOG.md` written; tag `v1.0.0` pushed 2026-11-16; the GGUF is the `model-v1` Release asset. The v1.0.0 Release page needs the owner's GitHub login.)*
 - [x] Walk through `PRD.md` section 14 and tick each criterion with an evidence link. Re-check the novelty claim from `PRD.md` section 2 before it appears anywhere public. *(`docs/PRD_ACCEPTANCE.md`: 3 criteria met, 4 partly met with the gaps listed.)*
 
 **Acceptance:** every PRD section 14 criterion has a link to evidence.
