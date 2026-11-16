@@ -17,7 +17,7 @@ import httpx
 from evals.metrics import parse_output
 from training.jsonl import read_rows
 from training.normalize import normalize_text
-from training.prompt import SYSTEM_PROMPT, USER_TEMPLATE, build_messages
+from training.prompt import USER_TEMPLATE, build_messages
 
 # Ollama settings from Architecture 6.5 (num_ctx grows only for the few-shot prompt).
 OLLAMA_OPTIONS = {"temperature": 0, "top_k": 1, "num_predict": 8, "num_ctx": 1024, "seed": 0}
