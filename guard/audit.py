@@ -108,13 +108,6 @@ class AuditStore:
             sv[verdict] = sv.get(verdict, 0) + n
         return out
 
-    def fetch_all(self, table: str) -> list[tuple]:
-        """Every row of a table (tests and inspection)."""
-        if table not in ("audit_log", "quarantine"):
-            raise ValueError(table)
-        with self._lock:
-            return self._db.execute(f"SELECT * FROM {table}").fetchall()  # noqa: S608 (fixed names)
-
     def close(self) -> None:
         """Close the connection."""
         with self._lock:

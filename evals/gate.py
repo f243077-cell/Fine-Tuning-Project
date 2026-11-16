@@ -11,7 +11,6 @@ Thresholds = release metrics minus a 2-point tolerance for "higher is better" me
 
 import argparse
 import json
-import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]

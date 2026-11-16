@@ -12,7 +12,6 @@ quarantine table; this script keeps them out of the index and writes demo_rag/re
 import argparse
 import json
 import logging
-from pathlib import Path
 
 from client.ruguard_client import BatchItem, GuardClient
 from demo_rag.chunking import Chunk, chunk_doc, count_tokens, load_docs

@@ -154,5 +154,3 @@ def timed(scanner, text: str, source: str) -> tuple[str, str | None, float]:
     raw, pred = scanner(text, source)
     return raw, pred, time.perf_counter() - t0
 
-
-SYSTEM_PROMPT_USED = SYSTEM_PROMPT  # re-exported for the report
