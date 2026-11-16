@@ -105,8 +105,7 @@ jobs:
           python evals/gate.py --thresholds evals/thresholds_smoke.json --metrics ci_runs/ru-guard-1.5b-v2-smoke/metrics.json | tee gate_out.txt || rc=$?
           # Annotations are readable on the run page without a login.
           echo "::notice title=Smoke metrics::$(cat metrics_line.txt)"
-          if [ "$rc" != "0" ]; then echo "::error title=Smoke gate failed::$(tr '
-' ' ' < gate_out.txt)"; fi
+          if [ "$rc" != "0" ]; then echo "::error title=Smoke gate failed::$(paste -sd' ' gate_out.txt)"; fi
           { echo "### Smoke eval"; echo; cat metrics_line.txt; echo; echo '```'; cat gate_out.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
           exit "$rc"
       - name: Upload smoke report
