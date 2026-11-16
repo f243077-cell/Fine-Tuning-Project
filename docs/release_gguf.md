@@ -14,7 +14,7 @@ Keep the repository public, so that standard GitHub-hosted runners stay free.
 
    It must print `52b5472abc1419f8c43645a733dd4dd9ee9e6e8b1be7de974d61dd988f8022e7`.
 
-2. Open https://github.com/f243077-cell/Fine-Tuning-Project/releases/new
+2. Open https://github.com/f243077-cell/Roman-Urdu-Guard-Model/releases/new
 3. **Choose a tag:** type `model-v1` and click "Create new tag: model-v1 on publish". Target: `main`.
 4. **Release title:** `ru-guard-1.5b-v2 (Q4_K_M) model file`
 5. **Description:** paste this:
@@ -32,7 +32,7 @@ Keep the repository public, so that standard GitHub-hosted runners stay free.
 
 ## Check
 
-Open https://github.com/f243077-cell/Fine-Tuning-Project/releases/download/model-v1/ru-guard-1.5b-v2-Q4_K_M.gguf.
+Open https://github.com/f243077-cell/Roman-Urdu-Guard-Model/releases/download/model-v1/ru-guard-1.5b-v2-Q4_K_M.gguf.
 The download must start. Then, on the Actions tab, run the "ci" workflow ("Run workflow"). The "Smoke eval
 (100 rows) and gate" job should run the eval and print `gate: PASS`.
 

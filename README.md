@@ -1,6 +1,6 @@
 # RU-Guard: a prompt-injection guard for Roman Urdu
 
-[![ci](https://github.com/f243077-cell/Fine-Tuning-Project/actions/workflows/ci.yml/badge.svg)](https://github.com/f243077-cell/Fine-Tuning-Project/actions/workflows/ci.yml)
+[![ci](https://github.com/f243077-cell/Roman-Urdu-Guard-Model/actions/workflows/ci.yml/badge.svg)](https://github.com/f243077-cell/Roman-Urdu-Guard-Model/actions/workflows/ci.yml)
 
 RU-Guard reads a piece of text and says whether it hides an instruction aimed at an AI system. It is a small Qwen2.5 model, fine-tuned with QLoRA, for **Roman Urdu** (Urdu in Latin letters), English and the mix of both. It runs on a CPU as a local service (`guard-api`) behind Ollama, and it can protect a chatbot, a RAG app, an agent or an MCP gateway.
 
@@ -56,13 +56,13 @@ CI runs the unit tests on every pull request, then a 100-row smoke eval and a sc
 You need Git, Python 3.12, and Docker with Compose. The downloads (the 1 GB model and, for the all-Docker path, the Ollama image: 8.4 GB on disk for `ollama/ollama:0.32.15`, measured) decide how long it takes.
 
 ```bash
-git clone https://github.com/f243077-cell/Fine-Tuning-Project.git
-cd Fine-Tuning-Project
+git clone https://github.com/f243077-cell/Roman-Urdu-Guard-Model.git
+cd Roman-Urdu-Guard-Model
 
 # 1. The model file (GitHub Release model-v1), then check it
 mkdir -p models
 curl -L -o models/ru-guard-1.5b-v2-Q4_K_M.gguf \
-  https://github.com/f243077-cell/Fine-Tuning-Project/releases/download/model-v1/ru-guard-1.5b-v2-Q4_K_M.gguf
+  https://github.com/f243077-cell/Roman-Urdu-Guard-Model/releases/download/model-v1/ru-guard-1.5b-v2-Q4_K_M.gguf
 sha256sum models/ru-guard-1.5b-v2-Q4_K_M.gguf   # 52b5472abc1419f8c43645a733dd4dd9ee9e6e8b1be7de974d61dd988f8022e7
 
 # 2. Two secrets in .env

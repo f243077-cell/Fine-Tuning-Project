@@ -27,7 +27,7 @@ drive.mount('/content/drive')
 
 **3. Get the code.**
 ```python
-!git clone https://github.com/f243077-cell/Fine-Tuning-Project.git /content/ru-guard
+!git clone https://github.com/f243077-cell/Roman-Urdu-Guard-Model.git /content/ru-guard
 %cd /content/ru-guard
 !git log --oneline -1
 ```
