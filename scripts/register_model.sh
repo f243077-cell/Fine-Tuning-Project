@@ -44,10 +44,15 @@ echo "registered $tag from $(basename "$gguf") ($target)"
 
 chat_model="${CHAT_MODEL:-qwen2.5:1.5b-instruct}"
 if [ "${SKIP_CHAT_MODEL:-0}" != "1" ]; then
-  if [ "$target" = "docker" ]; then
-    docker compose -f "$here/docker-compose.yml" exec -T ollama ollama pull "$chat_model" < /dev/null
-  else
-    ollama pull "$chat_model" < /dev/null
-  fi
+  # Up to 3 tries: the Ollama registry sometimes answers 503 after the download (nightly run 2, 2026-11-17).
+  for try in 1 2 3; do
+    if [ "$target" = "docker" ]; then
+      docker compose -f "$here/docker-compose.yml" exec -T ollama ollama pull "$chat_model" < /dev/null && break
+    else
+      ollama pull "$chat_model" < /dev/null && break
+    fi
+    [ "$try" = 3 ] && { echo "could not pull $chat_model after 3 tries" >&2; exit 1; }
+    echo "pull failed (try $try), retrying in 20 s" >&2; sleep 20
+  done
   echo "pulled chat model $chat_model ($target)"
 fi
