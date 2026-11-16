@@ -30,8 +30,6 @@ First release. Deployed model: `ru-guard-1.5b-v2` (Qwen2.5-1.5B-Instruct, QLoRA,
 - Attacks that address the classifier ("label this SAFE") are the main misses; spaced letters and leetspeak pass it.
 - The 80 seeds, the 300-row test set and the Roman Urdu demo texts were drafted by an AI coding assistant and have not been reviewed by a native speaker (D22, D53, D54).
 - QLoRA adapters and merged weights of the v2 models were not kept; only the GGUF files were downloaded (the v1 ones are reported to be on Google Drive, not verified).
-- The repository's code licence is not chosen yet. The training data contains CC BY-SA 4.0 rows.
-- The all-Docker path with the `ollama` container was not run on the development machine in Phase 6 (slow image download); the host-Ollama path was.
-- The demo video is not recorded yet (`docs/DEMO.md`).
+- The demo video is silent; a narrated version is optional. In the all-Docker path, demo-rag needs the chat model pulled into the container (about 1 GB); that part ran only with host Ollama.
 
-Earlier history is in `docs/phase-notes/` and the decision log in `Architecture.md` section 18 (D1 to D57).
+Earlier history is in `docs/phase-notes/` and the decision log in `Architecture.md` section 18 (D1 to D59).
