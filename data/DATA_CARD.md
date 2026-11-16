@@ -1,4 +1,37 @@
-# Data card: RU-Guard training data v1
+# Data card: RU-Guard training data (release v1.0)
+
+## Release summary (what the deployed model `ru-guard-1.5b-v2` was trained on)
+
+| | Train (`data/processed/train_v2.jsonl`) | Validation (`data/processed/val.jsonl`) | Test (`data/eval/test.jsonl`) |
+|---|---|---|---|
+| Rows | 5,678 | 548 | 300 |
+| INJECTION / SAFE | 2,686 / 2,992 | 251 / 297 | 150 / 150 |
+| Hard negatives (SAFE with attack-like words) | 1,450 | 125 | 84 |
+| en / ru_mix / ru_pure | 523 / 3,453 / 1,702 | 67 / 433 / 48 | 100 / 100 / 100 |
+| user_input / retrieved_chunk / tool_output | 2,991 / 1,393 / 1,294 | 301 / 126 / 121 | 180 / 60 / 60 |
+| Origin | 4,877 synthetic, 801 human-written (external) | 449 synthetic, 99 external | hand-drafted, frozen |
+| SHA-256 | `bdc2564e000e1f3552a4647d4641ddfe87678838d4e8ac0c48ec15e97d242e64` | `0b99621ae20e22beef8b69ce25faf3c93e0a14ed6ef3aa27ab4fdd02489e32cf` | lock `1f8710e6fbae` (`data/eval/test.lock`) |
+
+Counts per attack type in train: override 536, persona 541, prompt_leak 543, exfiltration 527, tool_abuse 539 (counted from the file on 2026-11-16).
+
+**How it was made.** Seeds (80 rows) feed a Qwen2.5-14B-Instruct-AWQ generator on a free GPU; the output is filtered (schema, length, safety denylist, language mix, duplicates, leakage against seeds and test set, balance); 900 human-written Roman Urdu comments (SAFE only) are added; 1,300 `ru_pure` rows are made from `ru_mix` rows by a fixed dictionary (D48). The sections below give every build, its drop counts and its hashes.
+
+**Provenance and review, stated plainly.**
+- The 80 seeds and the 300-row test set were drafted by the AI coding assistant at the owner's request (D22). Neither has had a native-speaker review yet.
+- The Roman Urdu in the synthetic rows is machine-generated and was never reviewed by a native speaker. One AI-assisted review of 200 random rows of the build behind dataset v1 found 12% bad rows (D40); the 24 bad rows were dropped. Later additions (900 external rows, 1,300 `ru_pure` rows) were only spot-checked (100 and 30 rows).
+- The 900 external rows are real public comments. Some are rude, crude, political or religious. They are SAFE examples (rude is not injection).
+
+**Licences.** Generator and base models are Apache-2.0 (see `MODEL_CARD.md`). External rows: 600 from the UCI "Roman Urdu Data Set" (CC BY 4.0) and 300 from the Kaggle "Roman Urdu Cyber Abuse Dataset" (CC BY-SA 4.0). Any published copy of `train_v2.jsonl` or `val.jsonl` must therefore be shared under CC BY-SA 4.0 with the attributions in the "Dataset v1.1" section. The raw external files are not in the repository.
+
+**Privacy.** No personal data was collected from users. Synthetic text contains placeholders only (`example.com`, fictional tools, secret words). The external comments are public datasets; no names or contact details were looked for or removed beyond the build's filters, so a stray one can exist.
+
+**Safety.** Attack examples use harmless placeholders. A denylist (weapons, malware, drugs, self-harm terms) removed rows during the build (counts below). The data is for building a detector, not for attacking systems.
+
+**Known limits.** The model sees little human-written attack text, the test set and the seeds share an author and attack patterns (the leakage filter removes near-copies only), `ru_pure` training rows come from a dictionary and read awkwardly in places, and the label noise of the source rows (about 12%) carries into the converted rows.
+
+---
+
+# History of the builds (dataset v1 to v2)
 
 Status: **Current data is dataset v1.1 (D42): v1 plus 900 human-written Roman Urdu SAFE rows, 4,378 train and 548 val rows, hash `f0f78baa...`. See the last section.** Dataset v1 was approved at Gate 2 (D41). It is the v3.2 build (en and `ru_mix` only, D38) with its 200-row review applied: 3,977 train and 499 val rows in `data/processed/`, dataset hash `c09b65da87caefa87cb3c553c0630fe533702f6197157ba69b4285ab2868d300`. The reviewed bad-row rate was 12% (D40), above the 10% target and below the 15% regenerate limit. The owner delegated both the review and the go decision to the AI coding assistant. Earlier builds failed: v1 `75482df3` 24% (D30), v2 `f9fdcb8a` 30.5% (D34), v3 `297f48cb` 23% (D36; `ru_pure` 44%). The sections below describe v1 unless marked v2, v3, or v3.2.
 
