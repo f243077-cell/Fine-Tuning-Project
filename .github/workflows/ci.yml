@@ -92,7 +92,23 @@ jobs:
         run: python evals/eval_guard.py --model ollama:ru-guard-1.5b-v2 --split test --subset smoke --ollama-url http://127.0.0.1:11434 --out ci_runs
       - name: Merge gate
         if: steps.asset.outputs.available == 'true'
-        run: python evals/gate.py --thresholds evals/thresholds_smoke.json --metrics ci_runs/ru-guard-1.5b-v2-smoke/metrics.json
+        run: |
+          python - <<'PY' | tee metrics_line.txt
+          import json
+          m = json.load(open("ci_runs/ru-guard-1.5b-v2-smoke/metrics.json"))
+          o = m["overall"]["point"]
+          ru = m["cuts"]["language"]["roman_urdu"]
+          print("smoke metrics: " + " ".join(f"{k} {o[k]:.3f}" for k in ("recall", "fpr", "f1", "macro_f1_attack_type", "invalid_rate"))
+                + f" ru_recall {ru['recall']['point']:.3f} ru_fpr {ru['fpr']['point']:.3f}")
+          PY
+          rc=0
+          python evals/gate.py --thresholds evals/thresholds_smoke.json --metrics ci_runs/ru-guard-1.5b-v2-smoke/metrics.json | tee gate_out.txt || rc=$?
+          # Annotations are readable on the run page without a login.
+          echo "::notice title=Smoke metrics::$(cat metrics_line.txt)"
+          if [ "$rc" != "0" ]; then echo "::error title=Smoke gate failed::$(tr '
+' ' ' < gate_out.txt)"; fi
+          { echo "### Smoke eval"; echo; cat metrics_line.txt; echo; echo '```'; cat gate_out.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          exit "$rc"
       - name: Upload smoke report
         if: always() && steps.asset.outputs.available == 'true'
         uses: actions/upload-artifact@v7
