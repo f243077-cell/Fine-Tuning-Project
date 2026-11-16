@@ -237,12 +237,12 @@ Claude Code:
 
 **Goal:** a repo a reviewer can trust and run.
 
-- [ ] `README.md`: what and why, results table (from `EVAL_REPORT.md`), the grand workflow and RAG pipeline pictures from `docs/understanding/` (relative links; the Mermaid blocks in `Architecture.md` stay the editable source), 5-minute quickstart, limitations, ethics note.
-- [ ] Final `MODEL_CARD.md` (intended use, data, evaluation, limits, **licence check of each base model**) and final `data/DATA_CARD.md`.
-- [ ] `docs/INTERVIEW_NOTES.md`: a 5-minute whiteboard walkthrough that follows `docs/understanding/02-grand-workflow.png`, tradeoffs (QLoRA vs encoder, latency vs accuracy, fail-closed vs open), likely questions.
-- [ ] Demo script and video checklist. **[HUMAN]** records the demo.
-- [ ] Tag `v1.0`, attach GGUF assets, write the changelog.
-- [ ] Walk through `PRD.md` section 14 and tick each criterion with an evidence link. Re-check the novelty claim from `PRD.md` section 2 before it appears anywhere public.
+- [x] `README.md`: what and why, results table (from `EVAL_REPORT.md`), the grand workflow and RAG pipeline pictures from `docs/understanding/` (relative links; the Mermaid blocks in `Architecture.md` stay the editable source), 5-minute quickstart, limitations, ethics note. *(Done 2026-11-16; the demo video link is a placeholder until the owner records it.)*
+- [x] Final `MODEL_CARD.md` (intended use, data, evaluation, limits, **licence check of each base model**) and final `data/DATA_CARD.md`.
+- [x] `docs/INTERVIEW_NOTES.md`: a 5-minute whiteboard walkthrough that follows `docs/understanding/02-grand-workflow.png`, tradeoffs (QLoRA vs encoder, latency vs accuracy, fail-closed vs open), likely questions.
+- [x] Demo script and video checklist. **[HUMAN]** records the demo. *(Script and checklist: `docs/DEMO.md`. The owner records the demo; not recorded yet.)*
+- [ ] Tag `v1.0`, attach GGUF assets, write the changelog. *(`CHANGELOG.md` written. The tag and the v1.0 Release page are left to the owner at Gate 10, because they publish the release: see `docs/phase-notes/phase-10.md`.)*
+- [x] Walk through `PRD.md` section 14 and tick each criterion with an evidence link. Re-check the novelty claim from `PRD.md` section 2 before it appears anywhere public. *(`docs/PRD_ACCEPTANCE.md`: 3 criteria met, 4 partly met with the gaps listed.)*
 
 **Acceptance:** every PRD section 14 criterion has a link to evidence.
 

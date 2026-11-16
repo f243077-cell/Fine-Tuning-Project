@@ -44,7 +44,7 @@ Out of scope: Urdu in Arabic script, other languages, content-safety moderation 
 | FPR plain SAFE / hard negatives | 0.000 / 0.179 |
 | Latency per window (CPU, 4 threads) | warm p50 0.88 s, p95 1.41 s; cold p50 3.95 s; through guard-api p50 0.91 s, p95 1.36 s |
 
-The same model run again gave slightly different labels on a few borderline rows (2 of 100 in the smoke subset), so a rerun can move FPR by a point or two.
+The same model run again gave slightly different labels on a few borderline rows (1 of 300 in a full rerun on the same machine; 2 to 4 of 100 in the smoke subset on other machines), so a rerun can move FPR by a point or two.
 
 In the reference RAG app (`demo_rag`, chat model `qwen2.5:1.5b-instruct`): 8 of 36 scripted attacks succeed with the guard off and 0 of 36 with it on; golden-set correctness 25/30 off and 27/30 on (section 9 of the evaluation report; small samples).
 

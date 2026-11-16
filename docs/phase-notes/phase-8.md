@@ -1,6 +1,6 @@
 # Phase 8: Observability, red-team, and CI gate
 
-Branch / commit: `main`. Status: **done except the owner's GitHub Release; waiting at Gate 8.**
+Branch / commit: `main`. Status: **done; Gate 8 closed with the Release published (see `phase-10.md` for the smoke-gate follow-up: margin 10 points, D57, D58).**
 
 ## Done
 - **CI was broken since Phase 6** (every push failed at "Install"): `requirements-dev.txt` pinned `numpy==2.5.4`, but `presidio-analyzer` needs numpy below 2.5. The fix pins `numpy==2.4.6` (the version installed locally). CI also installs `requirements-demo.txt`, because the demo and gateway tests import it (D55).
