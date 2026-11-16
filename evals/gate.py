@@ -3,6 +3,7 @@
     python evals/gate.py                                         # thresholds' own release run
     python evals/gate.py --metrics evals/reports/runs/<run>/metrics.json
     python evals/gate.py --make evals/reports/runs/<run>         # write evals/thresholds.json from a release run
+    python evals/gate.py --make <run> --tolerance 0.06 --thresholds evals/thresholds_smoke.json   # smoke gate
 
 Thresholds = release metrics minus a 2-point tolerance for "higher is better" metrics, plus 2 points for
 "lower is better" metrics (FPR, invalid rate), clamped to [0, 1].
@@ -45,10 +46,11 @@ def make_thresholds(run_dir: Path, tolerance: float = TOLERANCE) -> dict:
            "tolerance": tolerance, "min": {}, "max": {}}
     for name, (path, direction) in METRICS.items():
         v = read_value(metrics, path)
+        margin = min(tolerance, TOLERANCE) if name == "invalid_rate" else tolerance  # invalid output does not jitter
         if direction == "min":
-            out["min"][name] = round(max(0.0, v - tolerance), 4)
+            out["min"][name] = round(max(0.0, v - margin), 4)
         else:
-            out["max"][name] = round(min(1.0, v + tolerance), 4)
+            out["max"][name] = round(min(1.0, v + margin), 4)
     return out
 
 
@@ -72,9 +74,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--thresholds", type=Path, default=THRESHOLDS)
     ap.add_argument("--metrics", type=Path, help="metrics.json to check (default: the release run)")
     ap.add_argument("--make", type=Path, metavar="RUN_DIR", help="write thresholds from this release run")
+    ap.add_argument("--tolerance", type=float, default=TOLERANCE, help="margin for --make (default 0.02)")
     args = ap.parse_args(argv)
     if args.make:
-        data = make_thresholds(args.make)
+        data = make_thresholds(args.make, args.tolerance)
         args.thresholds.write_text(json.dumps(data, indent=1) + "\n", encoding="utf-8")
         print(f"wrote {args.thresholds}")
         return 0

@@ -101,6 +101,8 @@ python -m demo_rag.ingest --guard on --report    # Phase 7: G0 ingest + quaranti
 ALLOW_GUARD_TOGGLE=true uvicorn demo_rag.app.main:app --port 8002
 python scripts/check_corpus_leak.py              # corpus, attack suite, golden set, notes vs the test set (read-only)
 python -m gateway.server                         # MCP gateway over stdio (GUARD_URL, GUARD_API_KEY)
+python evals/eval_guard.py --model ollama:ru-guard-1.5b-v2 --split test --subset smoke --out ci_runs   # Phase 8: the PR smoke eval (100 rows)
+python evals/gate.py --thresholds evals/thresholds_smoke.json --metrics ci_runs/ru-guard-1.5b-v2-smoke/metrics.json   # smoke gate (6-point margin)
 ```
 Training and generation scripts run on Colab, not here. Local runs are limited to tiny smoke tests.
 

@@ -42,3 +42,4 @@ models/Modelfile.*.tmp
 
 # Playwright MCP scratch output
 .playwright-mcp/
+ci_runs/

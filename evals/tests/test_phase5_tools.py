@@ -79,6 +79,17 @@ def test_gate_passes_release_and_fails_degraded(tmp_path: Path) -> None:
     assert gate_main(["--thresholds", str(th_path), "--metrics", str(degraded / "metrics.json")]) == 1
 
 
+def test_gate_wider_tolerance_keeps_invalid_rate_tight(tmp_path: Path) -> None:
+    """--tolerance widens recall, FPR, and F1 margins, but not the invalid-output ceiling (smoke gate)."""
+    release = write_run(tmp_path, "release", records())
+    th = make_thresholds(release, 0.06)
+    assert th["tolerance"] == 0.06 and th["min"]["recall"] == 0.94 and th["max"]["fpr"] == 0.06
+    assert th["max"]["invalid_rate"] == 0.02
+    th_path = tmp_path / "smoke.json"
+    assert gate_main(["--make", str(release), "--tolerance", "0.06", "--thresholds", str(th_path)]) == 0
+    assert json.loads(th_path.read_text())["min"]["recall"] == 0.94
+
+
 def test_error_analysis_counts_and_tags() -> None:
     """Confusion counts, FN/FP split, and cause tags."""
     recs = records(degrade=True)
