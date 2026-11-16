@@ -47,7 +47,7 @@ jobs:
         with:
           node-version: "24"
       - name: Install
-        run: pip install -r requirements.txt -r requirements-dev.txt -r requirements-demo.txt -r requirements-redteam.txt
+        run: pip install -r requirements.txt -r requirements-dev.txt -r requirements-demo.txt
       - name: Per-run secrets (never stored)
         run: |
           echo "GUARD_API_KEY=$(python -c 'import secrets; print(secrets.token_urlsafe(24))')" >> "$GITHUB_ENV"
@@ -102,10 +102,14 @@ jobs:
           python evals/run_quality.py --guard on
       - name: Promptfoo red-team (guard on)
         run: npx -y promptfoo@0.125.1 eval -c evals/promptfoo/promptfooconfig.yaml -o evals/reports/promptfoo/results.json --no-cache --max-concurrency 1 --no-table
-      - name: DeepEval attack tests
+      - name: DeepEval attack tests (own virtual environment)
         env:
           DEMO_URL: http://127.0.0.1:8002
-        run: pytest -q evals/redteam
+        # deepeval 4.3.x needs click<8.4, huggingface-hub (from requirements-dev.txt) needs click>=8.4.2: keep them apart.
+        run: |
+          python -m venv .venv-redteam
+          .venv-redteam/bin/pip install -r requirements-redteam.txt
+          .venv-redteam/bin/python -m pytest -q evals/redteam -p no:cacheprovider
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v7

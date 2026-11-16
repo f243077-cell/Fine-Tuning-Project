@@ -1,3 +1,9 @@
 # Live red-team tests (Phase 8): DeepEval attack tests in evals/redteam (nightly CI; not needed for unit tests).
+# Install in its OWN virtual environment: deepeval 4.3.x pins click<8.4, while huggingface-hub (pulled in by
+# transformers in requirements-dev.txt) needs click>=8.4.2, so the two files cannot share one environment.
+#   python -m venv .venv-redteam && .venv-redteam/bin/pip install -r requirements-redteam.txt
+#   DEMO_URL=http://localhost:8002 .venv-redteam/bin/python -m pytest -q evals/redteam -p no:cacheprovider
 # Used with deterministic metrics only (no judge model, no paid API). Telemetry off: DEEPEVAL_TELEMETRY_OPT_OUT=YES.
 deepeval==4.3.4
+pytest==9.2.0
+httpx==0.28.1

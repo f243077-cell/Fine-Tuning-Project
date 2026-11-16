@@ -12,9 +12,11 @@ The first real CI smoke runs failed the gate on commits with no change to the mo
 | Owner's laptop, fresh smoke run (different request order) | 2 | 0.920 | 0.140 | 0.893 | 0.819 | 0.212 |
 | GitHub runner, CI run 55 | not measured | 0.920 | 0.140 | 0.893 | 0.798 | 0.212 |
 | GitHub runner, AMD EPYC 9V45 (4 cores), 3 runs with an Ollama restart before each (jitter diagnostic, branch `diag/jitter`) | 4 (all 3 runs identical to each other) | 0.940 | 0.160 | 0.895 | 0.822 | 0.242 |
-| GitHub runner, CI run 52 | not measured (the gate failed at step 11) | not recorded | | | | |
+| GitHub runner, AMD EPYC 7763 (4 cores), 3 runs with an Ollama restart before each (second diagnostic sample) | 1 (all 3 runs identical to each other) | 0.920 | 0.120 | 0.902 | 0.825 | 0.182 |
+| GitHub runner, CI run 56 (10-point margin; same metrics as the EPYC 9V45 diagnostic) | not measured | 0.940 | 0.160 | 0.895 | 0.822 | 0.242 |
+| GitHub runner, CI run 52 | not measured (the gate failed at step 11; its metrics were not recorded then) | not recorded | | | | |
 
-Reading: repeated runs on one machine with the same request order give the same labels (0 rows differ between the three runner runs). The labels move by 2 to 4 rows of 100 between environments (a different CPU, or a different request order). With 50 rows per class one row is 2 points, and one row of the 33 Roman Urdu benign rows is 3 points. The attack-type macro-F1 is the noisiest metric (about 10 attacks per type): it fell by 2 to 5 points in every environment. At a 6-point margin the diagnostic run failed the gate by 0.0006 on Roman Urdu FPR (0.2424 against 0.2418, two flipped rows). The cause (CPU model, order, or both) is not isolated.
+Reading: repeated runs on one machine with the same request order give the same labels (0 rows differ between the three runs on each runner). The labels move by 1 to 4 rows of 100 between environments, and on the GitHub runners the size of the move follows the CPU model: AMD EPYC 7763 gave 1 row (the gate passes even at 6 points), AMD EPYC 9V45 gave 4 rows twice (the diagnostic and CI run 56). The owner's laptop (Intel i7-7500U) with a different request order gave 2 rows. With 50 rows per class one row is 2 points, and one row of the 33 Roman Urdu benign rows is 3 points. The attack-type macro-F1 is the noisiest metric (about 10 attacks per type): it fell by 2 to 5 points in every environment. At a 6-point margin the diagnostic run failed the gate by 0.0006 on Roman Urdu FPR (0.2424 against 0.2418, two flipped rows). The cause (CPU model, order, or both) is not isolated.
 
 `thresholds_smoke.json` is now the release model's 100-row metrics minus **10 points**; the invalid-output ceiling stays at 2 points. The full 300-row gate (`thresholds.json`) is unchanged at 2 points.
 
@@ -22,13 +24,14 @@ Command: `python evals/gate.py --make evals/reports/runs/ru-guard-1.5b-v2-smoke 
 
 ## What the 10-point gate still catches
 
-Each saved 300-row run reduced to the same 100 smoke rows and checked against `thresholds_smoke.json` (real predictions, no new model calls), plus the two CI-runner observations above:
+Each saved 300-row run reduced to the same 100 smoke rows and checked against `thresholds_smoke.json` (real predictions, no new model calls), plus the CI-runner observations above:
 
 | Run | Recall | FPR | Smoke gate |
 |---|---|---|---|
 | ru-guard-1.5b-v2 (deployed) | 0.92 | 0.12 | PASS |
 | GitHub runner, CI run 55 | 0.92 | 0.14 | PASS |
-| GitHub runner, EPYC 9V45 | 0.94 | 0.16 | PASS |
+| GitHub runner, EPYC 9V45 (CI run 56 and the diagnostic) | 0.94 | 0.16 | PASS |
+| GitHub runner, EPYC 7763 | 0.92 | 0.12 | PASS |
 | ru-guard-1.5b (v1) | 0.86 | 0.10 | PASS |
 | ru-guard-1.5b-q8_0 (v1) | 0.84 | 0.10 | FAIL (1 check) |
 | ru-guard-0.5b-v2 | 0.88 | 0.10 | FAIL (1 check) |
